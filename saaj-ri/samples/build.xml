@@ -1,0 +1,47 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<project name="SAAJ Samples" default="image" basedir=".">
+  
+  <property name="build.home" location="../build" />
+  
+  <!-- The base directory for compilation targets -->
+  <property name="servlet.jar" location="../lib/servlet.jar"/>
+  <property name="samples.build" location="${build.home}/samples"/>
+  <property name="webapps.dir" location="${build.home}/samples"/>
+  <property name="wars.dir" location="${dist.home}/samples"/>
+  <property name="saaj.home" location="${build.home}"/>
+
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="init"
+   description="Initialize and evaluate conditionals">
+    <echo message="-------- SAAJ Samples -------------"/>
+  </target>
+
+  <target name="prepare" depends="init"
+   description="Prepare build directory">
+    <mkdir dir="${samples.build}"/>
+  </target>
+
+  <target name="image" depends="prepare">
+    <ant dir="${basedir}/saajservlet" target="jar"/>        
+    <ant dir="${basedir}/persister" target="jar"/>        
+    <ant dir="${basedir}/soapprocessor" target="jar"/>        
+    <ant dir="${basedir}/simple/WEB-INF" target="war"/>
+    <ant dir="${basedir}/book/WEB-INF" target="war"/>
+    <ant dir="${basedir}/translator/WEB-INF" target="war"/>    
+    <ant dir="${basedir}/uddiping"/>
+    <ant dir="${basedir}/progress"/>
+    <ant dir="${basedir}/saveandload"/>
+    <ant dir="${basedir}/soapnode"/>
+  </target>
+
+  <target name="clean"
+   description="Clean build and distribution directories">
+    <delete    dir="${samples.build}"/>
+  </target>
+</project>

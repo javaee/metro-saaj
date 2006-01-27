@@ -1,0 +1,10 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<bi:bookInfo xmlns:bi="http://saaj.sample/bookinfo">
+  <bi:title>Learning SAAJ</bi:title>
+  <bi:publication>Foo Inc.</bi:publication>
+  <bi:price>$32.99</bi:price>
+</bi:bookInfo>

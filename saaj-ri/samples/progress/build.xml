@@ -1,0 +1,74 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<project name="progress" default="image" basedir=".">
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="${user.home}/.ant.properties"/>    <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../../build.properties"/>          <!-- For all webapps -->
+  <property file="../../../build.properties"/>             
+
+  <property name="samples.build" value="../../build/samples" />
+  
+  <!-- The base directory for compilation targets -->
+  <property name="progress.build"              
+	    value="${samples.build}/progress"/>
+
+  <!-- The base directory for component sources -->
+  <property name="progress.src"             
+	    value="src"/>
+
+  <!-- Construct compile classpath -->
+  <path id="compile.classpath.progress">
+    <fileset dir="${saaj.home}/lib" includes="*.jar"/>
+  </path>
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="init"
+   description="Initialize and evaluate conditionals">
+    <echo message="-------- SAAJ Samples - Progress -------------"/>
+    <echo message="${saaj.jar}"/>
+    <echo message="${progress.build}"/>
+  </target>
+
+  <target name="prepare" depends="init"
+   description="Prepare build directory">
+    <mkdir dir="${progress.build}"/>
+    <mkdir dir="${progress.build}/src"/>
+  </target>
+
+  <target name="compile" depends="prepare"
+   description="Just compile the classes">
+
+    <!-- Run javac through everything -->
+    <javac  srcdir="${progress.src}"
+           destdir="${progress.build}"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath.progress"/>
+    </javac>
+  </target>
+
+  <target name="image" depends="compile,prepare"
+   description="Build into progress.build">
+
+    <copy todir="${progress.build}" >
+      <fileset dir="." excludes="build.xml"/>
+    </copy>
+    
+    <copy todir="${progress.build}/src" >
+      <fileset dir="src"/>
+    </copy> 
+  </target>
+
+  <target name="clean"
+   description="Clean build and distribution directories">
+    <delete    dir="${progress.build}"/>
+  </target>
+
+</project>

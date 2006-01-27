@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+
+<env:Envelope xmlns:enc="http://schemas.xmlsoap.org/soap/encoding/" 
+    xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:ns0="http://headertest.org/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <env:Body>
+   <ns0:echoVoid env:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+   </env:Body>
+</env:Envelope>
+    

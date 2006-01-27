@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+<soap-env:Header>
+<foo>line 1
+line 2
+line 3
+</foo>
+<bar>line 4</bar>
+</soap-env:Header>
+<soap-env:Body>
+<test> w
+ewe
+qeqw
+</test>
+</soap-env:Body>
+</soap-env:Envelope>

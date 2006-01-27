@@ -1,0 +1,12 @@
+For running the TCK tests through runtck.sh
+--------------------------------------------
+1. Make sure your JWSDP and SAAJTCK are installed
+2. Also install j2sdkee1.3
+3. Set the following Environment Variables
+
+export SAAJRI_HOME=`pwd`/saaj-ri
+export TS_HOME=/root/saajtck
+export JWSDP_HOME=/root/jwsdp-1.2
+export JAVA_HOME=/root/javahome/j2sdk1.4.2
+export J2EE_HOME=/root/j2sdkee1.3
+4. Run tck using ./runtck.sh

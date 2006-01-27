@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
+    <Body>
+        <businessList generic="2.0" xmlns="urn:uddi-org:api_v2" 
+            operator="www.ibm.com/services/uddi" truncated="false">
+
+            <businessInfos>
+                <businessInfo businessKey="5C4E0770-6952-11D5-AE83-0004AC49CC1E">
+                    <name junk:lang="en">Food</name>
+                    <description xml:lang="en">Test Food</description>
+                    <serviceInfos></serviceInfos>
+                </businessInfo>
+            </businessInfos>
+        </businessList>
+    </Body>
+</Envelope>

@@ -1,0 +1,74 @@
+<!--
+ Copyright 2004 Sun Microsystems, Inc. All rights reserved.
+ SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+
+<project name="uddiping" default="image" basedir=".">
+  <property file="${user.home}/build.properties"/>   <!-- User local        -->
+  <property file="${user.home}/.ant.properties"/>    <!-- User local        -->
+  <property file="build.properties"/>                <!-- Component local   -->
+  <property file="../../build.properties"/>          <!-- For all webapps -->
+  <property file="../../../build.properties"/>             
+
+  <property name="samples.build" value="../../build/samples" />
+  
+  <!-- The base directory for compilation targets -->
+  <property name="uddiping.build"              
+	    value="${samples.build}/uddiping"/>
+
+  <!-- The base directory for component sources -->
+  <property name="uddiping.src"             
+	    value="src"/>
+
+  <!-- Construct compile classpath -->
+  <path id="compile.classpath.uddiping">
+    <fileset dir="${saaj.home}/lib" includes="*.jar"/>
+  </path>
+
+<!-- ========== Executable Targets ======================================== -->
+
+  <target name="init"
+   description="Initialize and evaluate conditionals">
+    <echo message="-------- SAAJ Samples - UddiPing -------------"/>
+    <echo message="${saaj.jar}"/>
+    <echo message="${uddiping.build}"/>
+  </target>
+
+  <target name="prepare" depends="init"
+   description="Prepare build directory">
+    <mkdir dir="${uddiping.build}"/>
+    <mkdir dir="${uddiping.build}/src"/>
+  </target>
+
+  <target name="compile" depends="prepare"
+   description="Just compile the classes">
+
+    <!-- Run javac through everything -->
+    <javac  srcdir="${uddiping.src}"
+           destdir="${uddiping.build}"
+             debug="${compile.debug}"
+       deprecation="${compile.deprecation}"
+
+          optimize="${compile.optimize}">
+      <classpath refid="compile.classpath.uddiping"/>
+    </javac>
+  </target>
+
+  <target name="image" depends="compile,prepare"
+   description="Build into uddiping.build">
+
+    <copy todir="${uddiping.build}" >
+      <fileset dir="." excludes="build.xml"/>
+    </copy>
+    
+    <copy todir="${uddiping.build}/src" >
+      <fileset dir="src"/>
+    </copy> 
+  </target>
+
+  <target name="clean"
+   description="Clean build and distribution directories">
+    <delete    dir="${uddiping.build}"/>
+  </target>
+
+</project>

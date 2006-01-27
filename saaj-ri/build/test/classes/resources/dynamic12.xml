@@ -1,0 +1,1 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://www.w3.org/2003/05/soap-envelope"><SOAP-ENV:Header/><SOAP-ENV:Body><abc:find_service xmlns:abc="urn:uddi-org:api_v2"><name/></abc:find_service></SOAP-ENV:Body></SOAP-ENV:Envelope>

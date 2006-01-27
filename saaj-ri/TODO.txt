@@ -1,0 +1,12 @@
+Calls to ensureNamespaceIsDeclared was finally required in SAAJ 1.3 otherwise it was causing failure in 
+XMLSEC library decryption :
+
+Caused by: com.sun.org.apache.xml.internal.security.encryption.XMLEncryptionException: The prefix "tru" for element "tru:StockSymbol" is not bound.
+    [junit] Original Exception was org.xml.sax.SAXParseException: The prefix "tru" for element "tru:StockSymbol" is not bound.
+    [junit]     at com.sun.org.apache.xml.internal.security.encryption.XMLCipher$Serializer.deserialize(Unknown Source)
+    [junit]     at com.sun.org.apache.xml.internal.security.encryption.XMLCipher.decryptElement(Unknown Source)
+    [junit]     at com.sun.org.apache.xml.internal.security.encryption.XMLCipher.doFinal(Unknown Source)
+    [junit]     at com.sun.xml.wss.impl.apachecrypto.DecryptionProcessor.decryptElementWithCipher(DecryptionProcessor.java:776)
+
+Optimize instanceof checks
+
