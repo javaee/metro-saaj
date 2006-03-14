@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ElementImpl.java,v 1.1.1.1 2006-01-27 13:10:57 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:10:57 $
+ * $Id: ElementImpl.java,v 1.2 2006-03-14 10:50:36 ashutoshshahi Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-03-14 10:50:36 $
  */
 
 /*
@@ -140,6 +140,10 @@ public class ElementImpl
 
         if ("xmlns".equals(prefix)) {
             return NamespaceContext.XMLNS_URI;
+        }
+        
+        if("xml".equals(prefix)) {
+            return NamespaceContext.XML_URI;
         }
 
         if ("".equals(prefix)) {
