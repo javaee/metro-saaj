@@ -23,9 +23,9 @@
  */
 
 /*
- * $Id: BugfixesTest.java,v 1.1.1.1 2006-01-27 13:11:01 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:11:01 $
+ * $Id: BugfixesTest.java,v 1.2 2006-03-14 12:04:00 ashutoshshahi Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-03-14 12:04:00 $
  */
 
 package bugfixes;
@@ -36,6 +36,7 @@ import java.net.URLStreamHandler;
 import javax.activation.URLDataSource;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Locale;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -50,6 +51,7 @@ import junit.framework.TestSuite;
 
 import javax.xml.transform.stream.StreamSource;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import util.TestHelper;
 
@@ -1204,6 +1206,19 @@ public class BugfixesTest extends TestCase {
         SOAPBody body = sm.getSOAPBody();
         SOAPBodyElement element = (SOAPBodyElement) body.getFirstChild();
         assertEquals(element.getValue(), "testing");
+    }
+    
+    public void testBug6389297() throws SOAPException{
+        MessageFactory factory = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+        SOAPMessage message = factory.createMessage();
+        SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+        SOAPBody body = envelope.getBody();
+        SOAPFault fault = body.addFault();
+        fault.addFaultReasonText("Version Mismatch", Locale.ENGLISH);
+        org.w3c.dom.Node reason = fault.getLastChild();
+        Element text = (Element)reason.getFirstChild();
+        //returns an empty string for xmlns:xml
+        assertEquals("", text.getAttribute("xmlns:xml"));       
     }
 
     public static void main(String[] args) throws Exception {
