@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPPartImpl.java,v 1.1.1.1 2006-01-27 13:10:55 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:10:55 $
+ * $Id: SOAPPartImpl.java,v 1.2 2006-03-23 14:59:11 ashutoshshahi Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-03-23 14:59:11 $
  */
 
 /*
@@ -603,7 +603,7 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
       }  
     }
 
-    protected String lookForXmlDecl() throws SOAPException {
+    protected XMLDeclarationParser lookForXmlDecl() throws SOAPException {
         if ((source != null) && (source instanceof StreamSource)) {
 
             Reader reader = null;
@@ -647,7 +647,7 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
                 String xmlDecl = ev.getXmlDeclaration();
                 if ((xmlDecl != null) && (xmlDecl.length() > 0))
                     this.omitXmlDecl = false;
-                return xmlDecl;
+                return ev;
             }
         }
         return null;

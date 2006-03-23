@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPPart1_1Impl.java,v 1.1.1.1 2006-01-27 13:10:57 kumarjayanti Exp $
+ * $Id: SOAPPart1_1Impl.java,v 1.2 2006-03-23 14:59:10 ashutoshshahi Exp $
  */
 
 /*
@@ -42,6 +42,7 @@ import javax.xml.transform.Source;
 import com.sun.xml.messaging.saaj.soap.*;
 import com.sun.xml.messaging.saaj.soap.impl.EnvelopeImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
+import com.sun.xml.messaging.saaj.util.XMLDeclarationParser;
 
 public class SOAPPart1_1Impl extends SOAPPartImpl implements SOAPConstants {
 
@@ -64,7 +65,7 @@ public class SOAPPart1_1Impl extends SOAPPartImpl implements SOAPConstants {
     protected Envelope createEnvelopeFromSource() throws SOAPException {
         // Record the presence of xml declaration before the envelope gets
         // created.
-        String xmlDecl = lookForXmlDecl();
+        XMLDeclarationParser parser = lookForXmlDecl();
         Source tmp = source;
         source = null;
         EnvelopeImpl envelope =
@@ -77,7 +78,8 @@ public class SOAPPart1_1Impl extends SOAPPartImpl implements SOAPConstants {
 
         if (!omitXmlDecl) {
             envelope.setOmitXmlDecl("no");
-            envelope.setXmlDecl(xmlDecl);
+            envelope.setXmlDecl(parser.getXmlDeclaration());
+            envelope.setCharsetEncoding(parser.getEncoding());
         }
         return envelope;
     }

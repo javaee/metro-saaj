@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: EnvelopeImpl.java,v 1.1.1.1 2006-01-27 13:10:56 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:10:56 $
+ * $Id: EnvelopeImpl.java,v 1.2 2006-03-23 14:59:11 ashutoshshahi Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-03-23 14:59:11 $
  */
 
 /*
@@ -274,11 +274,14 @@ public abstract class EnvelopeImpl extends ElementImpl implements Envelope {
                     charset + "\" ?>";
             }
         
+           StreamResult result = new StreamResult(out);
             if (xmlDecl != null) {
                 OutputStreamWriter writer = new OutputStreamWriter(out, charset);
                 writer.write(xmlDecl);
                 writer.flush();
+                result = new StreamResult(writer);
             }
+           
 
             log.log(
                 Level.FINE,
@@ -289,7 +292,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements Envelope {
                 "SAAJ0191.impl.set.encoding", 
                 new String[] { charset });
                 
-            StreamResult result = new StreamResult(out);
+            //StreamResult result = new StreamResult(out);
             transformer.transform(getContent(), result);
         } catch (Exception ex) {
             throw new IOException(ex.getMessage());

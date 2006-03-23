@@ -34,7 +34,7 @@ import javax.xml.transform.TransformerException;
  *  <?xml ... ?>
  *
  * @author Panos Kougiouris (panos@acm.org)
- * @version $Revision: 1.1.1.1 $ $Date: 2006-01-27 13:10:58 $
+ * @version $Revision: 1.2 $ $Date: 2006-03-23 14:59:10 $
  */
 
 public class XMLDeclarationParser {
@@ -112,6 +112,7 @@ public class XMLDeclarationParser {
         
         if (utf16) {
             xmlDecl = new String(decl.getBytes(), "utf-16");
+            xmlDecl = xmlDecl.substring(xmlDecl.indexOf("<"));
         } else {
             xmlDecl = decl;
         }
@@ -146,7 +147,11 @@ public class XMLDeclarationParser {
         }
 
         m_encoding = parseEncoding(xmlDecl, eqIndex);
-
+        if(m_encoding.startsWith("\"")){
+            m_encoding = m_encoding.substring(m_encoding.indexOf("\"")+1, m_encoding.lastIndexOf("\""));
+        } else if(m_encoding.startsWith("\'")){
+            m_encoding = m_encoding.substring(m_encoding.indexOf("\'")+1, m_encoding.lastIndexOf("\'"));
+        }
      }
 
      //--------------------------------------------------------------------
