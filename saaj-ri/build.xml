@@ -548,28 +548,28 @@
 
   <!-- SAAJ zip file distribution creation -->
   <!-- assumes the dist target has been called -->
-  <target name="create.zip" description="Create SAAJ zip file distribution">
+  <target name="create.zip" description="Create SAAJ zip file distribution" depends="dist">
 
     <!-- make build and output directories -->
     <mkdir dir="${zip.build.dir}"/>
     <mkdir dir="${zip.release.dir}"/>
 
     <!-- copy saaj jar files into the right directory structure -->
-    <copy todir="${zip.build.dir}/saaj/lib" overwrite="yes">
+    <copy todir="${zip.build.dir}/saaj${version}/lib" overwrite="yes">
       <fileset dir="${dist.home}/lib">
         <include name="saaj-*.jar"/>
       </fileset>
     </copy>
 
     <!-- make zip file -->
-    <zip destfile="${zip.release.dir}/SAAJ-${version}.zip" basedir="${zip.build.dir}" whenempty="fail"/>
+    <zip destfile="${zip.release.dir}/saaj${version}.zip" basedir="${zip.build.dir}" whenempty="fail"/>
 
   </target>
   
   
   <target name="create.src.zip" description="Create SAAJ source zip file">
     <mkdir dir="${zip.release.dir}"/>
-    <zip destfile="${zip.release.dir}/SAAJ-${version}.src.zip" basedir="${source.home}" />
+    <zip destfile="${zip.release.dir}/saaj${version}.src.zip" basedir="${source.home}" />
   </target>
 
 
