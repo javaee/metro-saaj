@@ -185,9 +185,9 @@
          basedir="${build.home}/classes">
      <manifest>
         <attribute name="Specification-Title" value="SOAP with Attachments API for Java"/>    
-        <attribute name="Specification-Version" value="1.3"/> 
+        <attribute name="Specification-Version" value="${version}"/> 
         <attribute name="Implementation-Title" value="SAAJ Implementation"/>    
-        <attribute name="Implementation-Version" value="1.3"/>     
+        <attribute name="Implementation-Version" value="${version}"/>     
         <attribute name="Implementation-Vendor" value="Sun Microsystems Inc"/>    
         <attribute name="Implementation-Vendor-Id" value="com.sun"/> 
         <attribute name="Extension-Name" value="com.sun.xml.messaging.saaj"/>
