@@ -573,7 +573,7 @@
        HPUX FILE DISTRIBUTION 
       ======================= -->
   <!-- assumes the dist target has been called -->
-    <target name="create.hpux" description="Create SAAJ HPUX package" depends="dist">
+    <target name="create.hpux" description="Create SAAJ HPUX package">
 
     <!-- copy template spec file to spec file in build dir and replace variables -->
     <copy tofile="${hpux.build.dir}/sun-saaj.psf" file="${basedir}/hpux/sun-saaj.psf.tmpl" overwrite="yes"/>
