@@ -81,8 +81,11 @@
   <!-- The zip file distribution directory -->
   <property name="zip.release.dir"    value="${basedir}/zip-dist"/>
 
-
-
+  <!-- The hpux build directory -->
+  <property name="hpux.build.dir"    value="${build.home}/hpux"/>
+                                                                                
+  <!-- The hpux distribution directory -->
+  <property name="hpux.release.dir"    value="${basedir}/hpux-dist"/>
 
 
 <!-- ************ Dependencies **** ************************************** -->
@@ -566,6 +569,55 @@
 
   </target>
   
+  <!-- =======================
+       HPUX FILE DISTRIBUTION 
+      ======================= -->
+  <!-- assumes the dist target has been called -->
+    <target name="create.hpux" description="Create SAAJ HPUX package" depends="dist">
+
+    <!-- copy template spec file to spec file in build dir and replace variables -->
+    <copy tofile="${hpux.build.dir}/sun-saaj.psf" file="${basedir}/hpux/sun-saaj.psf.tmpl" overwrite="yes"/>
+
+    <!-- replace saaj version -->
+    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${version}">
+      <replacetoken>@saaj.version@</replacetoken>
+    </replace>
+
+    <!-- replace date stamp... 1st specify correct format  -->
+    <tstamp>
+      <format property="pkg.datestamp" pattern="yyyy.MM.dd.hh.mm"/>
+    </tstamp>
+    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${pkg.datestamp}">
+      <replacetoken>@datestamp@</replacetoken>
+    </replace>
+
+    <!-- replace bindir, libdir  -->
+    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${basedir}/hpux">
+      <replacetoken>@bindir@</replacetoken>
+    </replace>
+
+    <mkdir dir="${hpux.build.dir}/lib"/>
+
+    <copy todir="${hpux.build.dir}/lib" overwrite="yes">
+      <fileset dir="${dist.home}/lib">
+        <include name="saaj-api.jar"/>
+        <include name="saaj-impl.jar"/>
+      </fileset>
+    </copy>
+
+    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${hpux.build.dir}/lib">
+      <replacetoken>@libdir@</replacetoken>
+    </replace>
+
+    <!-- make output directory -->
+    <mkdir dir="${hpux.release.dir}/sun-saaj"/>
+
+    <!--  -->
+	<exec  executable="/usr/sbin/swpackage" failonerror="true">
+      <arg line="-x follow_symlinks=true -x compression_type=gzip -x compress_cmd=/usr/contrib/bin/gzip -x uncompress_files=false -x compress_files=true -x reinstall_files=true -x package_in_place=false -x target_type=directory -x write_remote_files=true -x run_as_superuser=false -s ${hpux.build.dir}/sun-saaj.psf @ ${hpux.release.dir}/sun-saaj"/>
+	 </exec>
+
+   </target>
   
   <target name="create.src.zip" description="Create SAAJ source zip file">
     <mkdir dir="${zip.release.dir}"/>

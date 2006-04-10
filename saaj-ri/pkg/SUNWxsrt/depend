@@ -1,7 +1,7 @@
 # Copyright 2002 Microsystems, Inc.  All Rights Reserved.
 # Use is subject to license terms.
 #
-#	$Id: depend,v 1.1.1.1 2006-01-27 13:10:55 kumarjayanti Exp $
+#	$Id: depend,v 1.2 2006-04-10 07:14:12 kumarjayanti Exp $
 #
 # This package information file defines software dependencies associated
 # with the pkg.  You can define three types of pkg dependencies with this file:
@@ -27,5 +27,4 @@ P SUNWcsd	Core Solaris Devices
 P SUNWcsl	Core Solaris Libraries
 
 P SUNWjaf	Java Activation Framework
-P SUNWjmail	Java Mail Runtime
 P SUNWjaxp	Java API for XML Processing
