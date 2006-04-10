@@ -1,0 +1,73 @@
+</dd>
+<script id="eraser">
+  // hide all default navigation bars
+  
+  // get to the block
+  var dd = document.getElementById("eraser").previousSibling;
+  for( n=dd; n!=null; n=n.previousSibling ) {
+    if(n.nodeType==1) { // if element
+      if(n.tagName=="DD") { // kill all the link items
+        n.style.display = "none";
+      }
+      if(n.tagName=="DT") { // change the title
+        n.innerHTML = "JAXB project";
+      }
+    }
+  }
+  
+  // delete the "get involved" block
+  for( n=dd.parentNode.previousSibling; n!=null; n=n.previousSibling ) {
+    if(n.nodeType==1) { // if element
+      if(n.tagName=="DL") {
+        n.style.display = "none";
+      }
+    }
+  }
+  
+  // replace breadcrumbs
+  breadcrumbs = document.getElementById("breadcrumbs");
+  breadcrumbs.innerHTML = "<a href='https://community.java.net/java-ws-xml/'>Java WS/XML community</a> | <a href='https://glassfish.dev.java.net/'>Glassfish</a> | <a href='https://jwsdp.dev.java.net/'>JWSDP</a>";
+</script>
+
+
+
+<dd>
+  <ul>
+    <li>
+      <a href="/servlets/ProjectHome">Project home</a>
+    <li>
+      <a href="/servlets/ProjectMemberList">Membership</a>
+  </ul>
+<dd>
+  <ul>
+    <li>
+      <a href="/servlets/ProjectNewsList">Announcements</a>
+    <!-- does SAAJ also want to use this forum?
+    <li>
+      <a href="http://forums.java.net/jive/forum.jspa?forumID=46&start=0">Discussion forums</a>
+    -->
+    <li>
+      <a href="/servlets/ProjectMailingListList">Mailing lists</a>
+  </ul>
+<dd>
+  <ul>
+    <li>
+      <a href="/servlets/ProjectDocumentList">Downloads</a>
+      <a href="/source/browse/saaj/">Version control - CVS</a>
+  </ul>
+<dd>
+  <ul>
+    <li>
+      <a href="/servlets/ProjectIssues">Issue tracker</a>
+    <li>
+      <form name="ProjectIssuesForm" method="get" action="/issues/show_bug.cgi">
+        <input type="submit" value="Go to" /> # <input name="id" size="3" />
+      </form>
+  </ul>
+<dd>
+  <ul>
+    <li>
+      <a href="/faq/index.html">FAQ</a>
+    <li>
+      <a href="http://wiki.java.net/bin/view/Javawsxml/SaajSI">Wiki</a>
+  </ul>
