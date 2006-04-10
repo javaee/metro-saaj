@@ -1,7 +1,67 @@
 <html>
-<title>SAAJ Standard Implementation</title>
+<head>
+  <style>
+    .app H3 {
+      clear: none;
+    }
+    .axial {
+      display: none;
+    }
+    #apphead {
+      display: none;
+    }
+    #download-icon {
+      text-align: center;
+      padding-top: 1em;
+      padding-bottom: 1em;
+      background-color: white;
+    }
+    .floatbox {
+      width:190px;
+      
+      // background:rgb(254,236,219);
+      background:rgb(238,238,238);
+      margin-top: 1em;
+      padding: 5px;
+      // border: 1px solid rgb(252,142,37);
+      border: 1px solid rgb(170,170,170);
+    }
+  </style>
+  <link rel="alternate" type="application/rss+xml" href="/servlets/ProjectNewsRSS">
+  <link rel="SHORTCUT ICON" href="http://jaxb.dev.java.net/images/glassfish_favicon.gif">
+	<title>SAAJ Standard Implementation</title>
+</head>
 <body>
-<h1>SAAJ Standard Implementation Project</h1>
+<script>
+// kill "description" h3 bar
+ld = document.getElementById("longdescription");
+for( n=ld.firstChild; n!=null; n=n.nextSibling ) {
+  if(n.nodeType==1 && n.innerHTML=="Description" ) {
+    n.parentNode.removeChild(n);
+    break;
+  }
+}
+</script>
+<table border="0" width="100%">
+  <tr>
+<!--
+    <td><img src="/javaxml-duke.gif" align="middle"></td>
+-->
+    <td><a href="http://glassfish.dev.java.net" alt="GlassFish Community"><img align="left" src="images/glassfish_logo.gif" valign="top" style="border: 0px solid"></a></td>
+    <td>
+      <h1>SAAJ Project</h1>
+      Part of <a href="http://glassfish.dev.java.net">Project GlassFish</a>
+    </td>
+    <td width="*">
+      <div align=right>
+      <a href="/servlets/ProjectNewsRSS"><img src="/images/rss1.gif" border="0"></a><br>
+      <small>
+        (<a href="http://wiki.java.net/bin/view/Javawsxml/RssCorner">new to RSS?</a>)
+      </small>
+      </div>
+    </td>
+  </tr>
+</table>
 
 
 <h2>Welcome</h2>
