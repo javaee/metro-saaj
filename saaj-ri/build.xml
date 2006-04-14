@@ -11,6 +11,7 @@
   <property name="version" value="1.3"/>
   <property name="rpm.version" value="1.3"/>
   <property name="rpm.release" value="1"/>
+  <property name="zip.release" value="1"/>
 
 <!-- ************ Per user local properties ****************************** -->
 
@@ -558,14 +559,36 @@
     <mkdir dir="${zip.release.dir}"/>
 
     <!-- copy saaj jar files into the right directory structure -->
-    <copy todir="${zip.build.dir}/saaj${version}/lib" overwrite="yes">
+    <copy todir="${zip.build.dir}/saaj/lib" overwrite="yes">
       <fileset dir="${dist.home}/lib">
         <include name="saaj-*.jar"/>
       </fileset>
     </copy>
 
+    <copy todir="${zip.build.dir}" overwrite="yes">
+      <fileset dir="${basedir}/zip">
+        <include name="filelist.txt"/>
+        <include name="version"/>
+      </fileset>
+    </copy>
+
+    <!-- replace parameters in version file  -->
+    <replace file="${zip.build.dir}/version" value="${version}">
+      <replacetoken>@saaj.version@</replacetoken>
+    </replace>
+    <!-- replace date stamp... 1st specify correct format  -->
+    <tstamp>
+      <format property="pkg.datestamp" pattern="yyyyMMdd"/>
+    </tstamp>
+    <replace file="${zip.build.dir}/version" value="${pkg.datestamp}">
+      <replacetoken>@datestamp@</replacetoken>
+    </replace>
+    <replace file="${zip.build.dir}/version" value="${zip.release}">
+      <replacetoken>@zip.release@</replacetoken>
+    </replace>
+
     <!-- make zip file -->
-    <zip destfile="${zip.release.dir}/saaj${version}.zip" basedir="${zip.build.dir}" whenempty="fail"/>
+    <zip destfile="${zip.release.dir}/saaj.zip" basedir="${zip.build.dir}" whenempty="fail"/>
 
   </target>
   
