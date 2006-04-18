@@ -552,7 +552,7 @@
 
   <!-- SAAJ zip file distribution creation -->
   <!-- assumes the dist target has been called -->
-  <target name="create.zip" description="Create SAAJ zip file distribution" depends="dist">
+  <target name="create.zip" description="Create SAAJ zip file distribution">
 
     <!-- make build and output directories -->
     <mkdir dir="${zip.build.dir}"/>
