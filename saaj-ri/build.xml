@@ -740,20 +740,19 @@
     </filterset>
   </maven-repository-importer>
 
-  <!-- import to CVS
+  <!-- import to CVS -->
   <tstamp />
   <echo>importing to CVS...</echo>
   <cvs dest="build/maven-repo">
     <commandline>
-      <argument value="-d:pserver:${user.name}@java-net-cvs:/cvs" />
-      <argument line="-z9 import -ko -w *.jar -kb -m" />
+      <argument value="-d:pserver:${user.name}@kohsuke.sfbay:/cvs" />
+      <argument line="-z9 import -ko -W *.jar -kb -m" />
       <argument value="deploying new jars to the java.net maven repository" />
 
       <argument value="saaj/repo" />
       <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
     </commandline>
   </cvs>
-  -->
 </target>
   
 </project>
