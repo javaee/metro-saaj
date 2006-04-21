@@ -719,22 +719,13 @@
   </taskdef>
   <delete dir="build/maven-repo" /><!-- clean it -->
   <maven-repository-importer
-      destdir="build/maven-repo"
+      destdir="build/maven-repo" version="${version}${suffix}">
+    <artifact
       jar="${build.home}/lib/saaj-api.jar"
-      pom="${basedir}/poms/saaj-api.pom"
-      version="${version}${suffix}"
-      >
-    <filterset>
-      <filter token="API_VERSION" value="${version}${suffix}"/>
-    </filterset>
-  </maven-repository-importer>
-  <!-- repeat the maven-repository-importer if you have more jars -->
-
-  <maven-repository-importer
-      destdir="build/maven-repo"
+      pom="${basedir}/poms/saaj-api.pom" />
+    <artifact
       jar="${build.home}/lib/saaj-impl.jar"
-      pom="${basedir}/poms/saaj-impl.pom"
-      version="${version}${suffix}">
+      pom="${basedir}/poms/saaj-impl.pom" />
     <filterset>
       <filter token="API_VERSION" value="${version}${suffix}"/>
     </filterset>
