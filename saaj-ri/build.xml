@@ -9,6 +9,7 @@
 
   <property name="name" value="SAAJ RI"/>
   <property name="version" value="1.3"/>
+  <property name="suffix" value="-SNAPSHOT"/>
   <property name="rpm.version" value="1.3"/>
   <property name="rpm.release" value="1"/>
   <property name="zip.release" value="1"/>
@@ -704,5 +705,50 @@
             <arg value="mime.AttachImageTest"/>
         </java>
   </target>
+
+ <target name="push-to-maven" depends="jar">
+  <taskdef resource="maven-repository-importer.properties">
+    <classpath>
+      <pathelement path="${basedir}/lib/maven-repository-importer.jar" />
+    </classpath>
+  </taskdef>
+  <delete dir="build/maven-repo" /><!-- clean it -->
+  <maven-repository-importer
+      destdir="build/maven-repo"
+      jar="${build.home}/lib/saaj-api.jar"
+      pom="${basedir}/poms/saaj-api.pom"
+      version="${version}${suffix}"
+      >
+    <filterset>
+      <filter token="API_VERSION" value="${version}${suffix}"/>
+    </filterset>
+  </maven-repository-importer>
+  <!-- repeat the maven-repository-importer if you have more jars -->
+
+  <maven-repository-importer
+      destdir="build/maven-repo"
+      jar="${build.home}/lib/saaj-impl.jar"
+      pom="${basedir}/poms/saaj-impl.pom"
+      version="${version}${suffix}">
+    <filterset>
+      <filter token="API_VERSION" value="${version}${suffix}"/>
+    </filterset>
+  </maven-repository-importer>
+
+  <!-- import to CVS
+  <tstamp />
+  <echo>importing to CVS...</echo>
+  <cvs dest="build/maven-repo">
+    <commandline>
+      <argument value="-d:pserver:${user.name}@java-net-cvs:/cvs" />
+      <argument line="-z9 import -ko -w *.jar -kb -m" />
+      <argument value="deploying new jars to the java.net maven repository" />
+
+      <argument value="saaj/repo" />
+      <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
+    </commandline>
+  </cvs>
+  -->
+</target>
   
 </project>
