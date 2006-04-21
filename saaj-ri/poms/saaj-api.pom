@@ -1,0 +1,13 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>javax.xml.soap</groupId>
+  <artifactId>saaj-api</artifactId>
+  <version>@API_VERSION@</version>
+  <dependencies>
+    <dependency>
+      <groupId>activation</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.0.2</version>
+    </dependency>
+  </dependencies>
+</project>
