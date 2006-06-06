@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: FastInfosetDataContentHandler.java,v 1.1.1.1 2006-01-27 13:10:56 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:10:56 $
+ * $Id: FastInfosetDataContentHandler.java,v 1.2 2006-06-06 18:46:01 sandoz Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-06-06 18:46:01 $
  */
 
 /*
@@ -36,9 +36,6 @@ import java.io.InputStream;
 
 import javax.activation.*;
 import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import com.sun.xml.messaging.saaj.util.FastInfosetReflection;
 
@@ -49,12 +46,8 @@ import com.sun.xml.messaging.saaj.util.FastInfosetReflection;
  */
 public class FastInfosetDataContentHandler implements DataContentHandler {
     public final String STR_SRC = "org.jvnet.fastinfoset.FastInfosetSource";
-    private static Class fiSourceClass = null;
 
-    public FastInfosetDataContentHandler() throws ClassNotFoundException {
-        if (fiSourceClass == null) {
-            fiSourceClass = Class.forName(STR_SRC);
-        }
+    public FastInfosetDataContentHandler() {
     }
 
     /**
@@ -63,8 +56,9 @@ public class FastInfosetDataContentHandler implements DataContentHandler {
      */
     public DataFlavor[] getTransferDataFlavors() { // throws Exception;
         DataFlavor flavors[] = new DataFlavor[1];
-        flavors[0] = new ActivationDataFlavor(fiSourceClass, 
-            "application/fastinfoset", "Fast Infoset");
+        flavors[0] = new ActivationDataFlavor(
+                FastInfosetReflection.getFastInfosetSource_class(), 
+                "application/fastinfoset", "Fast Infoset");
         return flavors;
     }
 
