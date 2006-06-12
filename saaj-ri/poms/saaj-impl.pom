@@ -1,6 +1,6 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>javax.xml.soap</groupId>
+  <groupId>com.sun.xml.messaging.saaj</groupId>
   <artifactId>saaj-impl</artifactId>
   <version>@VERSION@</version>
   <dependencies>
@@ -8,11 +8,6 @@
       <groupId>javax.xml.soap</groupId>
       <artifactId>saaj-api</artifactId>
       <version>@API_VERSION@</version>
-    </dependency>
-    <dependency>
-      <groupId>activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>1.0.2</version>
     </dependency>
   </dependencies>
 </project>
