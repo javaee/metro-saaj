@@ -711,39 +711,41 @@
          dest="lib/maven-repository-importer.jar" />
   </target>
 
- <target name="push-to-maven" depends="jar">
-  <taskdef resource="maven-repository-importer.properties">
-    <classpath>
-      <pathelement path="${basedir}/lib/maven-repository-importer.jar" />
-    </classpath>
-  </taskdef>
-  <delete dir="build/maven-repo" /><!-- clean it -->
-  <maven-repository-importer
-      destdir="build/maven-repo" version="${version}${suffix}">
-    <artifact
-      jar="${build.home}/lib/saaj-api.jar"
-      pom="${basedir}/poms/saaj-api.pom" />
-    <artifact
-      jar="${build.home}/lib/saaj-impl.jar"
-      pom="${basedir}/poms/saaj-impl.pom" />
-    <filterset>
-      <filter token="API_VERSION" value="${version}${suffix}"/>
-    </filterset>
-  </maven-repository-importer>
-
-  <!-- import to CVS -->
-  <tstamp />
-  <echo>importing to CVS...</echo>
-  <cvs dest="build/maven-repo">
-    <commandline>
-      <argument value="-d:pserver:${user.name}@kohsuke.sfbay:/cvs" />
-      <argument line="-z9 import -ko -W *.jar -kb -m" />
-      <argument value="deploying new jars to the java.net maven repository" />
-
-      <argument value="saaj/repo" />
-      <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
-    </commandline>
-  </cvs>
-</target>
+  <target name="push-to-maven-prepare" depends="jar">
+    <taskdef resource="maven-repository-importer.properties">
+      <classpath>
+        <pathelement path="${basedir}/lib/maven-repository-importer.jar" />
+      </classpath>
+    </taskdef>
+    <delete dir="build/maven-repo" /><!-- clean it -->
+    <maven-repository-importer
+        destdir="build/maven-repo" version="${version}${suffix}">
+      <artifact
+        jar="${build.home}/lib/saaj-api.jar"
+        pom="${basedir}/poms/saaj-api.pom" />
+      <artifact
+        jar="${build.home}/lib/saaj-impl.jar"
+        pom="${basedir}/poms/saaj-impl.pom" />
+      <filterset>
+        <filter token="API_VERSION" value="${version}${suffix}"/>
+      </filterset>
+    </maven-repository-importer>
+  </target>
+  
+  <target name="push-to-maven" depends="push-to-maven-prepare">
+    <!-- import to CVS -->
+    <tstamp />
+    <echo>importing to CVS...</echo>
+    <cvs dest="build/maven-repo">
+      <commandline>
+        <argument value="-d:pserver:${user.name}@kohsuke.sfbay:/cvs" />
+        <argument line="-z9 import -ko -W *.jar -kb -m" />
+        <argument value="deploying new jars to the java.net maven repository" />
+  
+        <argument value="saaj/repo" />
+        <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
+      </commandline>
+    </cvs>
+  </target>
   
 </project>
