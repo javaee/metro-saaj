@@ -22,11 +22,34 @@ SOAP with Attachments API for Java<sup><font size="-2">TM</font></sup>
 (SAAJ) 1.3 provides the API for creating and sending SOAP messages by
 means of
 the <code>javax.xml.soap</code> package. It is used for the SOAP
-messaging that goes on behind the scenes in JAX-RPC and JAXR
-implementations. Developers can also use it to write SOAP messaging
-applications directly instead of using JAX-RPC.</p>
+messaging that goes on behind the scenes in JAX-RPC, and JAXR
+implementations. SOAP Handlers in JAX-WS use SAAJ APIs to access the
+SOAP Message.&nbsp; Developers can also use it to write SOAP messaging
+applications directly instead of using JAX-RPC/JAX-WS.</p>
 <hr>
-<b>NOTE:</b> The <code>javax.xml.messaging</code> package, defined in
+<b>NOTE:</b> <br>
+<p>&nbsp;The
+SAAJ specification is developed through the Java Community
+Process following the process described at
+<a href="http://www.jcp.org/en/procedures/overview">jcp.org</a>.
+This process involves an
+Expert Group with a lead that is responsible for delivering
+the specification, a reference implementation (RI) and a test
+compatibility kit (TCK).
+The primary goal of an RI is to support the development of the
+specification and to validate it. Specific RIs can have additional
+goals; the SAAJ RI is a production-quality implementation that is
+used directly in a number of products
+by Sun and other vendors. To emphasize the quality of the
+implementation we call it a <em>Standard Implementation</em>.
+</p>
+The SAAJ expert group has wide industry participation with Sun
+Microsystems as the EG lead. The initial API was part of JAXM 1.0 in
+<a href="http://jcp.org/en/jsr/detail?id=67">JSR-67</a> and was
+released in December 2001;
+the specification was later separated from JAXM in a maintenance
+release in June 2002. The <code>javax.xml.messaging</code> package,
+defined in
 the Java API for XML Messaging (JAXM) 1.1 specification, is not part of
 the <a
  href="http://java.sun.com/webservices/downloads/webservicespack.html">Java
