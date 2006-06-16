@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: FastInfosetReflection.java,v 1.2 2006-06-06 18:46:01 sandoz Exp $
- * $Revision: 1.2 $
- * $Date: 2006-06-06 18:46:01 $
+ * $Id: FastInfosetReflection.java,v 1.3 2006-06-16 11:39:58 sandoz Exp $
+ * $Revision: 1.3 $
+ * $Date: 2006-06-16 11:39:58 $
  */
 
 /*
@@ -103,40 +103,28 @@ public class FastInfosetReflection {
     
     static {
         try {
-            // Load the FastInfosetRuntime
-            Class clazz = Class.forName("com.sun.fastinfoset.runtime.FastInfosetRuntime");
-            Method m = clazz.getDeclaredMethod("getClassLoader", 
-                    new Class[] { ClassLoader.class });
-            // Obtain the class loader to use to load the rest of the Fast Infoset classes
-            ClassLoader cl = (ClassLoader)m.invoke(null, 
-                    new Object[] { FastInfosetReflection.class.getClassLoader() });
-            
-            
+            Class clazz = null;
             clazz =
-                Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentParser",
-                    true, cl);
+                Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentParser");
             fiDOMDocumentParser_new = clazz.getConstructor(null);
             fiDOMDocumentParser_parse = clazz.getMethod("parse", 
                 new Class[] { org.w3c.dom.Document.class, java.io.InputStream.class });
             
-            clazz = Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentSerializer",
-                    true, cl);
+            clazz = Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentSerializer");
             fiDOMDocumentSerializer_new = clazz.getConstructor(null);
             fiDOMDocumentSerializer_serialize = clazz.getMethod("serialize", 
                 new Class[] { org.w3c.dom.Node.class });
             fiDOMDocumentSerializer_setOutputStream = clazz.getMethod("setOutputStream",
                 new Class[] { java.io.OutputStream.class });
             
-            fiFastInfosetSource_class = clazz = Class.forName("org.jvnet.fastinfoset.FastInfosetSource",
-                    true, cl);
+            fiFastInfosetSource_class = clazz = Class.forName("org.jvnet.fastinfoset.FastInfosetSource");
             fiFastInfosetSource_new = clazz.getConstructor(
                 new Class[] { java.io.InputStream.class });
             fiFastInfosetSource_getInputStream = clazz.getMethod("getInputStream", null);          
             fiFastInfosetSource_setInputStream = clazz.getMethod("setInputStream", 
                 new Class[] { java.io.InputStream.class });          
             
-            clazz = Class.forName("org.jvnet.fastinfoset.FastInfosetResult",
-                    true, cl);
+            clazz = Class.forName("org.jvnet.fastinfoset.FastInfosetResult");
             fiFastInfosetResult_new = clazz.getConstructor(
                 new Class[] { java.io.OutputStream.class });
             fiFastInfosetResult_getOutputStream = clazz.getMethod("getOutputStream", null);           
