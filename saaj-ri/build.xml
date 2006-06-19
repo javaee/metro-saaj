@@ -367,6 +367,7 @@
     <delete    dir="${pkg.release.dir}"/>
     <delete    dir="${rpm.release.dir}"/>
     <delete    dir="${zip.release.dir}"/>
+    <delete    dir="${basedir}/j2se-integration" />
   </target>
 
 
@@ -747,5 +748,28 @@
       </commandline>
     </cvs>
   </target>
+
+  <target name="integrate-package-rename-task">
+    <get src="http://kohsuke.sfbay/hudson/job/package-rename-task/lastSuccessfulBuild/artifact/target/package-rename-task-1.0.jar"
+         dest="${basedir}/lib/package-rename-task.jar"/>
+  </target>
+
+  <target name="j2se-integration"  description="prepare renamed source code for J2SE integration">
+	<taskdef name="prename" classname="com.sun.wts.tools.ant.PackageRenameTask">
+	    <classpath>
+              <pathelement path="${basedir}/lib/package-rename-task.jar"/>
+            </classpath>
+        </taskdef>
+	<prename srcdir="src/java" destdir="j2se-integration/saaj-ri/src/java">
+            <pattern from="com.sun.xml.messaging" to="com.sun.xml.internal.messaging"/>
+        </prename>
+        <!-- sanity test -->
+        <mkdir dir="build/renamed-classes"/>
+	<javac srcdir="j2se-integration/saaj-ri/src/java" destdir="build/renamed-classes"  source="1.4">
+	<classpath>
+            <fileset dir="lib" includes="*.jar"/>
+        </classpath>
+        </javac>
+   </target>
   
 </project>
