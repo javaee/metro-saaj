@@ -368,6 +368,7 @@
     <delete    dir="${rpm.release.dir}"/>
     <delete    dir="${zip.release.dir}"/>
     <delete    dir="${basedir}/j2se-integration" />
+    <delete    dir="${basedir}/remove-rename" />
   </target>
 
 
@@ -766,6 +767,24 @@
         <!-- sanity test -->
         <mkdir dir="build/renamed-classes"/>
 	<javac srcdir="j2se-integration/saaj-ri/src/java" destdir="build/renamed-classes"  source="1.4">
+	<classpath>
+            <fileset dir="lib" includes="*.jar"/>
+        </classpath>
+        </javac>
+   </target>
+
+  <target name="remove-rename"  description="remove renaming to make saaj wore">
+	<taskdef name="prename" classname="com.sun.wts.tools.ant.PackageRenameTask">
+	    <classpath>
+              <pathelement path="${basedir}/lib/package-rename-task.jar"/>
+            </classpath>
+        </taskdef>
+	<prename srcdir="src/java" destdir="remove-rename/saaj-ri/src/java">
+            <pattern from="com.sun.org.apache.xerces.internal" to="org.apache.xerces"/>
+        </prename>
+        <!-- sanity test -->
+        <mkdir dir="build/nonrenamed-classes"/>
+	<javac srcdir="remove-rename/saaj-ri/src/java" destdir="build/nonrenamed-classes"  source="1.4">
 	<classpath>
             <fileset dir="lib" includes="*.jar"/>
         </classpath>

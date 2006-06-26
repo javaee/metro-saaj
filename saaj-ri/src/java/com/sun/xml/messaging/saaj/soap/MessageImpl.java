@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageImpl.java,v 1.1.1.1 2006-01-27 13:10:56 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:10:56 $
+ * $Id: MessageImpl.java,v 1.2 2006-06-26 08:47:57 kumarjayanti Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-06-26 08:47:57 $
  */
 
 /*
@@ -752,7 +752,7 @@ public abstract class MessageImpl
         needsSave();
     }
 
-    static private final Iterator nullIter = Collections.emptyList().iterator();
+    static private final Iterator nullIter = Collections.EMPTY_LIST.iterator();
 
     public Iterator getAttachments() {
         try {
