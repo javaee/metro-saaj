@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageImpl.java,v 1.2 2006-06-26 08:47:57 kumarjayanti Exp $
- * $Revision: 1.2 $
- * $Date: 2006-06-26 08:47:57 $
+ * $Id: MessageImpl.java,v 1.3 2006-08-04 09:24:24 ashutoshshahi Exp $
+ * $Revision: 1.3 $
+ * $Date: 2006-08-04 09:24:24 $
  */
 
 /*
@@ -102,6 +102,11 @@ public abstract class MessageImpl
      * application/fastinfoset
      */
     protected boolean acceptFastInfoset = false;
+    
+    protected MimeMultipart mmp = null;
+    
+    // if attachments are present, don't read the entire message in byte stream in saveTo()
+    private boolean optimizeAttachmentProcessing = true;
 
     // switch back to old MimeMultipart incase of problem
     private static boolean switchOffBM = false;
@@ -1091,6 +1096,8 @@ public abstract class MessageImpl
                  * be either XML of Fast depending on the mode.
                  */
                     in = getHeaderBytes();
+                    // no attachments, hence this property can be false
+                    this.optimizeAttachmentProcessing = false;
                 } catch (IOException ex) {
                     log.severe("SAAJ0539.soap.cannot.get.header.stream");
                     throw new SOAPExceptionImpl(
@@ -1105,21 +1112,12 @@ public abstract class MessageImpl
                         "Content-Type",
                         getExpectedContentType() +
                         (isFastInfoset ? "" : "; charset=" + charset));
+                headers.setHeader(
+                    "Content-Length",
+                    Integer.toString(messageByteCount));
             } else {
-                ByteOutputStream out = new ByteOutputStream();
-                if(hasXOPContent()){
-                    getXOPMessage().writeTo(out);
-                }else{
-                    MimeMultipart mmp = getMimeMessage();
-                    mmp.writeTo(out);
-                    if (!switchOffBM && !switchOffLazyAttachment &&
-                            (multiPart != null) && !attachmentsInitialized) {
-                        ((BMMimeMultipart)multiPart).setInputStream(
-                                ((BMMimeMultipart)mmp).getInputStream());
-                    }
-                }
-                messageBytes = out.getBytes();
-                messageByteCount = out.getCount();
+                if(!hasXOPContent())
+                    mmp = getMimeMessage();
             }
         } catch (Throwable ex) {
             log.severe("SAAJ0540.soap.err.saving.multipart.msg");
@@ -1127,10 +1125,6 @@ public abstract class MessageImpl
                     "Error during saving a multipart message",
                     ex);
         }
-          
-        headers.setHeader(
-            "Content-Length",
-            Integer.toString(messageByteCount));
 
         // FIX ME -- SOAP Action replaced by Content-Type optional parameter action
         /*
@@ -1214,11 +1208,33 @@ public abstract class MessageImpl
     }
 
     public void writeTo(OutputStream out) throws SOAPException, IOException {
-        if (saveRequired())
+        if (saveRequired()){
+            this.optimizeAttachmentProcessing = true;
             saveChanges();
+        }
 
-
-        out.write(messageBytes, 0, messageByteCount);
+        if(!optimizeAttachmentProcessing){
+            out.write(messageBytes, 0, messageByteCount);
+        }
+        else{
+            try{
+                if(hasXOPContent()){
+                    getXOPMessage().writeTo(out);
+                }else{
+                    mmp.writeTo(out);
+                    if (!switchOffBM && !switchOffLazyAttachment &&
+                            (multiPart != null) && !attachmentsInitialized) {
+                        ((BMMimeMultipart)multiPart).setInputStream(
+                                ((BMMimeMultipart)mmp).getInputStream());
+                    }
+                } 
+            } catch(Exception ex){
+                log.severe("SAAJ0540.soap.err.saving.multipart.msg");
+                throw new SOAPExceptionImpl(
+                        "Error during saving a multipart message",
+                        ex);                
+            }
+        }
 
         if(isCorrectSoapVersion(SOAP1_1_FLAG)) {
 
