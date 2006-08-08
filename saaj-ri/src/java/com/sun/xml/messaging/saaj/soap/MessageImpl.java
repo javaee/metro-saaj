@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageImpl.java,v 1.3 2006-08-04 09:24:24 ashutoshshahi Exp $
- * $Revision: 1.3 $
- * $Date: 2006-08-04 09:24:24 $
+ * $Id: MessageImpl.java,v 1.4 2006-08-08 10:16:59 ashutoshshahi Exp $
+ * $Revision: 1.4 $
+ * $Date: 2006-08-08 10:16:59 $
  */
 
 /*
@@ -1116,7 +1116,9 @@ public abstract class MessageImpl
                     "Content-Length",
                     Integer.toString(messageByteCount));
             } else {
-                if(!hasXOPContent())
+                if(hasXOPContent())
+                    mmp = getXOPMessage();
+                else
                     mmp = getMimeMessage();
             }
         } catch (Throwable ex) {
@@ -1219,7 +1221,7 @@ public abstract class MessageImpl
         else{
             try{
                 if(hasXOPContent()){
-                    getXOPMessage().writeTo(out);
+                    mmp.writeTo(out);
                 }else{
                     mmp.writeTo(out);
                     if (!switchOffBM && !switchOffLazyAttachment &&
