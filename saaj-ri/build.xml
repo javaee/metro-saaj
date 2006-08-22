@@ -766,7 +766,8 @@
             </classpath>
         </taskdef>
 	<prename srcdir="src/java" destdir="j2se-integration/saaj-ri/src/java">
-            <pattern from="com.sun.xml.messaging" to="com.sun.xml.internal.messaging"/>
+	    <pattern from="com.sun.xml" to="com.sun.xml.internal"/>
+	    <pattern from="org.jvnet.fastinfoset" to="com.sun.xml.internal.org.jvnet.fastinfoset" />
         </prename>
         <!-- sanity test -->
         <mkdir dir="build/renamed-classes"/>
