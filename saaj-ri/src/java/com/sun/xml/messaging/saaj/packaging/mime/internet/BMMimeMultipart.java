@@ -582,9 +582,13 @@ public  class BMMimeMultipart extends MimeMultipart {
 
         if (b == '\r') {
             b = is.read();
+            //skip any multiple '\r'
+            while (b == '\r') {
+                b = is.read();
+            }
             if (b == '\n') {
                 return true;
-            } else {
+            } else {     
                 throw new Exception(
                     "transport padding after a Mime Boundary  should end in a CRLF, found CR only");
             }
@@ -607,6 +611,10 @@ public  class BMMimeMultipart extends MimeMultipart {
             b = is.read();
             if (b == '\r') {
                 b = is.read();
+                //skip any multiple '\r'
+                while (b == '\r') {
+                    b = is.read();
+                }
                 if (b == '\n') {
                    return true;
                 }
