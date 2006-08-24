@@ -582,8 +582,8 @@ public  class BMMimeMultipart extends MimeMultipart {
 
         if (b == '\r') {
             b = is.read();
-            //skip any multiple '\r'
-            while (b == '\r') {
+            //skip any multiple '\r' "\r\n" --> "\r\r\n" on Win2k
+            if (b == '\r') {
                 b = is.read();
             }
             if (b == '\n') {
@@ -611,8 +611,8 @@ public  class BMMimeMultipart extends MimeMultipart {
             b = is.read();
             if (b == '\r') {
                 b = is.read();
-                //skip any multiple '\r'
-                while (b == '\r') {
+                //skip any multiple '\r': "\r\n" --> "\r\r\n" on Win2k
+                if (b == '\r') {
                     b = is.read();
                 }
                 if (b == '\n') {
