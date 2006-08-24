@@ -23,7 +23,7 @@
  */
 
 /**
- * $Id: AttachImageTest.java,v 1.1.1.1 2006-01-27 13:11:00 kumarjayanti Exp $
+ * $Id: AttachImageTest.java,v 1.2 2006-08-24 07:17:02 kumarjayanti Exp $
  */
 
 package mime;
@@ -484,7 +484,8 @@ public class AttachImageTest extends TestCase {
             msg.addAttachmentPart(ap);
             msg.saveChanges();
             byte[] bufx = ap.getRawContentBytes();
-            assertTrue(bufx.length == 1634);
+            // on Win2k CRLF changes into CRCRLF
+            assertTrue((bufx.length == 1634) || (bufx.length == 1710));
           
         }
 
