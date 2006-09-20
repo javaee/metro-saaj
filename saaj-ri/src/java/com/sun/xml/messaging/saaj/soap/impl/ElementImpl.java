@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ElementImpl.java,v 1.2 2006-03-14 10:50:36 ashutoshshahi Exp $
- * $Revision: 1.2 $
- * $Date: 2006-03-14 10:50:36 $
+ * $Id: ElementImpl.java,v 1.3 2006-09-20 13:13:36 ashutoshshahi Exp $
+ * $Revision: 1.3 $
+ * $Date: 2006-09-20 13:13:36 $
  */
 
 /*
@@ -1210,7 +1210,14 @@ public class ElementImpl
             prefix = qualifiedName.substring(0, index);
             localName = qualifiedName.substring(index + 1);
         }
-                super.setAttributeNS(namespaceURI,qualifiedName,value);
+        
+        // Workaround for bug 6467808 - This needs to be fixed in JAXP
+        if(elementQName.getLocalPart().equals("Fault") && 
+                (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(value) || 
+                SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(value)))
+            return;
+        
+        super.setAttributeNS(namespaceURI,qualifiedName,value);
         //String tmpLocalName = this.getLocalName();
         String tmpURI = this.getNamespaceURI();
         boolean isIDNS = false;
