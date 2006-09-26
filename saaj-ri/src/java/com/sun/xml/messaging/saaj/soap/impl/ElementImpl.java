@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ElementImpl.java,v 1.3 2006-09-20 13:13:36 ashutoshshahi Exp $
- * $Revision: 1.3 $
- * $Date: 2006-09-20 13:13:36 $
+ * $Id: ElementImpl.java,v 1.4 2006-09-26 15:39:24 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2006-09-26 15:39:24 $
  */
 
 /*
@@ -499,7 +499,8 @@ public class ElementImpl
         } else {
             setAttributeNS(NamespaceContext.XMLNS_URI, "xmlns", uri);
         }
-        tryToFindEncodingStyleAttributeName();
+        //Fix for CR:6474641
+        //tryToFindEncodingStyleAttributeName();
         return this;
     }
 
@@ -931,8 +932,9 @@ public class ElementImpl
         if (parent != null) {
             parent.removeChild(this);
         }
-        encodingStyleAttribute.clearName();
-        tryToFindEncodingStyleAttributeName();
+        encodingStyleAttribute.clearNameAndValue();
+        // Fix for CR: 6474641
+        //tryToFindEncodingStyleAttributeName();
     }
 
     public void tryToFindEncodingStyleAttributeName() {
@@ -972,6 +974,13 @@ public class ElementImpl
         public String getValue() {
             return attributeValue;
         }
+
+        /** Note: to be used only in detachNode method */
+        public void clearNameAndValue() {
+            attributeName = null;
+            attributeValue = null;
+        }
+
         private void reconcileAttribute() throws SOAPException {
             if (attributeName != null) {
                 removeAttribute(attributeName);
