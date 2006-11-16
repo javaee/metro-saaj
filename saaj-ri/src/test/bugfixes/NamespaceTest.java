@@ -127,11 +127,16 @@ public class NamespaceTest extends TestCase {
         SOAPEnvelope env = msg.getSOAPPart().getEnvelope();
         NamedNodeMap attrs = env.getAttributes();
         int attrsLen = attrs.getLength();
-        assertEquals("There's a single attribute", attrsLen, 1);
-        Attr curAttr = (Attr) attrs.item(0);
+        //assertEquals("There's a single attribute", attrsLen, 1);
+        // there should be no attributes returned in this case, by the getAttributes call
+        // since the only attr is a NamespaceDeclaration ATTR.
+        assertEquals("There's a single attribute", attrsLen, 0);
+        
+        /*Attr curAttr = (Attr) attrs.item(0);
+        System.out.println(curAttr.getNamespaceURI() + ":" + curAttr.getLocalName() + ":" +curAttr.getPrefix());
         assertTrue(curAttr.getNamespaceURI().length() > 0);
         assertTrue(curAttr.getLocalName().length() > 0);
-        assertTrue(curAttr.getPrefix().length() > 0);
+        assertTrue(curAttr.getPrefix().length() > 0); */
     }
 
     public static void main(String argv[]) {

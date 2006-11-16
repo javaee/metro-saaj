@@ -23,9 +23,9 @@
  */
 
 /*
- * $Id: BugfixesTest.java,v 1.2 2006-03-14 12:04:00 ashutoshshahi Exp $
- * $Revision: 1.2 $
- * $Date: 2006-03-14 12:04:00 $
+ * $Id: BugfixesTest.java,v 1.3 2006-11-16 07:23:42 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2006-11-16 07:23:42 $
  */
 
 package bugfixes;
@@ -1131,8 +1131,16 @@ public class BugfixesTest extends TestCase {
         ByteArrayOutputStream incorrect = new ByteArrayOutputStream();
         recvMsg.writeTo(incorrect);
         fin.close();
-
-        assertTrue(correct.toString().equals(incorrect.toString()));
+        Iterator it = ((javax.xml.soap.SOAPHeader)recvHdr).getChildElements();
+        SOAPHeaderElement n = (SOAPHeaderElement)it.next();
+        //making sure there was a Actor.
+        assertTrue(n.getActor() != null);
+        //making sure MU was "0""
+        assertTrue(!n.getMustUnderstand());
+        
+        // the check cannot be like this because with the latest workspace
+        // there is just a re-ordering of the attributes.
+        //assertTrue(correct.toString().equals(incorrect.toString()));
     }
     
 	/*
