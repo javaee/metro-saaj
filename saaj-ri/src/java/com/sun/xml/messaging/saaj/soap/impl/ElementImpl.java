@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ElementImpl.java,v 1.5 2006-11-16 07:22:11 kumarjayanti Exp $
- * $Revision: 1.5 $
- * $Date: 2006-11-16 07:22:11 $
+ * $Id: ElementImpl.java,v 1.6 2006-11-16 16:01:14 kumarjayanti Exp $
+ * $Revision: 1.6 $
+ * $Date: 2006-11-16 16:01:14 $
  */
 
 /*
@@ -184,31 +184,31 @@ public class ElementImpl
             // Find if there's an ancester whose name contains this prefix
             org.w3c.dom.Node currentAncestor = this;
             
-            String uri = currentAncestor.lookupNamespaceURI(prefix);
-            return uri;
-//            while (currentAncestor != null &&
-//                   !(currentAncestor instanceof Document)) {
-//                
-//               /* if (prefix.equals(currentAncestor.getPrefix())) {
-//                    String uri = currentAncestor.getNamespaceURI();
-//                    // this is because the javadoc says getNamespaceURI() is not a computed value
-//                    // and URI for a non-empty prefix cannot be null
-//                    if (uri != null)
-//                        return uri;
-//                }*/
-//                String uri = currentAncestor.lookupNamespaceURI(prefix);
-//                if (uri != null) {
-//                    return uri;
-//                }
-//                
-//                /*if (((Element) currentAncestor).hasAttributeNS(
-//                        NamespaceContext.XMLNS_URI, prefix)) {
-//                    return ((Element) currentAncestor).getAttributeNS(
-//                               NamespaceContext.XMLNS_URI, prefix);
-//                }*/
-//
-//                currentAncestor = currentAncestor.getParentNode();
-//            }
+//            String uri = currentAncestor.lookupNamespaceURI(prefix);
+//            return uri;
+            while (currentAncestor != null &&
+                   !(currentAncestor instanceof Document)) {
+                
+               /* if (prefix.equals(currentAncestor.getPrefix())) {
+                    String uri = currentAncestor.getNamespaceURI();
+                    // this is because the javadoc says getNamespaceURI() is not a computed value
+                    // and URI for a non-empty prefix cannot be null
+                    if (uri != null)
+                        return uri;
+                }*/
+                //String uri = currentAncestor.lookupNamespaceURI(prefix);
+                //if (uri != null) {
+                //    return uri;
+                //}
+                
+                if (((Element) currentAncestor).hasAttributeNS(
+                        NamespaceContext.XMLNS_URI, prefix)) {
+                    return ((Element) currentAncestor).getAttributeNS(
+                               NamespaceContext.XMLNS_URI, prefix);
+                }
+
+                currentAncestor = currentAncestor.getParentNode();
+            }
         }
 
         return null;
