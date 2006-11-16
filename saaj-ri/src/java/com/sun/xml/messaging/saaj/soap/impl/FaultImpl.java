@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: FaultImpl.java,v 1.1.1.1 2006-01-27 13:10:56 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:10:56 $
+ * $Id: FaultImpl.java,v 1.2 2006-11-16 17:39:10 kumarjayanti Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-11-16 17:39:10 $
  */
 
 /*
@@ -151,8 +151,8 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         }
 
         String prefix = code.substring(0, prefixIndex);
-        String nsName =
-            ((ElementImpl) codeContainingElement).getNamespaceURI(prefix);
+        String nsName =((ElementImpl) codeContainingElement).lookupNamespaceURI(prefix);
+            //((ElementImpl) codeContainingElement).getNamespaceURI(prefix);
         return new QName(nsName, getLocalPart(code), prefix);
     }
 
