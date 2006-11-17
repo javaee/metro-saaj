@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ElementImpl.java,v 1.6 2006-11-16 16:01:14 kumarjayanti Exp $
- * $Revision: 1.6 $
- * $Date: 2006-11-16 16:01:14 $
+ * $Id: ElementImpl.java,v 1.7 2006-11-17 18:07:38 vivekp Exp $
+ * $Revision: 1.7 $
+ * $Date: 2006-11-17 18:07:38 $
  */
 
 /*
@@ -1229,10 +1229,14 @@ public class ElementImpl
         }
         
         // Workaround for bug 6467808 - This needs to be fixed in JAXP
-        if(elementQName.getLocalPart().equals("Fault") && 
-                (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(value) || 
-                SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(value)))
-            return;
+
+        // Rolling back this fix, this is a wrong fix, infact its causing other regressions in JAXWS tck and
+        // other tests, because of this change the namespace declarations on soapenv:Fault element are never
+        // picked up. The fix for bug 6467808 should be in JAXP.
+//        if(elementQName.getLocalPart().equals("Fault") &&
+//                (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(value) ||
+//                SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(value)))
+//            return;
         
         super.setAttributeNS(namespaceURI,qualifiedName,value);
         //String tmpLocalName = this.getLocalName();
