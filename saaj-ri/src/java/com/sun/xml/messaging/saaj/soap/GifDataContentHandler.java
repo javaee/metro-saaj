@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: GifDataContentHandler.java,v 1.1.1.1 2006-01-27 13:10:55 kumarjayanti Exp $
- * $Revision: 1.1.1.1 $
- * $Date: 2006-01-27 13:10:55 $
+ * $Id: GifDataContentHandler.java,v 1.2 2006-11-23 09:32:47 kumarjayanti Exp $
+ * $Revision: 1.2 $
+ * $Date: 2006-11-23 09:32:47 $
  */
 
 /*
@@ -109,7 +109,7 @@ public class GifDataContentHandler extends Component implements DataContentHandl
      */
     public void writeTo(Object obj, String type, OutputStream os)
 			throws IOException {
-	if (!(obj instanceof Image))
+	if (obj != null && !(obj instanceof Image))
 	    throw new IOException("\"" + getDF().getMimeType() +
 		"\" DataContentHandler requires Image object, " +
 		"was given object of type " + obj.getClass().toString());
