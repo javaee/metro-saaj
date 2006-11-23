@@ -35,6 +35,8 @@ import org.w3c.dom.Document;
 
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 
+import java.io.*;
+
 /*
  * Tests to check for namespace rules being followed in SOAP message creation.
  */
@@ -316,6 +318,24 @@ public class NamespaceTest extends TestCase {
             String extraPrefix = (String) eachDeclaration.next();
             fail("An extra namespace declaration was added for: " + extraPrefix);
         }
+    }
+    
+    public void testLookupNamespaceURIDOML3() throws Exception {
+        String msg = "<?xml version='1.0' ?><S:Envelope xmlns:S='http://schemas.xmlsoap.org/soap/envelope/'><S:Body><ns2:Fault xmlns:ns2='http://schemas.xmlsoap.org/soap/envelope/' xmlns:ns3='http://www.w3.org/2003/05/soap-envelope'><faultcode>ns3:VersionMismatch</faultcode><faultstring>Couldn't create SOAP message. Expecting Envelope in namespace http://schemas.xmlsoap.org/soap/envelope/, but got http://wrongname.org </faultstring></ns2:Fault></S:Body></S:Envelope>";
+        
+        
+        MessageFactory messageFactory = MessageFactory.newInstance();
+        MimeHeaders headers = new MimeHeaders();
+        headers.addHeader("Content-Type", "text/xml");
+        
+        SOAPMessage soapMsg = messageFactory.createMessage(headers,new ByteArrayInputStream(msg.getBytes()));
+        soapMsg.writeTo(System.out);
+        SOAPBody body = soapMsg.getSOAPPart().getEnvelope().getBody();
+        
+        SOAPFault fault = (SOAPFault)body.getFault();
+        String uri = fault.lookupNamespaceURI("ns3");
+        assertTrue(uri.equals("http://www.w3.org/2003/05/soap-envelope"));
+         
     }
 
     public static void main(String argv[]) {
