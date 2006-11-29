@@ -15,7 +15,7 @@
             </folders>
             <ide-actions>
                 <action name="build">
-                    <target>jar</target>
+                    <target>wspack</target>
                 </action>
                 <action name="clean">
                     <target>clean</target>
@@ -25,7 +25,10 @@
                 </action>
                 <action name="rebuild">
                     <target>clean</target>
-                    <target>jar</target>
+                    <target>wspack</target>
+                </action>
+                <action name="test">
+                    <target>run-tests</target>
                 </action>
             </ide-actions>
             <view>
@@ -43,6 +46,7 @@
                     <ide-action name="clean"/>
                     <ide-action name="javadoc"/>
                     <ide-action name="rebuild"/>
+                    <ide-action name="test"/>
                 </context-menu>
             </view>
             <subprojects/>
