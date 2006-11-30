@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPFactory1_2Impl.java,v 1.1.1.1 2006-01-27 13:10:57 kumarjayanti Exp $
+ * $Id: SOAPFactory1_2Impl.java,v 1.2 2006-11-30 07:48:23 kumarjayanti Exp $
  */
 
 /*
@@ -52,6 +52,12 @@ public class SOAPFactory1_2Impl extends SOAPFactoryImpl {
 
     public SOAPFault createFault(String reasonText, QName faultCode)
         throws SOAPException {
+         if (faultCode == null) {
+            throw new IllegalArgumentException("faultCode argument for createFault was passed NULL");
+        }
+        if (reasonText == null) {
+            throw new IllegalArgumentException("reasonText argument for createFault was passed NULL");
+        }
         Fault1_2Impl fault = new Fault1_2Impl(createDocument(), null);
         fault.setFaultString(reasonText);
         fault.setFaultCode(faultCode);
