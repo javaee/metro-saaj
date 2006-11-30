@@ -3,7 +3,7 @@
  SUN PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
 -->
 
-<project name="SAAJ Reference Implementation" default="image" basedir=".">
+<project name="SAAJ Reference Implementation" default="wspack" basedir=".">
 
 <!-- ************ What the heck are we building ************************** -->
 
