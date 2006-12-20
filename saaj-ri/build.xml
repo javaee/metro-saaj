@@ -744,7 +744,7 @@
     <echo>importing to CVS...</echo>
     <cvs dest="build/maven-repo">
       <commandline>
-        <argument value="-d:pserver:${user.name}@kohsuke.sfbay:/cvs" />
+        <argument value="-d:pserver:kumarjayanti@kohsuke.sfbay:/cvs" />
         <argument line="-z9 import -ko -W *.jar -kb -m" />
         <argument value="deploying new jars to the java.net maven repository" />
   
