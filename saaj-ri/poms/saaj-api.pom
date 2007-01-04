@@ -5,9 +5,10 @@
   <version>@API_VERSION@</version>
   <dependencies>
     <dependency>
-      <groupId>activation</groupId>
+      <!-- 1.0.2 would do, but that's not available in the repository -->
+      <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
-      <version>1.0.2</version>
+      <version>1.1</version>
     </dependency>
   </dependencies>
 </project>
