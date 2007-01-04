@@ -717,7 +717,7 @@
          dest="lib/maven-repository-importer.jar" />
   </target>
 
-  <target name="push-to-maven-prepare" depends="jar">
+  <target name="push-to-maven-prepare" depends="jar, create.src.zip">
     <taskdef resource="maven-repository-importer.properties">
       <classpath>
         <pathelement path="${basedir}/lib/maven-repository-importer.jar" />
@@ -728,9 +728,11 @@
         destdir="build/maven-repo" version="${version}${suffix}">
       <artifact
         jar="${build.home}/lib/saaj-api.jar"
+        srczip="lib/saaj-api-src.zip"
         pom="${basedir}/poms/saaj-api.pom" />
       <artifact
         jar="${build.home}/lib/saaj-impl.jar"
+        srczip="${zip.release.dir}/saaj${version}.src.zip"
         pom="${basedir}/poms/saaj-impl.pom" />
       <filterset>
         <filter token="API_VERSION" value="${version}${suffix}"/>
