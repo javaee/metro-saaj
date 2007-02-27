@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: FaultImpl.java,v 1.2 2006-11-16 17:39:10 kumarjayanti Exp $
- * $Revision: 1.2 $
- * $Date: 2006-11-16 17:39:10 $
+ * $Id: FaultImpl.java,v 1.3 2007-02-27 17:48:18 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2007-02-27 17:48:18 $
  */
 
 /*
@@ -64,6 +64,8 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
     protected abstract NameImpl getFaultActorName();
     protected abstract DetailImpl createDetail();
     protected abstract FaultElementImpl createSOAPFaultElement(String localName);
+    protected abstract FaultElementImpl createSOAPFaultElement(QName qname);
+    protected abstract FaultElementImpl createSOAPFaultElement(Name qname);
     protected abstract void checkIfStandardFaultCode(String faultCode, String uri) throws SOAPException;
     protected abstract void finallySetFaultCode(String faultcode) throws SOAPException;
     protected abstract boolean isStandardFaultElement(String localName);
@@ -232,7 +234,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
                 if (isStandardFaultElement(localName))
                     return replaceElementWithSOAPElement(
                                element, 
-                               createSOAPFaultElement(localName));
+                               createSOAPFaultElement(soapElement.getElementQName()));
                 return soapElement;
             }
         } else {
@@ -244,7 +246,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
                 String localName = elementName.getLocalName();
                 if (isStandardFaultElement(localName))
                     newElement =
-                        (ElementImpl) createSOAPFaultElement(localName);
+                        (ElementImpl) createSOAPFaultElement(elementName);
                 else
                     newElement = (ElementImpl) createElement(elementName);
             }

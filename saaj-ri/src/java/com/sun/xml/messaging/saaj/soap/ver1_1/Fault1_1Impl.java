@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Fault1_1Impl.java,v 1.1.1.1 2006-01-27 13:10:57 kumarjayanti Exp $
+ * $Id: Fault1_1Impl.java,v 1.2 2007-02-27 17:48:18 kumarjayanti Exp $
  */
 
 /*
@@ -300,4 +300,17 @@ public class Fault1_1Impl extends FaultImpl {
         }
         return super.addChildElement(element);
     }
+
+    protected FaultElementImpl createSOAPFaultElement(QName qname) {
+         return new FaultElement1_1Impl(
+                       ((SOAPDocument) getOwnerDocument()).getDocument(),
+                       qname);
+    }
+
+    protected FaultElementImpl createSOAPFaultElement(Name qname) {
+         return new FaultElement1_1Impl(
+                       ((SOAPDocument) getOwnerDocument()).getDocument(),
+                       (NameImpl)qname);
+    }
+
 }

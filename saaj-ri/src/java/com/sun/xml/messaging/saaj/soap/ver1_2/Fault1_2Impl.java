@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Fault1_2Impl.java,v 1.1.1.1 2006-01-27 13:10:57 kumarjayanti Exp $
+ * $Id: Fault1_2Impl.java,v 1.2 2007-02-27 17:48:19 kumarjayanti Exp $
  */
 
 /*
@@ -299,7 +299,7 @@ public class Fault1_2Impl extends FaultImpl {
         if (faultNode != null) {
             faultNode.detachNode();
         }
-        faultNode = createSOAPFaultElement(getFaultNodeName().getLocalName());
+        faultNode = createSOAPFaultElement(getFaultNodeName());
         faultNode = faultNode.addTextNode(uri);
         if (getFaultRole() != null) {
             insertBefore(faultNode, this.faultActorElement);
@@ -322,7 +322,7 @@ public class Fault1_2Impl extends FaultImpl {
         if (this.faultActorElement != null)
             this.faultActorElement.detachNode();
         this.faultActorElement =
-            createSOAPFaultElement(getFaultActorName().getLocalName());
+            createSOAPFaultElement(getFaultActorName());
         this.faultActorElement.addTextNode(uri);
         if (hasDetail()) {
             insertBefore(this.faultActorElement, this.detail);
@@ -544,6 +544,18 @@ public class Fault1_2Impl extends FaultImpl {
 
     protected QName getDefaultFaultCode() {
         return SOAPConstants.SOAP_SENDER_FAULT;
+    }
+    
+     protected FaultElementImpl createSOAPFaultElement(QName qname) {
+         return new FaultElement1_2Impl(
+                       ((SOAPDocument) getOwnerDocument()).getDocument(),
+                       qname);
+    }
+     
+    protected FaultElementImpl createSOAPFaultElement(Name qname) {
+         return new FaultElement1_2Impl(
+                       ((SOAPDocument) getOwnerDocument()).getDocument(),
+                       (NameImpl)qname);
     }
 
 }
