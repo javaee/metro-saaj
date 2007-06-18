@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: FaultImpl.java,v 1.3 2007-02-27 17:48:18 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2007-02-27 17:48:18 $
+ * $Id: FaultImpl.java,v 1.4 2007-06-18 12:09:21 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2007-06-18 12:09:21 $
  */
 
 /*
@@ -254,7 +254,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         }
     }
 
-    private SOAPFaultElement addFaultCodeElement() throws SOAPException {
+    protected SOAPFaultElement addFaultCodeElement() throws SOAPException {
         if (this.faultCodeElement == null)
             findFaultCodeElement();
         if (this.faultCodeElement == null) {

@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Fault1_1Impl.java,v 1.2 2007-02-27 17:48:18 kumarjayanti Exp $
+ * $Id: Fault1_1Impl.java,v 1.3 2007-06-18 12:09:22 kumarjayanti Exp $
  */
 
 /*
@@ -313,4 +313,46 @@ public class Fault1_1Impl extends FaultImpl {
                        (NameImpl)qname);
     }
 
+    public void setFaultCode(String faultCode, String prefix, String uri)
+        throws SOAPException {
+        if (prefix == null || prefix.equals("")) {
+            if (uri != null && !"".equals(uri)) {
+                prefix = getNamespacePrefix(uri);
+                if (prefix == null || prefix.equals("")) {
+                    prefix = "ns0";
+                }
+            }   
+        }
+
+        if (this.faultCodeElement == null)
+            findFaultCodeElement();
+
+        if (this.faultCodeElement == null)
+            this.faultCodeElement = addFaultCodeElement();
+        else
+            this.faultCodeElement.removeContents();
+ 
+        if (uri == null || uri.equals("")) {
+            if (prefix != null && !"".equals("prefix")) {
+                uri = this.faultCodeElement.getNamespaceURI(prefix);
+            }
+        }
+        
+        if (uri == null || uri.equals("")) {
+            //SOAP 1.1 Allows this
+            if (prefix != null && !"".equals(prefix)) {
+                log.severe("SAAJ0140.impl.no.ns.URI");
+                throw new SOAPExceptionImpl("No NamespaceURI, SOAP requires faultcode content to be a QName");
+            }
+        } else {
+            checkIfStandardFaultCode(faultCode, uri);
+            ((FaultElementImpl) this.faultCodeElement).ensureNamespaceIsDeclared(prefix, uri);
+        }
+        
+        if (prefix == null || "".equals(prefix)) {
+            finallySetFaultCode(faultCode);
+        } else {
+            finallySetFaultCode(prefix + ":" + faultCode);
+        }
+    }
 }
