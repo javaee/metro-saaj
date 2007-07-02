@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Fault1_1Impl.java,v 1.3 2007-06-18 12:09:22 kumarjayanti Exp $
+ * $Id: Fault1_1Impl.java,v 1.4 2007-07-02 10:59:31 kumarjayanti Exp $
  */
 
 /*
@@ -324,6 +324,7 @@ public class Fault1_1Impl extends FaultImpl {
             }   
         }
 
+       
         if (this.faultCodeElement == null)
             findFaultCodeElement();
 
@@ -337,13 +338,19 @@ public class Fault1_1Impl extends FaultImpl {
                 uri = this.faultCodeElement.getNamespaceURI(prefix);
             }
         }
+       
+        if (standardFaultCode(faultCode) && 
+                ((uri == null) || uri.equals(""))) {
+             log.log(Level.SEVERE, "SAAJ0306.ver1_1.faultcode.incorrect.namespace", new Object[]{faultCode});
+                throw new SOAPExceptionImpl("Namespace Error, Standard Faultcode: " +  faultCode + ", should be in SOAP 1.1 Namespace");
+        }
         
         if (uri == null || uri.equals("")) {
             //SOAP 1.1 Allows this
             if (prefix != null && !"".equals(prefix)) {
                 log.severe("SAAJ0140.impl.no.ns.URI");
                 throw new SOAPExceptionImpl("No NamespaceURI, SOAP requires faultcode content to be a QName");
-            }
+            } 
         } else {
             checkIfStandardFaultCode(faultCode, uri);
             ((FaultElementImpl) this.faultCodeElement).ensureNamespaceIsDeclared(prefix, uri);
@@ -354,5 +361,17 @@ public class Fault1_1Impl extends FaultImpl {
         } else {
             finallySetFaultCode(prefix + ":" + faultCode);
         }
+    }
+    
+    private boolean standardFaultCode(String faultCode) {
+        if (faultCode.equals("VersionMismatch") || faultCode.equals("MustUnderstand")
+            || faultCode.equals("Client") || faultCode.equals("Server")) {
+            return true;    
+        }
+        if (faultCode.startsWith("VersionMismatch.") || faultCode.startsWith("MustUnderstand.")
+            || faultCode.startsWith("Client.") || faultCode.startsWith("Server.")) {
+            return true;    
+        }
+        return false;
     }
 }
