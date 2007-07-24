@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: EnvelopeFactory.java,v 1.2 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:21 $
+ * $Id: EnvelopeFactory.java,v 1.3 2007-07-24 10:37:43 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2007-07-24 10:37:43 $
  */
 
 /*
@@ -114,6 +114,9 @@ public class EnvelopeFactory {
                     e);
             }
             InputSource is = SAXSource.sourceToInputSource(src);
+            if (is.getEncoding()== null && soapPart.getSourceCharsetEncoding() != null) {
+                is.setEncoding(soapPart.getSourceCharsetEncoding());
+            }
             XMLReader rejectFilter;
             try {
                 rejectFilter = new RejectDoctypeSaxFilter(saxParser);
