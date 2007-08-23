@@ -55,18 +55,16 @@
 
 package soap;
 
-import java.io.ByteArrayInputStream;import java.io.StringWriter;import javax.xml.soap.*;import javax.xml.transform.Transformer;import javax.xml.transform.TransformerFactory;import javax.xml.transform.dom.DOMSource;import javax.xml.transform.stream.StreamResult;import javax.xml.transform.stream.StreamSource;import junit.framework.TestCase;
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
+import javax.xml.soap.*;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import junit.framework.TestCase;
 
-/*
- * Test1.java
- *
- * Created on June 20, 2003, 8:26 AM
- */
-
-/**
- *
- * @author  pej
- */
 public class DetailTest extends TestCase {
     
     /** Creates a new instance of Test1 */
@@ -83,22 +81,9 @@ public class DetailTest extends TestCase {
 	    fail();
         }
     }
-    
-    public void doit1() throws Exception {
-		String testDoc =
-		  "<?xml version='1.0' encoding='UTF-8'?>\n"
-		+ "<D:Envelope xmlns:D='http://schemas.xmlsoap.org/soap/envelope/'>\n"
-    		+ "	<D:Body>\n"
-	        + "		<D:Fault>\n"
-            	+ "			<D:faultcode>Client.invalidSignature</D:faultcode>\n"
-            	+ "			<D:faultstring>invalid signature</D:faultstring>\n"
-            	+ "			<D:detail>\n"
-                + "				27: Invalid Signature\n"
-            	+ "			</D:detail>\n"
-        	+ "		</D:Fault>\n"
-    		+ "	</D:Body>\n"
-		+ "</D:Envelope>\n";
 
+    public void doit1() throws Exception {
+		String testDoc = 		  "<?xml version='1.0' encoding='UTF-8'?>\n" 		+ "<D:Envelope xmlns:D='http://schemas.xmlsoap.org/soap/envelope/'>\n"     		+ "	<D:Body>\n" 	        + "		<D:Fault>\n"             	+ "			<D:faultcode>Client.invalidSignature</D:faultcode>\n"             	+ "			<D:faultstring>invalid signature</D:faultstring>\n"             	+ "			<D:detail>\n"                 + "				27: Invalid Signature\n"             	+ "			</D:detail>\n"         	+ "		</D:Fault>\n"     		+ "	</D:Body>\n" 		+ "</D:Envelope>\n"; 
 		byte[] testDocBytes = testDoc.getBytes("UTF-8");
                 ByteArrayInputStream bais = new ByteArrayInputStream(testDocBytes);
 		StreamSource strSource = new StreamSource(bais);
@@ -113,8 +98,6 @@ public class DetailTest extends TestCase {
 		SOAPBody body = envelope.getBody();
 		SOAPFault fault = body.getFault();
 		Detail detail = fault.getDetail();
-		//System.out.println("\nnodeToString=" + nodeToString(envelope) + "\n\n");
-		//System.out.println("****** " + detail.getPrefix() + " *******");
 		assertTrue(detail.getPrefix().length()>0);
     }
 
@@ -126,8 +109,25 @@ public class DetailTest extends TestCase {
 
         	DOMSource source = new DOMSource(node);
         	StreamResult result = new StreamResult(stringWriter);
-
         	transformer.transform(source, result);
         	return stringWriter.toString();
+    }
+
+    public void testDetailEntryCR6581434() {
+        try {
+            MessageFactory mf = MessageFactory.newInstance();
+            SOAPMessage m = mf.createMessage();
+            SOAPEnvelope se = m.getSOAPPart().getEnvelope();
+            Name codeName  = se.createName("ErrorCode", "as", null);
+            SOAPFault fault = m.getSOAPBody().addFault();
+            Detail detail = fault.addDetail();
+            detail.addNamespaceDeclaration("as", "http://abc.com/test");
+            DetailEntry codeDetail = detail.addDetailEntry(codeName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+
     }
 }
