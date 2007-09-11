@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageImpl.java,v 1.7 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.7 $
- * $Date: 2007-07-16 16:41:21 $
+ * $Id: MessageImpl.java,v 1.8 2007-09-11 07:43:48 kumarjayanti Exp $
+ * $Revision: 1.8 $
+ * $Date: 2007-09-11 07:43:48 $
  */
 
 /*
@@ -877,6 +877,7 @@ public abstract class MessageImpl
             }
         }
         attachments = f;
+       // needsSave();
     }
 
     public AttachmentPart createAttachmentPart() {

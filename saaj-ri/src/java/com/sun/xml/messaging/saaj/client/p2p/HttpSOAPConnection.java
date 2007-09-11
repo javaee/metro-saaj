@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: HttpSOAPConnection.java,v 1.2 2007-07-16 16:41:19 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:19 $
+ * $Id: HttpSOAPConnection.java,v 1.3 2007-09-11 07:43:48 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2007-09-11 07:43:48 $
  */
 
 /*
@@ -101,6 +101,9 @@ public class HttpSOAPConnection extends SOAPConnection {
 
         try {
             messageFactory = MessageFactory.newInstance(SOAPConstants.DYNAMIC_SOAP_PROTOCOL);
+        } catch (NoSuchMethodError ex) {
+            //fallback to default SOAP 1.1 in this case for backward compatibility
+            messageFactory = MessageFactory.newInstance();
         } catch (Exception ex) {
             log.log(Level.SEVERE, "SAAJ0001.p2p.cannot.create.msg.factory", ex);
             throw new SOAPExceptionImpl("Unable to create message factory", ex);
