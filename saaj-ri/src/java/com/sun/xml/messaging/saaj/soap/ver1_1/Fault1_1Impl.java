@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Fault1_1Impl.java,v 1.5 2007-07-16 16:41:24 ofung Exp $
+ * $Id: Fault1_1Impl.java,v 1.6 2007-10-04 07:43:56 kumarjayanti Exp $
  */
 
 /*
@@ -376,7 +376,7 @@ public class Fault1_1Impl extends FaultImpl {
                 throw new SOAPExceptionImpl("Namespace Error, Standard Faultcode: " +  faultCode + ", should be in SOAP 1.1 Namespace");
         }
         
-        if (uri == null || uri.equals("")) {
+        if (uri == null) {
             //SOAP 1.1 Allows this
             if (prefix != null && !"".equals(prefix)) {
                 log.severe("SAAJ0140.impl.no.ns.URI");
