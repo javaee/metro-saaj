@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: HttpSOAPConnection.java,v 1.3 2007-09-11 07:43:48 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2007-09-11 07:43:48 $
+ * $Id: HttpSOAPConnection.java,v 1.4 2007-10-11 13:12:28 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2007-10-11 13:12:28 $
  */
 
 /*
@@ -84,6 +84,12 @@ import com.sun.xml.messaging.saaj.util.*;
  */
 public class HttpSOAPConnection extends SOAPConnection {
 
+    public static final String vmVendor = System.getProperty("java.vendor.url");
+    public static final String sunVmVendor = "http://java.sun.com/";
+    public static final String ibmVmVendor = "http://www.ibm.com/";
+    public static final boolean isSunVM = sunVmVendor.equals(vmVendor) ? true: false;
+    public static final boolean isIBMVM = ibmVmVendor.equals(vmVendor) ? true : false;
+    
     protected static Logger log =
         Logger.getLogger(LogDomainConstants.HTTP_CONN_DOMAIN,
                          "com.sun.xml.messaging.saaj.client.p2p.LocalStrings");
@@ -672,9 +678,23 @@ public class HttpSOAPConnection extends SOAPConnection {
         return ret;
     }
 
-    private static String SSL_PKG = "com.sun.net.ssl.internal.www.protocol";
-    private static String SSL_PROVIDER =
-        "com.sun.net.ssl.internal.ssl.Provider";
+    //private static String SSL_PKG = "com.sun.net.ssl.internal.www.protocol";
+    //private static String SSL_PROVIDER =
+      //  "com.sun.net.ssl.internal.ssl.Provider";
+    private static final String SSL_PKG;
+    private static final String SSL_PROVIDER;
+    
+    static {    
+        if (isIBMVM) {
+            SSL_PKG ="com.ibm.net.ssl.internal.www.protocol";
+            SSL_PROVIDER ="com.ibm.net.ssl.internal.ssl.Provider";
+        } else {
+            //if not IBM VM default to Sun.
+            SSL_PKG = "com.sun.net.ssl.internal.www.protocol";
+            SSL_PROVIDER ="com.sun.net.ssl.internal.ssl.Provider";
+        }
+    }
+    
     private void initHttps() {
         //if(!setHttps) {
         String pkgs = System.getProperty("java.protocol.handler.pkgs");
