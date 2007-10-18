@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: NameImpl.java,v 1.2 2007-07-16 16:41:23 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:23 $
+ * $Id: NameImpl.java,v 1.3 2007-10-18 06:38:05 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2007-10-18 06:38:05 $
  */
 
 /*
@@ -67,7 +67,7 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPConstants;
 
-import com.sun.org.apache.xerces.internal.xni.NamespaceContext;
+//import com.sun.org.apache.xerces.internal.xni.NamespaceContext;
 import org.w3c.dom.Element;
 
 import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
@@ -96,6 +96,13 @@ public class NameImpl implements Name {
         Logger.getLogger(LogDomainConstants.NAMING_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.name.LocalStrings");
     
+    /**
+     * XML Information Set REC
+     * all namespace attributes (including those named xmlns, 
+     * whose [prefix] property has no value) have a namespace URI of http://www.w3.org/2000/xmlns/
+     */
+    public final static String XMLNS_URI = "http://www.w3.org/2000/xmlns/".intern();
+    
     protected NameImpl(String name) {
         this.localName = name == null ? "" : name;
     }
@@ -106,9 +113,9 @@ public class NameImpl implements Name {
         this.prefix = prefix == null ? "" : prefix;
 
         if (this.prefix.equals("xmlns") && this.uri.equals("")) {
-            this.uri = NamespaceContext.XMLNS_URI;
+            this.uri = XMLNS_URI;
         }
-        if (this.uri.equals(NamespaceContext.XMLNS_URI) && this.prefix.equals("")) {
+        if (this.uri.equals(XMLNS_URI) && this.prefix.equals("")) {
             this.prefix = "xmlns";
         }
     }

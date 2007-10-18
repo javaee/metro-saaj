@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ImageDataContentHandler.java,v 1.2 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:21 $
+ * $Id: ImageDataContentHandler.java,v 1.3 2007-10-18 06:38:04 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2007-10-18 06:38:04 $
  */
 
 /*
@@ -174,6 +174,7 @@ public class ImageDataContentHandler extends Component
                 stream = ImageIO.createImageOutputStream(os);
                 writer.setOutput(stream);
                 writer.write(bufImage);
+                writer.dispose();
                 stream.close();
             } else {
                 log.log(Level.SEVERE, "SAAJ0526.soap.unsupported.mime.type",

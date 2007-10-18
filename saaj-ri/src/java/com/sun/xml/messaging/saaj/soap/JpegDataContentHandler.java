@@ -1,7 +1,7 @@
 /*
- * $Id: JpegDataContentHandler.java,v 1.2 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:21 $
+ * $Id: JpegDataContentHandler.java,v 1.3 2007-10-18 06:38:04 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2007-10-18 06:38:04 $
  */
 
 /*
@@ -48,7 +48,8 @@ import java.io.*;
 
 import javax.activation.*;
 
-import com.sun.image.codec.jpeg.*;
+//import com.sun.image.codec.jpeg.*;
+import javax.imageio.ImageIO;
 
 /**
  * JAF data handler for Jpeg content
@@ -94,13 +95,11 @@ public class JpegDataContentHandler
         if (df.getMimeType().startsWith("image/jpeg")) {
             if (df.getRepresentationClass().getName().equals(STR_SRC)) {
                 InputStream inputStream = null;
-                JPEGImageDecoder decoder = null;
                 BufferedImage jpegLoadImage = null;
 
                 try {
                     inputStream = ds.getInputStream();
-                    decoder = JPEGCodec.createJPEGDecoder(inputStream);
-                    jpegLoadImage = decoder.decodeAsBufferedImage();
+                    jpegLoadImage = ImageIO.read(inputStream); 
 
                 } catch (Exception e) {
                     System.out.println(e);
@@ -117,13 +116,11 @@ public class JpegDataContentHandler
      */
     public Object getContent(DataSource ds) { // throws Exception;
         InputStream inputStream = null;
-        JPEGImageDecoder decoder = null;
         BufferedImage jpegLoadImage = null;
 
         try {
             inputStream = ds.getInputStream();
-            decoder = JPEGCodec.createJPEGDecoder(inputStream);
-            jpegLoadImage = decoder.decodeAsBufferedImage();
+            jpegLoadImage = ImageIO.read(inputStream);
 
         } catch (Exception e) {
         }
@@ -170,11 +167,7 @@ public class JpegDataContentHandler
                 Graphics g = bufImage.createGraphics();
                 g.drawImage(img, 0, 0, null);
             }
-
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
-            JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(bufImage);
-            param.setQuality(1, false);
-            encoder.encode(bufImage, param);
+            ImageIO.write(bufImage, "jpeg", os);
 
         } catch (Exception ex) {
             throw new IOException(

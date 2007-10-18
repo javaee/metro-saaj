@@ -1,7 +1,7 @@
 /*
- * $Id: GifDataContentHandler.java,v 1.3 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.3 $
- * $Date: 2007-07-16 16:41:21 $
+ * $Id: GifDataContentHandler.java,v 1.4 2007-10-18 06:38:04 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2007-10-18 06:38:04 $
  */
 
 /*
@@ -43,11 +43,7 @@ package com.sun.xml.messaging.saaj.soap;
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.*;
-import com.sun.image.codec.jpeg.*;
-
-import java.awt.image.BufferedImage;
 import java.awt.*;
-import java.awt.MediaTracker;
 
 import javax.activation.*;
 

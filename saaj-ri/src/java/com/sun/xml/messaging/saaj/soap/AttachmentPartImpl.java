@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: AttachmentPartImpl.java,v 1.2 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:21 $
+ * $Id: AttachmentPartImpl.java,v 1.3 2007-10-18 06:38:04 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2007-10-18 06:38:04 $
  */
 
 /*
@@ -121,6 +121,7 @@ public class AttachmentPartImpl extends AttachmentPart {
                     "application/fastinfoset"
                         + hndlrStr
                         + "com.sun.xml.messaging.saaj.soap.FastInfosetDataContentHandler");
+                /* Image DataContentHandler handles all image types
                 mailMap.addMailcap(
                     "image/jpeg"
                         + hndlrStr
@@ -128,7 +129,7 @@ public class AttachmentPartImpl extends AttachmentPart {
                 mailMap.addMailcap(
                     "image/gif"
                         + hndlrStr
-                        + "com.sun.xml.messaging.saaj.soap.GifDataContentHandler");
+                        + "com.sun.xml.messaging.saaj.soap.GifDataContentHandler"); */
                 /*mailMap.addMailcap(
                     "multipart/*"
                         + hndlrStr
