@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Fault1_1Impl.java,v 1.6 2007-10-04 07:43:56 kumarjayanti Exp $
+ * $Id: Fault1_1Impl.java,v 1.7 2007-11-22 07:16:45 kumarjayanti Exp $
  */
 
 /*
@@ -370,11 +370,11 @@ public class Fault1_1Impl extends FaultImpl {
             }
         }
        
-        if (standardFaultCode(faultCode) && 
-                ((uri == null) || uri.equals(""))) {
-             log.log(Level.SEVERE, "SAAJ0306.ver1_1.faultcode.incorrect.namespace", new Object[]{faultCode});
-                throw new SOAPExceptionImpl("Namespace Error, Standard Faultcode: " +  faultCode + ", should be in SOAP 1.1 Namespace");
-        }
+//        if (standardFaultCode(faultCode) && 
+//                ((uri == null) || uri.equals(""))) {
+//             log.log(Level.WARNING, "SAAJ0306.ver1_1.faultcode.incorrect.namespace", new Object[]{faultCode});
+//               // throw new SOAPExceptionImpl("Namespace Error, Standard Faultcode: " +  faultCode + ", should be in SOAP 1.1 Namespace");
+//        }
         
         if (uri == null) {
             //SOAP 1.1 Allows this
