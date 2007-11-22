@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: HttpSOAPConnection.java,v 1.4 2007-10-11 13:12:28 kumarjayanti Exp $
- * $Revision: 1.4 $
- * $Date: 2007-10-11 13:12:28 $
+ * $Id: HttpSOAPConnection.java,v 1.5 2007-11-22 10:19:18 kumarjayanti Exp $
+ * $Revision: 1.5 $
+ * $Date: 2007-11-22 10:19:18 $
  */
 
 /*
@@ -85,10 +85,11 @@ import com.sun.xml.messaging.saaj.util.*;
 public class HttpSOAPConnection extends SOAPConnection {
 
     public static final String vmVendor = System.getProperty("java.vendor.url");
-    public static final String sunVmVendor = "http://java.sun.com/";
-    public static final String ibmVmVendor = "http://www.ibm.com/";
-    public static final boolean isSunVM = sunVmVendor.equals(vmVendor) ? true: false;
-    public static final boolean isIBMVM = ibmVmVendor.equals(vmVendor) ? true : false;
+    private static final String sunVmVendor = "http://java.sun.com/";
+    private static final String ibmVmVendor = "http://www.ibm.com/";
+    private static final boolean isSunVM = sunVmVendor.equals(vmVendor) ? true: false;
+    private static final boolean isIBMVM = ibmVmVendor.equals(vmVendor) ? true : false;
+    private static final String JAXM_URLENDPOINT="javax.xml.messaging.URLEndpoint";
     
     protected static Logger log =
         Logger.getLogger(LogDomainConstants.HTTP_CONN_DOMAIN,
@@ -134,10 +135,14 @@ public class HttpSOAPConnection extends SOAPConnection {
         }
 
         Class urlEndpointClass = null;
-
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
-            urlEndpointClass = Class.forName("javax.xml.messaging.URLEndpoint");
-        } catch (Exception ex) {
+            if (loader != null) {
+                urlEndpointClass = loader.loadClass(JAXM_URLENDPOINT);
+            } else {
+                urlEndpointClass = Class.forName(JAXM_URLENDPOINT);
+            }
+        } catch (ClassNotFoundException ex) {
             //Do nothing. URLEndpoint is available only when JAXM is there.
             log.finest("SAAJ0090.p2p.endpoint.available.only.for.JAXM");
         }
