@@ -221,6 +221,11 @@
 	       excludes="servlet.jar, ant.jar, optional.jar"/>
     </copy>
 
+    <tstamp>
+        <format pattern="yyyy-MM-dd" property="TODAY.ISO"/>
+    </tstamp>
+    <filter token="today.iso" value="${TODAY.ISO}"/>
+        
     <jar jarfile="${build.home}/lib/saaj-impl.jar"
          basedir="${build.home}/classes">
      <manifest>
@@ -230,6 +235,7 @@
         <attribute name="Implementation-Version" value="${version}"/>     
         <attribute name="Implementation-Vendor" value="Sun Microsystems Inc"/>    
         <attribute name="Implementation-Vendor-Id" value="com.sun"/> 
+        <attribute name="Build-Id" value="${build.number}-${TODAY.ISO}"/>
         <attribute name="Extension-Name" value="com.sun.xml.messaging.saaj"/>
         <attribute name="Class-Path" value="saaj-api.jar activation.jar"/> 
     </manifest> 
