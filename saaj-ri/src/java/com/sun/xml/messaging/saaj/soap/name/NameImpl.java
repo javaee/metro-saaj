@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: NameImpl.java,v 1.3 2007-10-18 06:38:05 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2007-10-18 06:38:05 $
+ * $Id: NameImpl.java,v 1.4 2008-01-11 09:22:36 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2008-01-11 09:22:36 $
  */
 
 /*
@@ -69,8 +69,6 @@ import javax.xml.soap.SOAPConstants;
 
 //import com.sun.org.apache.xerces.internal.xni.NamespaceContext;
 import org.w3c.dom.Element;
-
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
 
 public class NameImpl implements Name {
