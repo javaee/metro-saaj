@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageImpl.java,v 1.8 2007-09-11 07:43:48 kumarjayanti Exp $
- * $Revision: 1.8 $
- * $Date: 2007-09-11 07:43:48 $
+ * $Id: MessageImpl.java,v 1.9 2008-04-24 10:48:46 kumarjayanti Exp $
+ * $Revision: 1.9 $
+ * $Date: 2008-04-24 10:48:46 $
  */
 
 /*
@@ -180,7 +180,7 @@ public abstract class MessageImpl
      *      must be all lower case
      */
     private static boolean isSoap1_1Type(String primary, String sub) {
-        return primary.equals("text") && sub.equals("xml")
+        return primary.equalsIgnoreCase("text") && sub.equalsIgnoreCase("xml")
             || primary.equals("application")
                && sub.equals("fastinfoset");
     }
