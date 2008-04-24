@@ -604,7 +604,7 @@
 
     <!-- copy saaj jar files into the right directory structure -->
     <copy todir="${zip.build.dir}/saaj/lib" overwrite="yes">
-      <fileset dir="${dist.home}/lib">
+      <fileset dir="${build.home}/lib">
         <include name="saaj-*.jar"/>
       </fileset>
     </copy>
