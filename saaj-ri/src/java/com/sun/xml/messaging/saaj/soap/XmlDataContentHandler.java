@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: XmlDataContentHandler.java,v 1.2 2007-07-16 16:41:22 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:22 $
+ * $Id: XmlDataContentHandler.java,v 1.3 2008-07-05 02:59:39 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2008-07-05 02:59:39 $
  */
 
 /*
@@ -133,7 +133,7 @@ public class XmlDataContentHandler implements DataContentHandler {
      */
     public void writeTo(Object obj, String mimeType, OutputStream os)
         throws IOException {
-        if (!mimeType.equals("text/xml") && !mimeType.equals("application/xml"))
+        if (!mimeType.startsWith("text/xml") && !mimeType.startsWith("application/xml"))
             throw new IOException(
                 "Invalid content type \"" + mimeType + "\" for XmlDCH");
 
