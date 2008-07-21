@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: XmlDataContentHandler.java,v 1.3 2008-07-05 02:59:39 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2008-07-05 02:59:39 $
+ * $Id: XmlDataContentHandler.java,v 1.4 2008-07-21 11:51:32 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2008-07-21 11:51:32 $
  */
 
 /*
@@ -145,7 +145,13 @@ public class XmlDataContentHandler implements DataContentHandler {
                 // Streaming transform applies only to javax.xml.transform.StreamSource 
                 transformer.transform((Source) getContent((DataSource)obj), result);                
             } else {
-                transformer.transform((Source) obj, result);
+                Source src=null;
+                if (obj instanceof String) {
+                     src= new StreamSource(new java.io.StringReader((String) obj));
+                } else {
+                    src=(Source) obj;
+                }
+                transformer.transform(src, result);
             }
         } catch (Exception ex) {
             throw new IOException(
