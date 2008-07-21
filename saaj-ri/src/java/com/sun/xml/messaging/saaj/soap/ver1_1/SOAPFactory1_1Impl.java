@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPFactory1_1Impl.java,v 1.3 2007-07-16 16:41:24 ofung Exp $
+ * $Id: SOAPFactory1_1Impl.java,v 1.4 2008-07-21 11:34:27 kumarjayanti Exp $
  */
 
 /*
@@ -90,10 +90,8 @@ public class SOAPFactory1_1Impl extends SOAPFactoryImpl {
             throw new IllegalArgumentException("reasonText argument for createFault was passed NULL");
         }
         Fault1_1Impl fault = new Fault1_1Impl(createDocument(), null);
-        fault.setFaultString(reasonText);
-        
         fault.setFaultCode(faultCode);
-       
+        fault.setFaultString(reasonText);
         return fault;
     }
 
