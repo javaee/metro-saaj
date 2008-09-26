@@ -39,9 +39,10 @@
 <!-- ************ What the heck are we building ************************** -->
 
   <property name="name" value="SAAJ RI"/>
-  <property name="version" value="1.3"/>
+  <property name="version" value="1.3.1"/>
+  <property name="api.version" value="1.3"/>
   <property name="suffix" value="-SNAPSHOT"/>
-  <property name="rpm.version" value="1.3"/>
+  <property name="rpm.version" value="1.3.1"/>
   <property name="rpm.release" value="1"/>
   <property name="zip.release" value="1"/>
 
@@ -762,7 +763,7 @@
     </taskdef>
     <delete dir="build/maven-repo" /><!-- clean it -->
     <maven-repository-importer
-        destdir="build/maven-repo" version="${version}${suffix}">
+        destdir="build/maven-repo" version="${version}">
       <artifact
         jar="${build.home}/lib/saaj-api.jar"
         srczip="lib/saaj-api-src.zip"
@@ -772,7 +773,7 @@
         srczip="${zip.release.dir}/saaj${version}.src.zip"
         pom="${basedir}/poms/saaj-impl.pom" />
       <filterset>
-        <filter token="API_VERSION" value="${version}${suffix}"/>
+        <filter token="API_VERSION" value="${api.version}"/>
       </filterset>
     </maven-repository-importer>
   </target>
