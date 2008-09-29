@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: HttpSOAPConnection.java,v 1.6 2008-09-29 06:44:59 kumarjayanti Exp $
- * $Revision: 1.6 $
- * $Date: 2008-09-29 06:44:59 $
+ * $Id: HttpSOAPConnection.java,v 1.7 2008-09-29 06:48:21 kumarjayanti Exp $
+ * $Revision: 1.7 $
+ * $Date: 2008-09-29 06:48:21 $
  */
 
 /*
@@ -95,8 +95,8 @@ public class HttpSOAPConnection extends SOAPConnection {
         Logger.getLogger(LogDomainConstants.HTTP_CONN_DOMAIN,
                          "com.sun.xml.messaging.saaj.client.p2p.LocalStrings");
 
-    private static String defaultProxyHost = null;
-    private static int defaultProxyPort = -1;
+    private static final String defaultProxyHost = null;
+    private static final int defaultProxyPort = -1;
 
     MessageFactory messageFactory = null;
 
