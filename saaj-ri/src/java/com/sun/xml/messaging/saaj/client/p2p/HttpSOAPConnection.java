@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: HttpSOAPConnection.java,v 1.5 2007-11-22 10:19:18 kumarjayanti Exp $
- * $Revision: 1.5 $
- * $Date: 2007-11-22 10:19:18 $
+ * $Id: HttpSOAPConnection.java,v 1.6 2008-09-29 06:44:59 kumarjayanti Exp $
+ * $Revision: 1.6 $
+ * $Date: 2008-09-29 06:44:59 $
  */
 
 /*
@@ -91,12 +91,12 @@ public class HttpSOAPConnection extends SOAPConnection {
     private static final boolean isIBMVM = ibmVmVendor.equals(vmVendor) ? true : false;
     private static final String JAXM_URLENDPOINT="javax.xml.messaging.URLEndpoint";
     
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.HTTP_CONN_DOMAIN,
                          "com.sun.xml.messaging.saaj.client.p2p.LocalStrings");
 
-    public static String defaultProxyHost = null;
-    public static int defaultProxyPort = -1;
+    private static String defaultProxyHost = null;
+    private static int defaultProxyPort = -1;
 
     MessageFactory messageFactory = null;
 

@@ -91,11 +91,13 @@ import com.sun.xml.messaging.saaj.util.FastInfosetReflection;
 public class EfficientStreamingTransformer
     extends javax.xml.transform.Transformer {
 
-  static final String version;
-  static final String vendor;
+  //static final String version;
+  //static final String vendor;
 
-  protected static TransformerFactory transformerFactory = TransformerFactory.newInstance();
+  protected static final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
+  /** 
+  removing support for Java 1.4 and 1.3 : CR6658158
   static {
         version = System.getProperty("java.vm.version");
         vendor = System.getProperty("java.vm.vendor");
@@ -104,7 +106,7 @@ public class EfficientStreamingTransformer
             transformerFactory = 
                 new com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl();
         }
-  }
+  }*/
                                                                                                                                                   
     /**
      * TransformerFactory instance.

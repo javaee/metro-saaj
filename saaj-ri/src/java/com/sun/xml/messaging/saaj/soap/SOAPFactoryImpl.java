@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPFactoryImpl.java,v 1.2 2007-07-16 16:41:22 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:22 $
+ * $Id: SOAPFactoryImpl.java,v 1.3 2008-09-29 06:45:00 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2008-09-29 06:45:00 $
  */
 
 /*
@@ -79,7 +79,7 @@ import org.w3c.dom.Attr;
 
 public abstract class SOAPFactoryImpl extends SOAPFactory {
 
-    protected static Logger
+    protected static final Logger
         log = Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                                "com.sun.xml.messaging.saaj.soap.LocalStrings");
 

@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ElementImpl.java,v 1.9 2007-10-18 06:38:04 kumarjayanti Exp $
- * $Revision: 1.9 $
- * $Date: 2007-10-18 06:38:04 $
+ * $Id: ElementImpl.java,v 1.10 2008-09-29 06:45:01 kumarjayanti Exp $
+ * $Revision: 1.10 $
+ * $Date: 2008-09-29 06:45:01 $
  */
 
 /*
@@ -88,7 +88,7 @@ public class ElementImpl
 
     protected QName elementQName;
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_IMPL_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.impl.LocalStrings");
 

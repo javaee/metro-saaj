@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageFactoryImpl.java,v 1.2 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:21 $
+ * $Id: MessageFactoryImpl.java,v 1.3 2008-09-29 06:45:00 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2008-09-29 06:45:00 $
  */
 
 /*
@@ -83,15 +83,15 @@ import com.sun.xml.messaging.saaj.util.TeeInputStream;
  */
 public class MessageFactoryImpl extends MessageFactory {
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.LocalStrings");
 
-    protected static OutputStream listener;
+    protected  OutputStream listener;
 
     protected boolean lazyAttachments = false;
     
-    public static OutputStream listen(OutputStream newListener) {
+    public  OutputStream listen(OutputStream newListener) {
         OutputStream oldListener = listener;
         listener = newListener;
         return oldListener;

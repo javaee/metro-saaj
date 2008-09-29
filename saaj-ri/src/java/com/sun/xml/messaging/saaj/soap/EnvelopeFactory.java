@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: EnvelopeFactory.java,v 1.3 2007-07-24 10:37:43 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2007-07-24 10:37:43 $
+ * $Id: EnvelopeFactory.java,v 1.4 2008-09-29 06:45:00 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2008-09-29 06:45:00 $
  */
 
 /*
@@ -84,7 +84,7 @@ import com.sun.xml.messaging.saaj.util.transform.EfficientStreamingTransformer;
  */
 public class EnvelopeFactory {
     
-    protected static Logger
+    protected static final Logger
         log = Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
         "com.sun.xml.messaging.saaj.soap.LocalStrings");
     

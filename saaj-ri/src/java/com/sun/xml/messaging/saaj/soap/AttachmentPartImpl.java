@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: AttachmentPartImpl.java,v 1.3 2007-10-18 06:38:04 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2007-10-18 06:38:04 $
+ * $Id: AttachmentPartImpl.java,v 1.4 2008-09-29 06:45:00 kumarjayanti Exp $
+ * $Revision: 1.4 $
+ * $Date: 2008-09-29 06:45:00 $
  */
 
 /*
@@ -99,7 +99,7 @@ import javax.xml.soap.*;
  */
 public class AttachmentPartImpl extends AttachmentPart {
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.LocalStrings");
 

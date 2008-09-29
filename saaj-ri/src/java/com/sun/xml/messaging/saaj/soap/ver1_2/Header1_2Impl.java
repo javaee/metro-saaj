@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Header1_2Impl.java,v 1.2 2007-07-16 16:41:24 ofung Exp $
+ * $Id: Header1_2Impl.java,v 1.3 2008-09-29 06:45:03 kumarjayanti Exp $
  */
 
 /*
@@ -82,7 +82,7 @@ import com.sun.xml.messaging.saaj.util.LogDomainConstants;
 
 public class Header1_2Impl extends HeaderImpl {
     
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(
             LogDomainConstants.SOAP_VER1_2_DOMAIN,
             "com.sun.xml.messaging.saaj.soap.ver1_2.LocalStrings");

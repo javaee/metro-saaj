@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPPart1_2Impl.java,v 1.3 2007-07-16 16:41:25 ofung Exp $
+ * $Id: SOAPPart1_2Impl.java,v 1.4 2008-09-29 06:45:03 kumarjayanti Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import com.sun.xml.messaging.saaj.util.XMLDeclarationParser;
 
 public class SOAPPart1_2Impl extends SOAPPartImpl implements SOAPConstants{
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(SOAPPart1_2Impl.class.getName(),
                          "com.sun.xml.messaging.saaj.soap.ver1_2.LocalStrings");
 

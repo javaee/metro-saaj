@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPPartImpl.java,v 1.4 2007-07-24 10:37:43 kumarjayanti Exp $
- * $Revision: 1.4 $
- * $Date: 2007-07-24 10:37:43 $
+ * $Id: SOAPPartImpl.java,v 1.5 2008-09-29 06:45:00 kumarjayanti Exp $
+ * $Revision: 1.5 $
+ * $Date: 2008-09-29 06:45:00 $
  */
 
 /*
@@ -88,7 +88,7 @@ import javax.xml.transform.sax.SAXSource;
  * @author Anil Vijendran (anil@sun.com)
  */
 public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.LocalStrings");
 

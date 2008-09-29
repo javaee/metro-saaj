@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageImpl.java,v 1.9 2008-04-24 10:48:46 kumarjayanti Exp $
- * $Revision: 1.9 $
- * $Date: 2008-04-24 10:48:46 $
+ * $Id: MessageImpl.java,v 1.10 2008-09-29 06:45:00 kumarjayanti Exp $
+ * $Revision: 1.10 $
+ * $Date: 2008-09-29 06:45:00 $
  */
 
 /*
@@ -98,7 +98,7 @@ public abstract class MessageImpl
     public static final String CONTENT_ID             = "Content-ID";
     public static final String CONTENT_LOCATION       = "Content-Location";
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.LocalStrings");
 

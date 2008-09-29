@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: HeaderElement1_2Impl.java,v 1.2 2007-07-16 16:41:25 ofung Exp $
+ * $Id: HeaderElement1_2Impl.java,v 1.3 2008-09-29 06:45:03 kumarjayanti Exp $
  */
 
 /*
@@ -76,7 +76,7 @@ import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 
 public class HeaderElement1_2Impl extends HeaderElementImpl {
 
-    private static Logger log =
+    private static final Logger log =
         Logger.getLogger(HeaderElement1_2Impl.class.getName(),
                          "com.sun.xml.messaging.saaj.soap.ver1_2.LocalStrings");
        

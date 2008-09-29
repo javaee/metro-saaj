@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: NameImpl.java,v 1.4 2008-01-11 09:22:36 kumarjayanti Exp $
- * $Revision: 1.4 $
- * $Date: 2008-01-11 09:22:36 $
+ * $Id: NameImpl.java,v 1.5 2008-09-29 06:45:01 kumarjayanti Exp $
+ * $Revision: 1.5 $
+ * $Date: 2008-09-29 06:45:01 $
  */
 
 /*
@@ -90,7 +90,7 @@ public class NameImpl implements Name {
     protected String prefix = "";
     private String qualifiedName = null;
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.NAMING_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.name.LocalStrings");
     

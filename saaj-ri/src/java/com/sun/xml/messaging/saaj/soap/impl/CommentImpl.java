@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: CommentImpl.java,v 1.2 2007-07-16 16:41:23 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:23 $
+ * $Id: CommentImpl.java,v 1.3 2008-09-29 06:45:01 kumarjayanti Exp $
+ * $Revision: 1.3 $
+ * $Date: 2008-09-29 06:45:01 $
  */
 
 /*
@@ -76,7 +76,7 @@ public class CommentImpl
     extends com.sun.org.apache.xerces.internal.dom.CommentImpl
     implements javax.xml.soap.Text, org.w3c.dom.Comment { 
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_IMPL_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.impl.LocalStrings");
     protected static ResourceBundle rb =

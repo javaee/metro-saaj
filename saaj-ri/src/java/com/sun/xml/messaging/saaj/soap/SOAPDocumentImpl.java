@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPDocumentImpl.java,v 1.2 2007-07-16 16:41:22 ofung Exp $
+ * $Id: SOAPDocumentImpl.java,v 1.3 2008-09-29 06:45:00 kumarjayanti Exp $
  */
 
 /*
@@ -74,7 +74,7 @@ import com.sun.xml.messaging.saaj.util.LogDomainConstants;
 
 public class SOAPDocumentImpl extends DocumentImpl implements SOAPDocument {
 
-    protected static Logger log =
+    protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.LocalStrings");
     
