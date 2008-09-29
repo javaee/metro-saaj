@@ -39,10 +39,10 @@
 <!-- ************ What the heck are we building ************************** -->
 
   <property name="name" value="SAAJ RI"/>
-  <property name="version" value="1.3.1"/>
+  <property name="version" value="1.3.3"/>
   <property name="api.version" value="1.3"/>
   <property name="suffix" value="-SNAPSHOT"/>
-  <property name="rpm.version" value="1.3.1"/>
+  <property name="rpm.version" value="1.3.3"/>
   <property name="rpm.release" value="1"/>
   <property name="zip.release" value="1"/>
 
@@ -231,9 +231,9 @@
          basedir="${build.home}/classes">
      <manifest>
         <attribute name="Specification-Title" value="SOAP with Attachments API for Java"/>    
-        <attribute name="Specification-Version" value="${version}"/> 
+        <attribute name="Specification-Version" value="${api.version}"/> 
         <attribute name="Implementation-Title" value="SAAJ Implementation"/>    
-        <attribute name="Implementation-Version" value="${version}"/>     
+        <attribute name="Implementation-Version" value="${version}${suffix}"/>     
         <attribute name="Implementation-Vendor" value="Sun Microsystems Inc"/>    
         <attribute name="Implementation-Vendor-Id" value="com.sun"/> 
         <attribute name="Build-Id" value="${build.number}-${TODAY.ISO}"/>
@@ -308,8 +308,8 @@
              destdir="${wspack.home}/samples/soapprocessor/javadocs"
              author="false"
              version="false"
-             windowtitle="${Name} ${version}"
-             doctitle="${Name} ${version}"
+             windowtitle="${Name} ${version}${suffix}"
+             doctitle="${Name} ${version}${suffix}"
              bottom="Copyright &#169; 2004 Sun Microsystems, Inc. All Rights Reserved.">
         <classpath refid="compile.classpath"/>
     </javadoc>
@@ -466,7 +466,7 @@
     </replace>
 
     <!-- replace saaj version -->
-    <replace file="${pkg.build.dir}/${pkg.saaj}/pkginfo" value="${version}">
+    <replace file="${pkg.build.dir}/${pkg.saaj}/pkginfo" value="${version}${suffix}">
       <replacetoken>@saaj.version@</replacetoken>
     </replace>
 
@@ -618,7 +618,7 @@
     </copy>
 
     <!-- replace parameters in version file  -->
-    <replace file="${zip.build.dir}/version" value="${version}">
+    <replace file="${zip.build.dir}/version" value="${version}${suffix}">
       <replacetoken>@saaj.version@</replacetoken>
     </replace>
     <!-- replace date stamp... 1st specify correct format  -->
@@ -647,7 +647,7 @@
     <copy tofile="${hpux.build.dir}/sun-saaj.psf" file="${basedir}/hpux/sun-saaj.psf.tmpl" overwrite="yes"/>
 
     <!-- replace saaj version -->
-    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${version}">
+    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${version}${suffix}">
       <replacetoken>@saaj.version@</replacetoken>
     </replace>
 
@@ -689,7 +689,7 @@
   
   <target name="create.src.zip" description="Create SAAJ source zip file">
     <mkdir dir="${zip.release.dir}"/>
-    <zip destfile="${zip.release.dir}/saaj${version}.src.zip" basedir="${source.home}" />
+    <zip destfile="${zip.release.dir}/saaj${version}${suffix}.src.zip" basedir="${source.home}" />
   </target>
 
 
@@ -763,14 +763,14 @@
     </taskdef>
     <delete dir="build/maven-repo" /><!-- clean it -->
     <maven-repository-importer
-        destdir="build/maven-repo" version="${version}">
+        destdir="build/maven-repo" version="${version}${suffix}">
       <artifact
         jar="${build.home}/lib/saaj-api.jar"
         srczip="lib/saaj-api-src.zip"
         pom="${basedir}/poms/saaj-api.pom" />
       <artifact
         jar="${build.home}/lib/saaj-impl.jar"
-        srczip="${zip.release.dir}/saaj${version}.src.zip"
+        srczip="${zip.release.dir}/saaj${version}${suffix}.src.zip"
         pom="${basedir}/poms/saaj-impl.pom" />
       <filterset>
         <filter token="API_VERSION" value="${api.version}"/>
