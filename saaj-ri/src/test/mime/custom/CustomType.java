@@ -54,9 +54,9 @@
  */
 
 /**
- * $Id: CustomType.java,v 1.2 2007-07-16 16:41:28 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:28 $
+ * 
+ * 
+ * 
  */
 
 package mime.custom;

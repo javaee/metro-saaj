@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ReceivingServlet.java,v 1.2 2007-07-16 16:42:00 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:42:00 $
+ * 
+ * 
+ * 
  */
 
 /*
@@ -278,7 +278,7 @@ public  class ReceivingServlet extends HttpServlet {
         MessageFactory factory = MessageFactory.newInstance();
         MimeHeaders headers = new MimeHeaders();
         headers.setHeader("Content-Type","text/xml");
-
+        @SuppressWarnings("deprication")
         StringBufferInputStream strStream= new StringBufferInputStream("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><abc:find_service xmlns:abc=\"urn:uddi-org:api_v2\"><name/></abc:find_service></SOAP-ENV:Body></SOAP-ENV:Envelope>");
 
         SOAPMessage msg = factory.createMessage(headers, strStream);

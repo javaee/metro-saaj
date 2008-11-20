@@ -54,9 +54,9 @@
  */
 
 /*
- * $Id: BugfixesTest.java,v 1.4 2007-07-16 16:41:26 ofung Exp $
- * $Revision: 1.4 $
- * $Date: 2007-07-16 16:41:26 $
+ * 
+ * 
+ * 
  */
 
 package bugfixes;
@@ -1030,7 +1030,7 @@ public class BugfixesTest extends TestCase {
             Document document = null;
             DocumentBuilderFactory factory =
                 new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
-            //factory.setNamespaceAware(true);
+            factory.setNamespaceAware(true);
   
             DocumentBuilder builder = factory.newDocumentBuilder();
             document =
