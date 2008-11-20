@@ -1,7 +1,7 @@
 /*
- * $Id: FastInfosetDataContentHandler.java,v 1.3 2007-07-16 16:41:21 ofung Exp $
- * $Revision: 1.3 $
- * $Date: 2007-07-16 16:41:21 $
+ * 
+ * 
+ * 
  */
 
 /*

@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: JaxmURI.java,v 1.2 2007-07-16 16:41:25 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:25 $
+ * 
+ * 
+ * 
  */
 
 /*
@@ -96,7 +96,7 @@ import java.io.Serializable;
 * default port for a specific scheme). Rather, it only knows the
 * grammar and basic set of operations that can be applied to a URI.
 *
-* @version  $Id: JaxmURI.java,v 1.2 2007-07-16 16:41:25 ofung Exp $
+* @version  
 *
 **********************************************************************/
  public class JaxmURI implements Serializable {

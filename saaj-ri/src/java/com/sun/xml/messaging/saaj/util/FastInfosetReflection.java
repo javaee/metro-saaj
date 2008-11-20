@@ -1,7 +1,7 @@
 /*
- * $Id: FastInfosetReflection.java,v 1.4 2007-07-16 16:41:25 ofung Exp $
- * $Revision: 1.4 $
- * $Date: 2007-07-16 16:41:25 $
+ * 
+ * 
+ * 
  */
 
 /*

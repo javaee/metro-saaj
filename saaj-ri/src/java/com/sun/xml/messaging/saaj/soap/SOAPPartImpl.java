@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPPartImpl.java,v 1.5 2008-09-29 06:45:00 kumarjayanti Exp $
- * $Revision: 1.5 $
- * $Date: 2008-09-29 06:45:00 $
+ * 
+ * 
+ * 
  */
 
 /*

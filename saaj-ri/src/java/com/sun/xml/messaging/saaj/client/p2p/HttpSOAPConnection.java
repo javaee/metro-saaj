@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: HttpSOAPConnection.java,v 1.7 2008-09-29 06:48:21 kumarjayanti Exp $
- * $Revision: 1.7 $
- * $Date: 2008-09-29 06:48:21 $
+ * 
+ * 
+ * 
  */
 
 /*

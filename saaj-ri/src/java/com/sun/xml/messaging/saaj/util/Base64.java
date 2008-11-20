@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: Base64.java,v 1.2 2007-07-16 16:41:25 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:25 $
+ * 
+ * 
+ * 
  */
 
 /*
@@ -72,7 +72,7 @@ package com.sun.xml.messaging.saaj.util;
  * This class is used by XML Schema binary format validation
  *
  * @author Jeffrey Rodriguez
- * @version $Revision: 1.2 $ $Date: 2007-07-16 16:41:25 $
+ * @version  
  */
 public final class Base64 {
 

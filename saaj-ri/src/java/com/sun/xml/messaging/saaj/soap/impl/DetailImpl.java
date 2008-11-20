@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: DetailImpl.java,v 1.3 2007-08-23 10:54:47 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2007-08-23 10:54:47 $
+ * 
+ * 
+ * 
  */
 
 package com.sun.xml.messaging.saaj.soap.impl;

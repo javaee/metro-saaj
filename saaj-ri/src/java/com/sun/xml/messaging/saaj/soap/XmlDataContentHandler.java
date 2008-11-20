@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: XmlDataContentHandler.java,v 1.4 2008-07-21 11:51:32 kumarjayanti Exp $
- * $Revision: 1.4 $
- * $Date: 2008-07-21 11:51:32 $
+ * 
+ * 
+ * 
  */
 
 /*

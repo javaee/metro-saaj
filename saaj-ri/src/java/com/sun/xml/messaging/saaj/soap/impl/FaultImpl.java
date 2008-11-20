@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: FaultImpl.java,v 1.6 2007-10-04 07:43:55 kumarjayanti Exp $
- * $Revision: 1.6 $
- * $Date: 2007-10-04 07:43:55 $
+ * 
+ * 
+ * 
  */
 
 /*

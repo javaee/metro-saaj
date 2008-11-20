@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPPart1_2Impl.java,v 1.4 2008-09-29 06:45:03 kumarjayanti Exp $
+ * 
  */
 
 /*
