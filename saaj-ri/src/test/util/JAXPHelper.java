@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: JAXPHelper.java,v 1.2 2007-07-16 16:42:02 ofung Exp $
+ * 
  */
 
 /*

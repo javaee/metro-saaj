@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ReceivingServlet.java,v 1.2 2007-07-16 16:42:00 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:42:00 $
+ * 
+ * 
+ * 
  */
 
 /*

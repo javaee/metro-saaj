@@ -65,7 +65,7 @@ import javax.xml.transform.TransformerException;
  *  <?xml ... ?>
  *
  * @author Panos Kougiouris (panos@acm.org)
- * @version $Revision: 1.3 $ $Date: 2007-07-16 16:41:26 $
+ * @version  
  */
 
 public class XMLDeclarationParser {

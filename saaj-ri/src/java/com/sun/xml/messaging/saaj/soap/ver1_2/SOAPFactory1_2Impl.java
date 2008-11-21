@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: SOAPFactory1_2Impl.java,v 1.3 2007-07-16 16:41:25 ofung Exp $
+ * 
  */
 
 /*

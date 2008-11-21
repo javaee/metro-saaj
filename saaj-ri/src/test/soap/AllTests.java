@@ -54,7 +54,7 @@
  */
 
 /**
- * $Id: AllTests.java,v 1.2 2007-07-16 16:42:00 ofung Exp $
+ * 
  */
 
 package soap;

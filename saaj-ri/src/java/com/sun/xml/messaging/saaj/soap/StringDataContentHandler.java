@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: StringDataContentHandler.java,v 1.3 2008-01-11 09:22:36 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2008-01-11 09:22:36 $
+ * 
+ * 
+ * 
  */
 
 /*

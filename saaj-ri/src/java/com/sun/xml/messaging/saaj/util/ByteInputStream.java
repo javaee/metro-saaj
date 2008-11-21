@@ -18,8 +18,8 @@
  * [name of copyright owner]
  */
 /*
- * $Id: ByteInputStream.java,v 1.2 2007-07-16 16:41:25 ofung Exp $ $Revision:
- * 1.3 $ $Date: 2007-07-16 16:41:25 $
+ * 
+ * 
  */
 
 /*

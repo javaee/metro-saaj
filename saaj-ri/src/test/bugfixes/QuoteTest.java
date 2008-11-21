@@ -18,7 +18,7 @@
  * [name of copyright owner]
  */
 /*
- * $Id: QuoteTest.java,v 1.2 2007-07-16 16:41:26 ofung Exp $
+ * 
  */
 
 /*

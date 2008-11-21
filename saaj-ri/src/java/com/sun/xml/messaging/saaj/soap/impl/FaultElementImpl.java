@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: FaultElementImpl.java,v 1.2 2007-07-16 16:41:23 ofung Exp $
- * $Revision: 1.2 $
- * $Date: 2007-07-16 16:41:23 $
+ * 
+ * 
+ * 
  */
 
 /*

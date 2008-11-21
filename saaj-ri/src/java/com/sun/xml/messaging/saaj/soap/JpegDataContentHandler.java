@@ -1,7 +1,7 @@
 /*
- * $Id: JpegDataContentHandler.java,v 1.3 2007-10-18 06:38:04 kumarjayanti Exp $
- * $Revision: 1.3 $
- * $Date: 2007-10-18 06:38:04 $
+ * 
+ * 
+ * 
  */
 
 /*

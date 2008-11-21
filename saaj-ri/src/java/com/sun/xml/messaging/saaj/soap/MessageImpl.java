@@ -18,9 +18,9 @@
  * [name of copyright owner]
  */
 /*
- * $Id: MessageImpl.java,v 1.10 2008-09-29 06:45:00 kumarjayanti Exp $
- * $Revision: 1.10 $
- * $Date: 2008-09-29 06:45:00 $
+ * 
+ * 
+ * 
  */
 
 /*

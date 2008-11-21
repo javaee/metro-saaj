@@ -74,7 +74,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * because they are not legal in SOAP.  If the user of this class sets a
  * LexicalHandler, then it forwards events to that handler.
  *
- * $Id: RejectDoctypeSaxFilter.java,v 1.3 2008-09-29 06:45:03 kumarjayanti Exp $
+ * 
  * @author Edwin Goei
  */
 
