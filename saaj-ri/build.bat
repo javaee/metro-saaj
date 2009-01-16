@@ -1,13 +1,13 @@
 @echo off
 
 REM
-REM $Id: build.bat,v 1.2 2007-07-16 16:41:12 ofung Exp $
+REM $Id: build.bat,v 1.3 2009-01-16 05:22:15 ofung Exp $
 REM
 
 REM
 REM DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 REM 
-REM Copyright 1997-2007 Sun Microsystems, Inc. All rights reserved.
+REM Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
 REM 
 REM The contents of this file are subject to the terms of either the GNU
 REM General Public License Version 2 only ("GPL") or the Common Development
