@@ -1,10 +1,4 @@
 /*
- * $Id: SAAJServlet.java,v 1.2.12.2 2009-01-16 05:54:13 ofung Exp $
- * $Revision: 1.2.12.2 $
- * $Date: 2009-01-16 05:54:13 $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -39,6 +33,13 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/*
+ * $Id: SAAJServlet.java,v 1.2.12.3 2009-01-17 00:44:44 ramapulavarthi Exp $
+ * $Revision: 1.2.12.3 $
+ * $Date: 2009-01-17 00:44:44 $
+ */
+
+
 package com.sun.xml.messaging.soap.server;
 
 import java.io.*;

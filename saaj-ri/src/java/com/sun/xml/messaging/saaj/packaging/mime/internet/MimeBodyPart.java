@@ -1,8 +1,4 @@
 /*
- * @(#)MimeBodyPart.java      1.52 03/02/12
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -37,6 +33,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/*
+ * @(#)MimeBodyPart.java      1.52 03/02/12
+ */
+
+
 
 package com.sun.xml.messaging.saaj.packaging.mime.internet;
 

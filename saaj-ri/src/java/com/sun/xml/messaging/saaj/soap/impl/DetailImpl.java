@@ -34,11 +34,7 @@
  * holder.
  */
 
-/*
- * 
- * 
- * 
- */
+
 
 package com.sun.xml.messaging.saaj.soap.impl;
 

@@ -1,8 +1,4 @@
 /*
- * $Id: ProcessingFaultHandler.java,v 1.2.12.2 2009-01-16 05:54:15 ofung Exp $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -37,6 +33,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/*
+ * $Id: ProcessingFaultHandler.java,v 1.2.12.3 2009-01-17 00:44:45 ramapulavarthi Exp $
+ */
+
+
 
 package com.sun.xml.soap;
 

@@ -680,7 +680,7 @@
     <!-- make output directory -->
     <mkdir dir="${hpux.release.dir}/sun-saaj"/>
 
-    <!--  -->
+    
 	<exec  executable="/usr/sbin/swpackage" failonerror="true">
       <arg line="-x follow_symlinks=true -x compression_type=gzip -x compress_cmd=/usr/contrib/bin/gzip -x uncompress_files=false -x compress_files=true -x reinstall_files=true -x package_in_place=false -x target_type=directory -x write_remote_files=true -x run_as_superuser=false -s ${hpux.build.dir}/sun-saaj.psf @ ${hpux.release.dir}/sun-saaj"/>
 	 </exec>
