@@ -1,10 +1,4 @@
 /*
- * $Id: ReceivingServlet.java,v 1.4 2009-01-16 05:22:24 ofung Exp $
- * $Revision: 1.4 $s
- * $Date: 2009-01-16 05:22:24 $
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -39,6 +33,13 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/*
+ * $Id: ReceivingServlet.java,v 1.5 2009-01-17 00:39:49 ramapulavarthi Exp $
+ * $Revision: 1.5 $s
+ * $Date: 2009-01-17 00:39:49 $
+ */
+
+
 package translator;
 
 import java.io.*;

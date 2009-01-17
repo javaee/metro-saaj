@@ -1,8 +1,4 @@
 /*
- * @(#)BASE64DecoderStream.java       1.8 02/03/27
- */
-
-/*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  * 
  * Copyright 1997-2009 Sun Microsystems, Inc. All rights reserved.
@@ -37,6 +33,11 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+/*
+ * @(#)BASE64DecoderStream.java       1.8 02/03/27
+ */
+
+
 
 package com.sun.xml.messaging.saaj.packaging.mime.util;
 

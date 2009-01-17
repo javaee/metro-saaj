@@ -1,5 +1,4 @@
 #! /bin/sh
-
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 # 
@@ -35,6 +34,7 @@
 # only if the new code is made subject to such option by the copyright
 # holder.
 #
+
 
 
 if [ -z "$JAVA_HOME" ]

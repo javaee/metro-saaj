@@ -1,9 +1,4 @@
 #! /bin/sh
-
-#
-# $Id: build.sh,v 1.3 2009-01-16 05:22:15 ofung Exp $
-#
-
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 # 
@@ -39,6 +34,11 @@
 # only if the new code is made subject to such option by the copyright
 # holder.
 #
+
+#
+# $Id: build.sh,v 1.4 2009-01-17 00:39:43 ramapulavarthi Exp $
+#
+
 
 if [ -z "$JAVA_HOME" ]
 then

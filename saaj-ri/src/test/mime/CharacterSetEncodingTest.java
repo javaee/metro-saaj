@@ -67,7 +67,7 @@ public class CharacterSetEncodingTest extends TestCase {
     public void testCharacterSetUtf16() throws Exception {
     
         MessageFactory factory = MessageFactory.newInstance();
-        String xml = "<?xml version=\"1.0\" encoding=\"UTF-16\"?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><p:content SOAP-ENV:encodingStyle=\"http://example.com/encoding\" xmlns:p=\"some-uri\">Jeu universel de caractères codés à plusieurs octets</p:content></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-16\"?><SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><p:content SOAP-ENV:encodingStyle=\"http://example.com/encoding\" xmlns:p=\"some-uri\">Jeu universel de caractï¿½res codï¿½s ï¿½ plusieurs octets</p:content></SOAP-ENV:Body></SOAP-ENV:Envelope>";
         SOAPMessage msg = factory.createMessage();
         msg.getMimeHeaders().setHeader("Content-Type","text/xml; charset=utf-16");
         msg.getSOAPPart().setContent(new StreamSource(new ByteArrayInputStream(xml.getBytes("utf-16"))));   
