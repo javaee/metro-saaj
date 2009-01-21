@@ -689,6 +689,11 @@
   
   <target name="create.src.zip" description="Create SAAJ source zip file">
     <mkdir dir="${zip.release.dir}"/>
+    <copy todir="${zip.release.dir}" overwrite="yes">
+      <fileset dir="${lib.home}">
+        <include name="saaj-api.src.zip"/>
+      </fileset>
+   </copy>
     <zip destfile="${zip.release.dir}/saaj${version}${suffix}.src.zip" basedir="${source.home}" />
   </target>
 
