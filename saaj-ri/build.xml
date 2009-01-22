@@ -691,7 +691,7 @@
     <mkdir dir="${zip.release.dir}"/>
     <copy todir="${zip.release.dir}" overwrite="yes">
       <fileset dir="${lib.home}">
-        <include name="saaj-api.src.zip"/>
+        <include name="saaj-api-src.zip"/>
       </fileset>
    </copy>
     <zip destfile="${zip.release.dir}/saaj${version}${suffix}.src.zip" basedir="${source.home}" />
