@@ -44,6 +44,7 @@ package com.sun.xml.messaging.saaj.util.transform;
 
 import java.io.*;
 
+import java.net.URISyntaxException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -57,6 +58,7 @@ import org.w3c.dom.Document;
 
 import com.sun.xml.messaging.saaj.util.XMLDeclarationParser;
 import com.sun.xml.messaging.saaj.util.FastInfosetReflection;
+import java.net.URI;
 
 /**
  * This class is a proxy for a Transformer object with optimizations
@@ -266,7 +268,12 @@ public class EfficientStreamingTransformer
                       fileURL = absolutePath;
                     }
                 }
-                return new FileInputStream(fileURL);
+                //return new FileInputStream(fileURL);
+                try {
+                    return new FileInputStream(new File(new URI(fileURL)));
+                } catch (URISyntaxException ex) {
+                    ex.printStackTrace();
+                }
             } catch (IOException e) {
                 throw new TransformerException(e.toString());
             }
