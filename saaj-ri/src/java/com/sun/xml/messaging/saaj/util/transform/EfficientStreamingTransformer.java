@@ -272,7 +272,7 @@ public class EfficientStreamingTransformer
                 try {
                     return new FileInputStream(new File(new URI(fileURL)));
                 } catch (URISyntaxException ex) {
-                    ex.printStackTrace();
+                    throw new TransformerException(ex);
                 }
             } catch (IOException e) {
                 throw new TransformerException(e.toString());
