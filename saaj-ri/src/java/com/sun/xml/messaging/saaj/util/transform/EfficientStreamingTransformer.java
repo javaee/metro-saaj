@@ -45,10 +45,6 @@ package com.sun.xml.messaging.saaj.util.transform;
 import java.io.*;
 
 import java.net.URISyntaxException;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamResult;
@@ -59,6 +55,9 @@ import org.w3c.dom.Document;
 import com.sun.xml.messaging.saaj.util.XMLDeclarationParser;
 import com.sun.xml.messaging.saaj.util.FastInfosetReflection;
 import java.net.URI;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 
 /**
  * This class is a proxy for a Transformer object with optimizations
@@ -76,8 +75,8 @@ public class EfficientStreamingTransformer
 
   //static final String version;
   //static final String vendor;
-
-  protected static final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+  // removing static : security issue : CR 6813167Z
+  private final TransformerFactory transformerFactory = TransformerFactory.newInstance();
 
   /** 
   removing support for Java 1.4 and 1.3 : CR6658158
@@ -413,8 +412,9 @@ public class EfficientStreamingTransformer
 
     /**
      * Threadlocal to hold a Transformer instance for this thread.
+     * CR : 6813167
      */
-    private static ThreadLocal effTransformer = new ThreadLocal(); 
+    //private static ThreadLocal effTransformer = new ThreadLocal(); 
     
     /**
      * Return Transformer instance for this thread, allocating a new one if 
@@ -422,11 +422,13 @@ public class EfficientStreamingTransformer
      * properties or any other data set on a previously used transformer.
      */
     public static Transformer newTransformer() {
-        Transformer tt = (Transformer) effTransformer.get();
+        //CR : 6813167
+        /*Transformer tt = (Transformer) effTransformer.get();
         if (tt == null) {
             effTransformer.set(tt = new EfficientStreamingTransformer());
         }       
-        return tt;
+        return tt;*/
+        return new EfficientStreamingTransformer(); 
     }
 
 }
