@@ -152,7 +152,11 @@ public class ASCIIUtility {
      */
     public static byte[] getBytes(InputStream is) throws IOException {
         ByteOutputStream bos = new ByteOutputStream();
-        bos.write(is);
+        try {
+            bos.write(is);
+        } finally {
+            is.close();
+        }
         return bos.toByteArray();
     }
 }
