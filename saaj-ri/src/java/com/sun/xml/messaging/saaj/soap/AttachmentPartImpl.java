@@ -346,8 +346,9 @@ public class AttachmentPartImpl extends AttachmentPart {
     public  void setBase64Content(InputStream content, String contentType) 
         throws SOAPException {
         dataHandler = null;
+        InputStream decoded = null;
         try {
-            InputStream decoded = MimeUtility.decode(content, "base64");
+            decoded = MimeUtility.decode(content, "base64");
             InternetHeaders hdrs = new InternetHeaders();
             hdrs.setHeader("Content-Type", contentType);
             //TODO: reading the entire attachment here is ineffcient. Somehow the MimeBodyPart
@@ -360,7 +361,13 @@ public class AttachmentPartImpl extends AttachmentPart {
         } catch (Exception e) {
             log.log(Level.SEVERE, "SAAJ0578.soap.attachment.setbase64content.exception", e);
             throw new SOAPExceptionImpl(e.getLocalizedMessage());
-        } 
+        } finally {
+            try {
+                decoded.close();
+            } catch (IOException ex) {
+                throw new SOAPException(ex);
+            }
+        }
     }
 
     public  InputStream getBase64Content() throws SOAPException {
@@ -431,6 +438,12 @@ public class AttachmentPartImpl extends AttachmentPart {
         } catch (Exception e) {
             log.log(Level.SEVERE, "SAAJ0576.soap.attachment.setrawcontent.exception", e);
             throw new SOAPExceptionImpl(e.getLocalizedMessage());
+        } finally {
+            try {
+                content.close();
+            } catch (IOException ex) {
+                throw new SOAPException(ex);
+            }
         }
     }
 
@@ -492,7 +505,6 @@ public class AttachmentPartImpl extends AttachmentPart {
         }
     }
 
-    //TODO: investigate size differences in mime.AttachImageTest
     public  byte[] getRawContentBytes() throws SOAPException {
         InputStream ret;
         if (rawContent != null) {
