@@ -38,42 +38,54 @@
 
 package com.sun.xml.messaging.saaj.util;
 
-import java.util.EmptyStackException;
-import java.util.Stack;
-
-import javax.xml.parsers.*;
 
 import org.xml.sax.SAXException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 
 /**
  * Pool of SAXParser objects
  */
 public class ParserPool {
-    private Stack parsers;
+    private final BlockingQueue queue;
     private SAXParserFactory factory;
     private int capacity;
 
     public ParserPool(int capacity) {
-		this.capacity = capacity;
+        this.capacity = capacity;
+        queue = new ArrayBlockingQueue(capacity);
         factory = new com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl(); //SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
-        parsers = new Stack();
+        for (int i=0; i < capacity; i++) {
+           try {
+                queue.put(factory.newSAXParser());
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } catch (ParserConfigurationException ex) {
+                throw new RuntimeException(ex);
+            } catch (SAXException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
-    public synchronized SAXParser get() throws ParserConfigurationException,
+    public SAXParser get() throws ParserConfigurationException,
 		SAXException {
 
         try {
-            return (SAXParser) parsers.pop();
-        } catch (EmptyStackException e) {
-            return factory.newSAXParser();
+            return (SAXParser) queue.take();
+        } catch (InterruptedException ex) {
+            throw new SAXException(ex);
         }
+
     }
 
-    public synchronized void put(SAXParser parser) {
-        if (parsers.size() < capacity) {
-            parsers.push(parser);
-        }
+    public void put(SAXParser parser) {
+        queue.offer(parser);
     }
 
 }

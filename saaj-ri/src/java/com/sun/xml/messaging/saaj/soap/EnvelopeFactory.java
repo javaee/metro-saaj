@@ -113,9 +113,6 @@ public class EnvelopeFactory {
             transformer.transform(src, result);
             
             Envelope env = (Envelope) soapPart.getEnvelope();
-            if (saxParser != null) {
-                parserPool.put(saxParser);
-            }
             return env;
         } catch (Exception ex) {
             if (ex instanceof SOAPVersionMismatchException) {
@@ -125,6 +122,10 @@ public class EnvelopeFactory {
             throw new SOAPExceptionImpl(
                 "Unable to create envelope from given source: ",
                 ex);
+        } finally {
+            if (saxParser != null) {
+                parserPool.put(saxParser);
+            }
         }
     }
 }
