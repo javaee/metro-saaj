@@ -88,6 +88,7 @@ public abstract class MessageImpl
     protected static final int FI_ENCODED_FLAG     = 16;     // 10000
     
     protected MimeHeaders headers;
+    protected ContentType contentType;
     protected SOAPPartImpl soapPart;
     protected FinalArrayList attachments;
     protected boolean saved = false;
@@ -211,6 +212,7 @@ public abstract class MessageImpl
         
         headers = new MimeHeaders();
         headers.setHeader("Accept", getExpectedAcceptHeader());
+        contentType = new ContentType();
     }
 
     /**
@@ -228,6 +230,7 @@ public abstract class MessageImpl
         this.messageBytes = src.messageBytes;
         this.messageByteCount = src.messageByteCount;
         this.properties = src.properties;
+        this.contentType = src.contentType;
     }
 
     /**
@@ -282,8 +285,8 @@ public abstract class MessageImpl
      */
     protected MessageImpl(MimeHeaders headers, final InputStream in)
         throws SOAPExceptionImpl {
-        ContentType ct = parseContentType(headers);
-        init(headers,identifyContentType(ct),ct,in);
+        contentType = parseContentType(headers);
+        init(headers,identifyContentType(contentType),contentType,in);
     }
 
     private static ContentType parseContentType(MimeHeaders headers) throws SOAPExceptionImpl {
@@ -562,17 +565,17 @@ public abstract class MessageImpl
      *      combination of flags, such as PLAIN_XML_CODE and MIME_MULTIPART_CODE.
      */
     // SOAP1.2 allow SOAP1.2 content type
-    static int identifyContentType(ContentType contentType)
+    static int identifyContentType(ContentType ct)
         throws SOAPExceptionImpl {
         // TBD
         //    Is there anything else we need to verify here?
 
-        String primary = contentType.getPrimaryType().toLowerCase();
-        String sub = contentType.getSubType().toLowerCase();
+        String primary = ct.getPrimaryType().toLowerCase();
+        String sub = ct.getSubType().toLowerCase();
 
         if (primary.equals("multipart")) {
             if (sub.equals("related")) {
-                String type = getTypeParameter(contentType);
+                String type = getTypeParameter(ct);
                 if (isEqualToSoap1_1Type(type)) {
                     return (type.equals("application/fastinfoset") ?
                            FI_ENCODED_FLAG : 0) | MIME_MULTIPART_FLAG | SOAP1_1_FLAG;
@@ -580,7 +583,7 @@ public abstract class MessageImpl
                 else if (isEqualToSoap1_2Type(type)) {
                     return (type.equals("application/soap+fastinfoset") ?
                            FI_ENCODED_FLAG : 0) | MIME_MULTIPART_FLAG | SOAP1_2_FLAG;
-                } else if (isMimeMultipartXOPPackage(contentType)) {
+                } else if (isMimeMultipartXOPPackage(ct)) {
                     return MIME_MULTIPART_XOP_FLAG;
                 } else {
                     log.severe("SAAJ0536.soap.content-type.mustbe.multipart");
@@ -606,7 +609,7 @@ public abstract class MessageImpl
                     && sub.equalsIgnoreCase("soap+fastinfoset") ?
                         FI_ENCODED_FLAG : 0) 
                    | PLAIN_XML_FLAG | SOAP1_2_FLAG;
-        } else if(isSOAPBodyXOPPackage(contentType)){
+        } else if(isSOAPBodyXOPPackage(ct)){
             return XOP_FLAG;
         } else {
             log.severe("SAAJ0537.soap.invalid.content-type");
@@ -654,10 +657,14 @@ public abstract class MessageImpl
         needsSave();
     }
 
-    private ContentType ContentType() {
+    private ContentType contentType() {
         ContentType ct = null;
         try {
-            ct = new ContentType(getContentType());
+            String currentContent = getContentType();
+            if (currentContent == null) {
+                return this.contentType;
+            }
+            ct = new ContentType(currentContent);
         } catch (Exception e) {
             // what to do here?
         }
@@ -668,33 +675,33 @@ public abstract class MessageImpl
      * Return the MIME type string, without the parameters.
      */
     public String getBaseType() {
-        return ContentType().getBaseType();
+        return contentType().getBaseType();
     }
 
     public void setBaseType(String type) {
-        ContentType ct = ContentType();
+        ContentType ct = contentType();
         ct.setParameter("type", type);
         headers.setHeader("Content-Type", ct.toString());
         needsSave();
     }
 
     public String getAction() {
-        return ContentType().getParameter("action");
+        return contentType().getParameter("action");
     }
 
     public void setAction(String action) {
-        ContentType ct = ContentType();
+        ContentType ct = contentType();
         ct.setParameter("action", action);
         headers.setHeader("Content-Type", ct.toString());
         needsSave();
     }
 
     public String getCharset() {
-        return ContentType().getParameter("charset");
+        return contentType().getParameter("charset");
     }
 
     public void setCharset(String charset) {
-        ContentType ct = ContentType();
+        ContentType ct = contentType();
         ct.setParameter("charset", charset);
         headers.setHeader("Content-Type", ct.toString());
         needsSave();
@@ -776,6 +783,18 @@ public abstract class MessageImpl
         if (attachments == null)
             return nullIter;
         return attachments.iterator();
+    }
+
+    private void setFinalContentType(String charset) {
+        ContentType ct = contentType();
+        if (ct == null) {
+            ct = new ContentType();
+        }
+        String[] split = getExpectedContentType().split("/");
+        ct.setPrimaryType(split[0]);
+        ct.setSubType(split[1]);
+        ct.setParameter("charset", charset);
+        headers.setHeader("Content-Type", ct.toString());
     }
 
     private class MimeMatchingIterator implements Iterator {
@@ -1116,11 +1135,13 @@ public abstract class MessageImpl
                 
                 messageBytes = in.getBytes();
                 messageByteCount = in.getCount();
-                
+
+                setFinalContentType(charset);
+                /*
                 headers.setHeader(
                         "Content-Type",
                         getExpectedContentType() +
-                        (isFastInfoset ? "" : "; charset=" + charset));
+                        (isFastInfoset ? "" : "; charset=" + charset));*/
                 headers.setHeader(
                     "Content-Length",
                     Integer.toString(messageByteCount));
