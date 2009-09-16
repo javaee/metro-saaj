@@ -124,6 +124,7 @@ public class EnvelopeFactory {
                 ex);
         } finally {
             if (saxParser != null) {
+                saxParser.reset();
                 parserPool.put(saxParser);
             }
         }

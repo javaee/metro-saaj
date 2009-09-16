@@ -608,26 +608,22 @@ public class HttpSOAPConnection extends SOAPConnection {
                 }
 
                 InputStream httpIn =
-                    (isFailure
+                        (isFailure
                         ? httpConnection.getErrorStream()
                         : httpConnection.getInputStream());
-
-                byte[] bytes = readFully(httpIn);
-
-                int length =
-                    httpConnection.getContentLength() == -1
-                        ? bytes.length
-                        : httpConnection.getContentLength();
-
                 // If no reply message is returned,
                 // content-Length header field value is expected to be zero.
-                if (length == 0) {
+                // java SE 6 documentation says :
+                // available() : an estimate of the number of bytes that can be read
+                //(or skipped over) from this input stream without blocking
+                //or 0 when it reaches the end of the input stream.
+                if ((httpIn == null )
+                        || (httpConnection.getContentLength() == 0)
+                        || (httpIn.available() == 0)) {
                     response = null;
                     log.warning("SAAJ0014.p2p.content.zero");
                 } else {
-
-                    ByteInputStream in = new ByteInputStream(bytes, length);
-                    response = messageFactory.createMessage(headers, in);
+                    response = messageFactory.createMessage(headers, httpIn);
                 }
 
                 httpIn.close();

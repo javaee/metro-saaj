@@ -58,12 +58,13 @@ public class ParserPool {
     public ParserPool(int capacity) {
         this.capacity = capacity;
         queue = new ArrayBlockingQueue(capacity);
-        factory = new com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl(); //SAXParserFactory.newInstance();
+        factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
         for (int i=0; i < capacity; i++) {
            try {
                 queue.put(factory.newSAXParser());
             } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
                 throw new RuntimeException(ex);
             } catch (ParserConfigurationException ex) {
                 throw new RuntimeException(ex);
