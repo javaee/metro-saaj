@@ -325,16 +325,15 @@ public class Fault1_1Impl extends FaultImpl {
 
     public void setFaultCode(String faultCode, String prefix, String uri)
         throws SOAPException {
-        if (prefix == null || prefix.equals("")) {
+        if (prefix == null || "".equals(prefix)) {
             if (uri != null && !"".equals(uri)) {
                 prefix = getNamespacePrefix(uri);
-                if (prefix == null || prefix.equals("")) {
+                if (prefix == null || "".equals(prefix)) {
                     prefix = "ns0";
                 }
             }   
         }
 
-       
         if (this.faultCodeElement == null)
             findFaultCodeElement();
 
@@ -343,28 +342,24 @@ public class Fault1_1Impl extends FaultImpl {
         else
             this.faultCodeElement.removeContents();
  
-        if (uri == null || uri.equals("")) {
+        if (uri == null || "".equals(uri)) {
             if (prefix != null && !"".equals("prefix")) {
                 uri = this.faultCodeElement.getNamespaceURI(prefix);
             }
         }
-       
-//        if (standardFaultCode(faultCode) && 
-//                ((uri == null) || uri.equals(""))) {
-//             log.log(Level.WARNING, "SAAJ0306.ver1_1.faultcode.incorrect.namespace", new Object[]{faultCode});
-//               // throw new SOAPExceptionImpl("Namespace Error, Standard Faultcode: " +  faultCode + ", should be in SOAP 1.1 Namespace");
-//        }
-        
-        if (uri == null) {
-            //SOAP 1.1 Allows this
+
+        if (uri == null || "".equals(uri)) {
             if (prefix != null && !"".equals(prefix)) {
-                log.severe("SAAJ0140.impl.no.ns.URI");
-                throw new SOAPExceptionImpl("No NamespaceURI, SOAP requires faultcode content to be a QName");
-            } 
-        } else {
-            checkIfStandardFaultCode(faultCode, uri);
-            ((FaultElementImpl) this.faultCodeElement).ensureNamespaceIsDeclared(prefix, uri);
+                //cannot allow an empty URI for a non-Empty prefix
+                log.log(Level.SEVERE, "SAAJ0307.impl.no.ns.URI", new Object[]{prefix + ":" + faultCode});
+                throw new SOAPExceptionImpl("Empty/Null NamespaceURI specified for faultCode \"" + prefix + ":" + faultCode + "\"");
+            } else {
+                uri = "";
+            }
         }
+
+        checkIfStandardFaultCode(faultCode, uri);
+        ((FaultElementImpl) this.faultCodeElement).ensureNamespaceIsDeclared(prefix, uri);
         
         if (prefix == null || "".equals(prefix)) {
             finallySetFaultCode(faultCode);

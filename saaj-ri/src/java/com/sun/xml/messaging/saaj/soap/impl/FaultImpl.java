@@ -105,17 +105,14 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
     public void setFaultCode(String faultCode, String prefix, String uri)
         throws SOAPException {
 
-        if (prefix == null || prefix.equals("")) {
-            if (uri == null) {
-                log.severe("SAAJ0140.impl.no.ns.URI");
-                throw new SOAPExceptionImpl("No NamespaceURI, SOAP requires faultcode content to be a QName");
-            }
-            prefix = getNamespacePrefix(uri);
-            if (prefix == null || prefix.equals("")) {
-                prefix = "ns0";
+        if (prefix == null || "".equals(prefix)) {
+            if (uri != null && !"".equals(uri)) {
+                prefix = getNamespacePrefix(uri);
+                if (prefix == null || "".equals(prefix)) {
+                    prefix = "ns0";
+                }
             }
         }
-
         if (this.faultCodeElement == null)
             findFaultCodeElement();
 
@@ -124,17 +121,26 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         else
             this.faultCodeElement.removeContents();
  
-        if (uri == null || uri.equals("")) {
+        if (uri == null || "".equals(uri)) {
             uri = this.faultCodeElement.getNamespaceURI(prefix);
         }
-        if (uri == null) {
-            log.severe("SAAJ0140.impl.no.ns.URI");
-            throw new SOAPExceptionImpl("No NamespaceURI, SOAP requires faultcode content to be a QName");
-        } else {
-            checkIfStandardFaultCode(faultCode, uri);
-            ((FaultElementImpl) this.faultCodeElement).ensureNamespaceIsDeclared(prefix, uri);
+        if (uri == null || "".equals(uri)) {
+            if (prefix != null && !"".equals(prefix)) {
+                //cannot allow an empty URI for a non-Empty prefix
+                log.log(Level.SEVERE, "SAAJ0140.impl.no.ns.URI", new Object[]{prefix + ":" + faultCode});
+                throw new SOAPExceptionImpl("Empty/Null NamespaceURI specified for faultCode \"" + prefix + ":" + faultCode + "\"");
+            } else {
+                uri = "";
+            }
         }
-        finallySetFaultCode(prefix + ":" + faultCode);
+        checkIfStandardFaultCode(faultCode, uri);
+        ((FaultElementImpl) this.faultCodeElement).ensureNamespaceIsDeclared(prefix, uri);
+        
+        if (prefix == null || "".equals(prefix)) {
+            finallySetFaultCode(faultCode);
+        } else {
+            finallySetFaultCode(prefix + ":" + faultCode);
+        }
     }
 
     public void setFaultCode(Name faultCodeQName) throws SOAPException {

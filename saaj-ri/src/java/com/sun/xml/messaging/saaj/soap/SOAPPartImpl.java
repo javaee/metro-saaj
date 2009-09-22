@@ -57,7 +57,10 @@ import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import com.sun.xml.messaging.saaj.soap.impl.EnvelopeImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.*;
+
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
+import org.w3c.dom.Node;
 
 /**
  * SOAPPartImpl is the first attachment. This contains the XML/SOAP document.
@@ -657,6 +660,8 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
                     this.omitXmlDecl = false;
                 return ev;
             }
+        } else if ((source != null) && (source instanceof DOMSource)) {
+           //TODO: A Domsource maynot contain XMLDecl ?.
         }
         return null;
     }

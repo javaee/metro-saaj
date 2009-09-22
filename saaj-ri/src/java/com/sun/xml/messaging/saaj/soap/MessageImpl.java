@@ -761,6 +761,7 @@ public abstract class MessageImpl
     public void addAttachmentPart(AttachmentPart attachment) {
         try {
             initializeAllAttachments();
+            this.optimizeAttachmentProcessing = true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

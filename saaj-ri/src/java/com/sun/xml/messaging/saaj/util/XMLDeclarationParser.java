@@ -36,8 +36,6 @@
 package com.sun.xml.messaging.saaj.util;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import javax.xml.transform.TransformerException;
 
@@ -56,7 +54,6 @@ public class XMLDeclarationParser {
     private String xmlDecl = null;
     static String gt16 = null;
     static String utf16Decl = null;
-   
     static {
          try {
              gt16 = new String(">".getBytes("utf-16"));
