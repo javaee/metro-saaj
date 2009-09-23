@@ -66,7 +66,7 @@ public class EnvelopeFactory {
         "com.sun.xml.messaging.saaj.soap.LocalStrings");
     
     private static ParserPool parserPool = new ParserPool(5);
-        
+
     public static Envelope createEnvelope(Source src, SOAPPartImpl soapPart)
         throws SOAPException 
     {
@@ -124,8 +124,7 @@ public class EnvelopeFactory {
                 ex);
         } finally {
             if (saxParser != null) {
-                saxParser.reset();
-                parserPool.put(saxParser);
+                parserPool.returnParser(saxParser);
             }
         }
     }
