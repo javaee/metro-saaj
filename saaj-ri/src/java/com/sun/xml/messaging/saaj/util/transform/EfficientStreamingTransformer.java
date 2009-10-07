@@ -77,7 +77,9 @@ public class EfficientStreamingTransformer
   //static final String version;
   //static final String vendor;
 
-  protected static final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+  //removing the static :security issue : see CR 6813167
+  private final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+
 
   /** 
   removing support for Java 1.4 and 1.3 : CR6658158
@@ -413,8 +415,9 @@ public class EfficientStreamingTransformer
 
     /**
      * Threadlocal to hold a Transformer instance for this thread.
+     * removing this optimiztion :  see CR 6813167
      */
-    private static ThreadLocal effTransformer = new ThreadLocal(); 
+    //private static ThreadLocal effTransformer = new ThreadLocal();
     
     /**
      * Return Transformer instance for this thread, allocating a new one if 
@@ -422,11 +425,12 @@ public class EfficientStreamingTransformer
      * properties or any other data set on a previously used transformer.
      */
     public static Transformer newTransformer() {
-        Transformer tt = (Transformer) effTransformer.get();
-        if (tt == null) {
-            effTransformer.set(tt = new EfficientStreamingTransformer());
-        }       
-        return tt;
+        //removing this optimiztion: see CR 6813167
+        //Transformer tt = (Transformer) effTransformer.get();
+        //if (tt == null) {
+        //    effTransformer.set(tt = new EfficientStreamingTransformer());
+        //}
+        return new EfficientStreamingTransformer();
     }
 
 }
