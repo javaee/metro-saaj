@@ -568,4 +568,8 @@ public class Fault1_2Impl extends FaultImpl {
                        (NameImpl)qname);
     }
 
+     public void setFaultActor(String faultActor) throws SOAPException {
+        this.setFaultRole(name);
+    }
+
 }

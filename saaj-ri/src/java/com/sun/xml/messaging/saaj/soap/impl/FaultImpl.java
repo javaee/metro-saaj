@@ -204,17 +204,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         return (getDetail() != null);
     }
 
-    public void setFaultActor(String faultActor) throws SOAPException {
-        if (this.faultActorElement == null)
-            findFaultActorElement();
-        if (this.faultActorElement != null)
-            this.faultActorElement.detachNode();
-        if (faultActor == null)
-            return;
-        this.faultActorElement =
-            addSOAPFaultElement(getFaultActorName().getLocalName());
-        this.faultActorElement.addTextNode(faultActor);
-    }
+    public abstract void setFaultActor(String faultActor) throws SOAPException;
 
     public String getFaultActor() {
         if (this.faultActorElement == null)

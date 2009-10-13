@@ -379,4 +379,22 @@ public class Fault1_1Impl extends FaultImpl {
         }
         return false;
     }
+
+     public void setFaultActor(String faultActor) throws SOAPException {
+        if (this.faultActorElement == null)
+            findFaultActorElement();
+        if (this.faultActorElement != null)
+            this.faultActorElement.detachNode();
+        if (faultActor == null)
+            return;
+        this.faultActorElement =
+            createSOAPFaultElement(getFaultActorName());
+        this.faultActorElement.addTextNode(faultActor);
+        if (hasDetail()) {
+            insertBefore(this.faultActorElement, this.detail);
+            return;
+        }
+        addNode(this.faultActorElement);
+        
+    }
 }
