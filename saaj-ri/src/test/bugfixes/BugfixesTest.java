@@ -38,10 +38,10 @@
 
 package bugfixes;
 
+import com.sun.xml.messaging.saaj.soap.MessageImpl;
 import java.io.*;
 import java.net.URL;
 import java.net.URLStreamHandler;
-import javax.activation.URLDataSource;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Locale;
@@ -52,7 +52,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.stream.StreamSource;
 
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -65,6 +64,9 @@ import util.TestHelper;
 
 import com.sun.xml.messaging.saaj.soap.SOAPVersionMismatchException;
 import com.sun.xml.messaging.saaj.util.ByteInputStream;
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.xml.transform.dom.DOMSource;
 
 /*
  * A class that contains test cases that verify some of the bug fixes made.
@@ -1236,6 +1238,112 @@ public class BugfixesTest extends TestCase {
         //returns an empty string for xmlns:xml
         assertEquals("", text.getAttribute("xmlns:xml"));       
     }
+
+    //TODO : Need to add assert statements in all the tests below.....
+     public static void testSAAJIssue44And37() throws Exception {
+         //TestCases for SAAJ Issue 44 and 37
+        byte[] bytes = new byte[0];
+        InputStream in = new ByteArrayInputStream(bytes);
+        MimeHeaders headers = new MimeHeaders();
+        MimeHeader header = new MimeHeader("Content-Type", "text/xml");
+        MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+        SOAPMessage m = mf.createMessage();
+        SOAPBody body = m.getSOAPBody();
+        String action = "exampleAction";
+        ((MessageImpl)m).setAction(action);
+        m.writeTo(System.out);
+        String[] ctyp = m.getMimeHeaders().getHeader("Content-Type");
+    }
+
+    public static void testSAAJIssue39() throws SOAPException, IOException {
+        MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+        SOAPMessage m = mf.createMessage();
+        m.getSOAPBody().addTextNode("This is a test body");
+
+        SOAPHeader hdr = m.getSOAPHeader();
+        SOAPHeaderElement hdre = (SOAPHeaderElement)hdr.addChildElement("MYHeader","test", "http://tmpuri");
+        hdre.addTextNode("This is a test header");
+        m.saveChanges();
+        AttachmentPart ap = m.createAttachmentPart(new DataHandler(new FileDataSource("src/test/mime/data/java.gif")));
+        m.addAttachmentPart(ap);
+        m.saveChanges();
+        //m.writeTo(System.out);
+        //test here if we call removeAttachments will it set back the
+        //optimizeAttachments flag to true again before/while doing a savechanges.
+    }
+
+    public static void testSAAJIssue38() throws Exception {
+        MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+        SOAPMessage m = mf.createMessage();
+        SOAPPart sp = m.getSOAPPart();
+        sp.setContent(new StreamSource(new FileInputStream(new File("src/test/bugfixes/data/service.wsdl"))));
+        SOAPEnvelope env = sp.getEnvelope();
+        //m.writeTo(System.out);
+        System.out.println("=======================\n\n");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        Document doc = dbf.newDocumentBuilder().parse(new File("src/test/bugfixes/data/sts.wsdl"));
+        Element elem = doc.getDocumentElement();
+        org.w3c.dom.Node xmlDecl = elem.getFirstChild();
+        if (xmlDecl.getNodeType() == Node.DOCUMENT_TYPE_NODE) {
+            System.out.println("This Node is an XMLDecl node");
+        }
+        //elem.getNodeType().
+        DOMSource domSource = new DOMSource(elem);
+        sp.setContent(domSource);
+        env = sp.getEnvelope();
+        //m.writeTo(System.out);
+    }
+    public static void testSAAJIssue47() throws Exception {
+       //should work and treat the QName as NCName
+        MessageFactory mf1 = MessageFactory.newInstance();
+        SOAPMessage m1 = mf1.createMessage();
+        SOAPFault fault1 = SOAPFactory.newInstance().createFault("This is a test Fault", new QName(null, "TestFaultCode", ""));
+        m1.getSOAPBody().addChildElement(fault1);
+        //m1.writeTo(System.out);
+
+        //should throw and exception
+        try {
+        MessageFactory mf = MessageFactory.newInstance();
+        SOAPMessage m = mf.createMessage();
+        SOAPFault fault = SOAPFactory.newInstance().createFault("This is a test Fault", new QName(null, "TestFaultCode", "myprefix"));
+        m.getSOAPBody().addChildElement(fault);
+        //m.writeTo(System.out);
+        } catch (Exception e) {
+            //should throw an exception
+        }
+
+    }
+
+    public static void testSAAJIssue46() throws SOAPException, FileNotFoundException {
+        /*
+        for (int j = 0; j < 10; j++) {
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < 10000; i++) {
+                MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+                SOAPMessage m = mf.createMessage();
+                SOAPPart sp = m.getSOAPPart();
+                sp.setContent(new StreamSource(new FileInputStream(new File("C:\\Users\\Kumar\\Desktop\\service.wsdl"))));
+                SOAPEnvelope env = sp.getEnvelope();
+                SOAPBody body = env.getBody();
+            }
+            long end = System.currentTimeMillis();
+            System.out.println("Time Taken =" + (end - start));
+        } */
+    }
+    public static void testSAAJIssue49() throws SOAPException, FileNotFoundException, IOException {
+        MessageFactory mf = MessageFactory.newInstance();
+        QName faultCode = new QName("http://schemas.xmlsoap.org/soap/envelope/",
+                "MustUnderstand");
+        String faultString = "test message";
+        SOAPFault fault = SOAPFactory.newInstance().createFault(faultString, faultCode);
+        Detail d = fault.addDetail();
+        d.addDetailEntry(new QName("", "entry1"));
+        fault.setFaultActor("http://example.org/actor");
+        SOAPMessage m = mf.createMessage();
+        m.getSOAPBody().addChildElement(fault);
+        //m.writeTo(System.out);
+    }
+
 
     public static void main(String[] args) throws Exception {
         if (th.isDebug()) {
