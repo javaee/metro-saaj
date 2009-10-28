@@ -1315,7 +1315,7 @@ public class BugfixesTest extends TestCase {
     }
 
     public static void testSAAJIssue46() throws SOAPException, FileNotFoundException {
-        /*
+        /* uncomment and fix the file being used. and add assert stmts
         for (int j = 0; j < 10; j++) {
             long start = System.currentTimeMillis();
             for (int i = 0; i < 10000; i++) {
@@ -1330,6 +1330,31 @@ public class BugfixesTest extends TestCase {
             System.out.println("Time Taken =" + (end - start));
         } */
     }
+
+    public static void testSAAJIssue31() throws Exception {
+        /* TODO: uncomment and fix the file being used and add assert stmts
+        System.setProperty("saaj.use.mimepull", "true");
+        MessageFactory mf = MessageFactory.newInstance();
+        SOAPMessage m = mf.createMessage();
+        m.getSOAPBody().addTextNode("This is a test body");
+
+        SOAPHeader hdr = m.getSOAPHeader();
+        SOAPHeaderElement hdre = (SOAPHeaderElement)hdr.addChildElement("MYHeader","test", "http://tmpuri");
+        hdre.addTextNode("This is a test header");
+        m.saveChanges();
+        AttachmentPart ap = m.createAttachmentPart(new DataHandler(new FileDataSource("C:\\glassfish.zip")));
+        m.addAttachmentPart(ap);
+        m.saveChanges();
+        m.writeTo(new FileOutputStream(new File("C:\\bigmessage.xml")));
+
+
+        SOAPMessage created = mf.createMessage(m.getMimeHeaders(), new FileInputStream(new File("C:\\bigmessage.xml")));
+        Iterator it = created.getAttachments();
+        AttachmentPart at = (AttachmentPart)it.next();
+        created.writeTo(new FileOutputStream(new File("C:\\bigmessage1.xml")));*/
+
+    }
+
     public static void testSAAJIssue49() throws SOAPException, FileNotFoundException, IOException {
         MessageFactory mf = MessageFactory.newInstance();
         QName faultCode = new QName("http://schemas.xmlsoap.org/soap/envelope/",
