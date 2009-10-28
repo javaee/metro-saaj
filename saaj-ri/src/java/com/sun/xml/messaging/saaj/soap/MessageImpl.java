@@ -84,7 +84,9 @@ public abstract class MessageImpl
     protected static final int MIME_MULTIPART_FLAG = 2;      // 00010
     protected static final int SOAP1_1_FLAG = 4;             // 00100
     protected static final int SOAP1_2_FLAG = 8;             // 01000
-    protected static final int MIME_MULTIPART_XOP_FLAG = 14; // 01110
+    //protected static final int MIME_MULTIPART_XOP_FLAG = 14; // 01110
+    protected static final int MIME_MULTIPART_XOP_SOAP1_1_FLAG = 6;  // 00110
+    protected static final int MIME_MULTIPART_XOP_SOAP1_2_FLAG = 10; // 01010
     protected static final int XOP_FLAG = 13;                // 01101
     protected static final int FI_ENCODED_FLAG     = 16;     // 10000
     
@@ -252,7 +254,26 @@ public abstract class MessageImpl
         return (stat & SOAP1_2_FLAG) != 0;
     }
 
-     private static boolean isMimeMultipartXOPPackage(ContentType contentType) {
+     private static boolean isMimeMultipartXOPSoap1_2Package(ContentType contentType) {
+        String type = contentType.getParameter("type");
+        if (type == null) {
+            return false;
+        }
+        type = type.toLowerCase();
+        if (!type.startsWith("application/xop+xml")) {
+            return false;
+        }
+        String startinfo = contentType.getParameter("start-info");
+        if (startinfo == null) {
+            return false;
+        }
+        startinfo = startinfo.toLowerCase();
+        return isEqualToSoap1_2Type(startinfo);
+    }
+
+
+     //private static boolean isMimeMultipartXOPPackage(ContentType contentType) {
+     private static boolean isMimeMultipartXOPSoap1_1Package(ContentType contentType) {
         String type = contentType.getParameter("type");
         if(type==null)
             return false;
@@ -265,7 +286,7 @@ public abstract class MessageImpl
         if(startinfo == null)
             return false;
         startinfo = startinfo.toLowerCase();
-        return isEqualToSoap1_2Type(startinfo) || isEqualToSoap1_1Type(startinfo);
+        return isEqualToSoap1_1Type(startinfo);
     }
  
     private static boolean isSOAPBodyXOPPackage(ContentType contentType){
@@ -600,8 +621,12 @@ public abstract class MessageImpl
                 else if (isEqualToSoap1_2Type(type)) {
                     return (type.equals("application/soap+fastinfoset") ?
                            FI_ENCODED_FLAG : 0) | MIME_MULTIPART_FLAG | SOAP1_2_FLAG;
-                } else if (isMimeMultipartXOPPackage(ct)) {
-                    return MIME_MULTIPART_XOP_FLAG;
+                /*} else if (isMimeMultipartXOPPackage(ct)) {
+                    return MIME_MULTIPART_XOP_FLAG;*/
+                } else if (isMimeMultipartXOPSoap1_1Package(ct)) {
+                    return MIME_MULTIPART_XOP_SOAP1_1_FLAG;
+                } else if (isMimeMultipartXOPSoap1_2Package(ct)) {
+                    return MIME_MULTIPART_XOP_SOAP1_2_FLAG;
                 } else {
                     log.severe("SAAJ0536.soap.content-type.mustbe.multipart");
                     throw new SOAPExceptionImpl(
@@ -1254,7 +1279,10 @@ public abstract class MessageImpl
         if(type == null)
             return false;
         ContentType ct = new ContentType(type);
-        return isMimeMultipartXOPPackage(ct) || isSOAPBodyXOPPackage(ct);
+        //return isMimeMultipartXOPPackage(ct) || isSOAPBodyXOPPackage(ct);
+        return isMimeMultipartXOPSoap1_1Package(ct) ||
+            isMimeMultipartXOPSoap1_2Package(ct) || isSOAPBodyXOPPackage(ct);
+
     }
 
     public void writeTo(OutputStream out) throws SOAPException, IOException {

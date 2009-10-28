@@ -1355,6 +1355,12 @@ public class BugfixesTest extends TestCase {
 
     }
 
+    public static void testSAAJIssue48() throws Exception {
+        /* TODO: add a testcase here 
+         * The data folder has the MTOM 1.1 and 1.2 messages for creating the
+         * test */
+
+    }
     public static void testSAAJIssue49() throws SOAPException, FileNotFoundException, IOException {
         MessageFactory mf = MessageFactory.newInstance();
         QName faultCode = new QName("http://schemas.xmlsoap.org/soap/envelope/",
