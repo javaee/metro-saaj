@@ -84,10 +84,10 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
     }
 
     public SOAPPart getSOAPPart() {
-        if (soapPart == null) {
-            soapPart = new SOAPPart1_1Impl(this);
+        if (soapPartImpl == null) {
+            soapPartImpl = new SOAPPart1_1Impl(this);
         }
-        return soapPart;
+        return soapPartImpl;
     }
 
     protected boolean isCorrectSoapVersion(int contentTypeId) {

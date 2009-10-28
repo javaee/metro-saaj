@@ -49,13 +49,6 @@ import com.sun.xml.messaging.saaj.packaging.mime.internet.MimeUtility;
 import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
 
-import javax.activation.CommandMap;
-import javax.activation.DataHandler;
-import javax.activation.MailcapCommandMap;
-import javax.xml.soap.AttachmentPart;
-import javax.xml.soap.MimeHeader;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ByteArrayOutputStream;
@@ -68,6 +61,7 @@ import java.util.logging.Logger;
 
 import javax.activation.*;
 import javax.xml.soap.*;
+import org.jvnet.mimepull.MIMEPart;
 
 /**
  * Implementation of attachments.
@@ -139,13 +133,31 @@ public class AttachmentPartImpl extends AttachmentPart {
     private MimeBodyPart rawContent = null;
     private DataHandler dataHandler = null;
 
+    //alternate impl that uses a MIMEPart
+    private MIMEPart mimePart = null;
+
     public AttachmentPartImpl() {
         headers = new MimeHeaders();
     }
 
+    public AttachmentPartImpl(MIMEPart part) {
+        headers = new MimeHeaders();
+        mimePart = part;
+        List<? extends org.jvnet.mimepull.Header> hdrs = part.getAllHeaders();
+        for (org.jvnet.mimepull.Header hd : hdrs) {
+            headers.addHeader(hd.getName(), hd.getValue());
+        }
+    }
+
     public int getSize() throws SOAPException {
         byte[] bytes;
-
+        if (mimePart != null) {
+            try {
+                return mimePart.read().available();
+            } catch (IOException e) {
+                return -1;
+            }
+        }
         if ((rawContent == null) && (dataHandler == null))
             return 0;
  
@@ -178,13 +190,20 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     public void clearContent() {
+        if (mimePart != null) {
+            mimePart = null;
+        }
         dataHandler = null;
         rawContent = null;
     }
 
     public Object getContent() throws SOAPException {
         try {
-            if (dataHandler != null)  {
+            if (mimePart != null) {
+                //return an inputstream
+                return mimePart.read();
+            }
+            if (dataHandler != null) {
                 return getDataHandler().getContent();
             } else if (rawContent != null) {
                 return rawContent.getContent();
@@ -200,6 +219,9 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     public void setContent(Object object, String contentType)
         throws IllegalArgumentException {
+        if (mimePart != null) {
+            mimePart = null;
+        }
         DataHandler dh = new DataHandler(object, contentType);
 
         setDataHandler(dh);
@@ -207,6 +229,27 @@ public class AttachmentPartImpl extends AttachmentPart {
 
 
     public DataHandler getDataHandler() throws SOAPException {
+        if (mimePart != null) {
+            //return an inputstream
+            return new DataHandler(new DataSource() {
+
+                public InputStream getInputStream() throws IOException {
+                    return mimePart.read();
+                }
+
+                public OutputStream getOutputStream() throws IOException {
+                    throw new UnsupportedOperationException("getOutputStream cannot be supported : You have enabled LazyAttachments Option");
+                }
+
+                public String getContentType() {
+                    return mimePart.getContentType();
+                }
+
+                public String getName() {
+                    return "MIMEPart Wrapper DataSource";
+                }
+            });
+        }
         if (dataHandler == null) {
             if (rawContent != null) {
                 return new DataHandler(new MimePartDataSource(rawContent));
@@ -219,6 +262,9 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     public void setDataHandler(DataHandler dataHandler)
         throws IllegalArgumentException {
+        if (mimePart != null) {
+            mimePart = null;
+        }
         if (dataHandler == null) {
             log.severe("SAAJ0503.soap.no.null.to.dataHandler");
             throw new IllegalArgumentException("Null dataHandler argument to setDataHandler");
@@ -291,6 +337,9 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     MimeBodyPart getMimePart() throws SOAPException {
         try {
+            if (this.mimePart != null) {
+                return new MimeBodyPart(mimePart);
+            }
             if (rawContent != null) {
                 copyMimeHeaders(headers, rawContent);
                 return rawContent;
@@ -345,6 +394,10 @@ public class AttachmentPartImpl extends AttachmentPart {
  
     public  void setBase64Content(InputStream content, String contentType) 
         throws SOAPException {
+
+        if (mimePart != null) {
+            mimePart = null;
+        }
         dataHandler = null;
         InputStream decoded = null;
         try {
@@ -372,7 +425,9 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     public  InputStream getBase64Content() throws SOAPException {
         InputStream stream;
-        if (rawContent != null) {
+        if (mimePart != null) {
+            stream = mimePart.read();
+        } else if (rawContent != null) {
             try {
                  stream = rawContent.getInputStream();
             } catch (Exception e) {
@@ -424,6 +479,9 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     public void setRawContent(InputStream content, String contentType) 
         throws SOAPException {
+        if (mimePart != null) {
+            mimePart = null;
+        }
         dataHandler = null;
         try {
             InternetHeaders hdrs = new InternetHeaders();
@@ -468,6 +526,9 @@ public class AttachmentPartImpl extends AttachmentPart {
     public void setRawContentBytes(
         byte[] content, int off, int len, String contentType) 
         throws SOAPException {
+        if (mimePart != null) {
+            mimePart = null;
+        }
         if (content == null) {
             throw new SOAPExceptionImpl("Null content passed to setRawContentBytes");
         }
@@ -485,6 +546,9 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     public  InputStream getRawContent() throws SOAPException {
+        if (mimePart != null) {
+            return mimePart.read();
+        }
         if (rawContent != null) {
             try {
                 return rawContent.getInputStream();
@@ -507,13 +571,22 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     public  byte[] getRawContentBytes() throws SOAPException {
         InputStream ret;
+        if (mimePart != null) {
+            try {
+                ret = mimePart.read();
+                return ASCIIUtility.getBytes(ret);
+            } catch (IOException ex) {
+                log.log(Level.SEVERE,"SAAJ0577.soap.attachment.getrawcontent.exception", ex);
+                throw new SOAPExceptionImpl(ex);
+            }
+        }
         if (rawContent != null) {
             try {
                 ret = rawContent.getInputStream();
                 return ASCIIUtility.getBytes(ret);
             } catch (Exception e) {
                 log.log(Level.SEVERE,"SAAJ0577.soap.attachment.getrawcontent.exception", e);
-                throw new SOAPExceptionImpl(e.getLocalizedMessage());
+                throw new SOAPExceptionImpl(e);
             }
         } else if (dataHandler != null) {
             try {

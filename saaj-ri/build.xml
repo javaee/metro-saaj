@@ -130,7 +130,7 @@
   <property name="qname.jar"             	value="${lib.home}/jax-qname.jar"/>
   <property name="saaj.jar"                   	value="${lib.home}/saaj-api.jar"/>
   <property name="FastInfoset.jar"             	value="${lib.home}/FastInfoset.jar"/>
-
+  <property name="mimepull.jar"             	value="${lib.home}/mimepull.jar"/>
 <!-- ************ Compiler Defaults ************************************** -->
 
   <!-- Should Java compilations set the 'debug' compiler option? -->
@@ -150,6 +150,7 @@
     <pathelement location="${saaj.jar}"/>
     <pathelement location="${qname.jar}"/>
     <pathelement location="${FastInfoset.jar}"/>
+    <pathelement location="${mimepull.jar}"/>
   </path>
 
   <property name="junit.jar"             value="${lib.home}/junit.jar"/>
@@ -192,8 +193,7 @@
            destdir="${build.home}/classes"
              debug="${compile.debug}"
        deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}"
-          source="1.4">
+          optimize="${compile.optimize}">
       <classpath refid="compile.classpath"/>
     </javac>
     <!-- Copy default Factories info -->
@@ -599,6 +599,18 @@
   <!-- assumes the dist target has been called -->
   <target name="create.zip" description="Create SAAJ zip file distribution">
 
+    <echo message="-------- Extracting MimePull classes to ${build.home}/classes --------"/>
+    <exec dir="${build.home}/classes" executable="jar" >
+            <arg line="xvf ${lib.home}/mimepull.jar"/>
+    </exec>
+
+    <echo message="-------- Adding MimePull classes to saaj-impl.jar--------"/>
+    <jar jarfile="${build.home}/lib/saaj-impl.jar"
+             basedir="${build.home}/classes"
+             index="false"
+             update="true"
+             excludes="com/**, META-INF/**">
+    </jar>
     <!-- make build and output directories -->
     <mkdir dir="${zip.build.dir}"/>
     <mkdir dir="${zip.release.dir}"/>
@@ -679,12 +691,9 @@
 
     <!-- make output directory -->
     <mkdir dir="${hpux.release.dir}/sun-saaj"/>
-
-    
-	<exec  executable="/usr/sbin/swpackage" failonerror="true">
+      <exec  executable="/usr/sbin/swpackage" failonerror="true">
       <arg line="-x follow_symlinks=true -x compression_type=gzip -x compress_cmd=/usr/contrib/bin/gzip -x uncompress_files=false -x compress_files=true -x reinstall_files=true -x package_in_place=false -x target_type=directory -x write_remote_files=true -x run_as_superuser=false -s ${hpux.build.dir}/sun-saaj.psf @ ${hpux.release.dir}/sun-saaj"/>
-	 </exec>
-
+      </exec>
    </target>
   
   <target name="create.src.zip" description="Create SAAJ source zip file">
@@ -813,10 +822,11 @@
 	<prename srcdir="src/java" destdir="j2se-integration/saaj-ri/src/java">
 	    <pattern from="com.sun.xml" to="com.sun.xml.internal"/>
 	    <pattern from="org.jvnet.fastinfoset" to="com.sun.xml.internal.org.jvnet.fastinfoset" />
+            <pattern from="org.jvnet.mimepull" to="com.sun.xml.internal.org.jvnet.mimepull" />
         </prename>
         <!-- sanity test -->
         <mkdir dir="build/renamed-classes"/>
-	<javac srcdir="j2se-integration/saaj-ri/src/java" destdir="build/renamed-classes"  source="1.4">
+	<javac srcdir="j2se-integration/saaj-ri/src/java" destdir="build/renamed-classes">
 	<classpath>
             <fileset dir="lib" includes="*.jar"/>
         </classpath>
@@ -834,7 +844,7 @@
         </prename>
         <!-- sanity test -->
         <mkdir dir="build/nonrenamed-classes"/>
-	<javac srcdir="remove-rename/saaj-ri/src/java" destdir="build/nonrenamed-classes"  source="1.4">
+	<javac srcdir="remove-rename/saaj-ri/src/java" destdir="build/nonrenamed-classes" >
 	<classpath>
             <fileset dir="lib" includes="*.jar"/>
         </classpath>

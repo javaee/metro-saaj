@@ -56,6 +56,7 @@ import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
 import com.sun.xml.messaging.saaj.soap.impl.EnvelopeImpl;
 import com.sun.xml.messaging.saaj.util.*;
+import org.jvnet.mimepull.MIMEPart;
 
 /**
  * The message implementation for SOAP messages with
@@ -89,7 +90,7 @@ public abstract class MessageImpl
     
     protected MimeHeaders headers;
     protected ContentType contentType;
-    protected SOAPPartImpl soapPart;
+    protected SOAPPartImpl soapPartImpl;
     protected FinalArrayList attachments;
     protected boolean saved = false;
     protected byte[] messageBytes;
@@ -120,6 +121,7 @@ public abstract class MessageImpl
     // switch back to old MimeMultipart incase of problem
     private static boolean switchOffBM = false;
     private static boolean switchOffLazyAttachment = false;
+    private static boolean useMimePull = false;
 
     static {
         try {
@@ -131,6 +133,7 @@ public abstract class MessageImpl
             if ((s != null) && s.equals("false")) {
                 switchOffLazyAttachment = true;
             }
+            useMimePull = Boolean.getBoolean("saaj.use.mimepull");
         } catch (SecurityException ex) {
             // ignore it
         }
@@ -224,7 +227,7 @@ public abstract class MessageImpl
         }
         MessageImpl src = (MessageImpl) msg;
         this.headers = src.headers;
-        this.soapPart = src.soapPart;
+        this.soapPartImpl = src.soapPartImpl;
         this.attachments = src.attachments;
         this.saved = src.saved;
         this.messageBytes = src.messageBytes;
@@ -400,7 +403,9 @@ public abstract class MessageImpl
                 };
 
                 multiPart = null;
-                if (switchOffBM) {
+                if (useMimePull) {
+                    multiPart = new MimePullMultipart(ds,contentType);
+                } else if (switchOffBM) {
                     multiPart = new MimeMultipart(ds,contentType);
                 } else {
                     multiPart = new BMMimeMultipart(ds,contentType);
@@ -408,6 +413,7 @@ public abstract class MessageImpl
 
                 String startParam = contentType.getParameter("start");
                 MimeBodyPart soapMessagePart = null;
+                InputStream soapPartInputStream = null;
                 String contentID = null;
                 if (switchOffBM || switchOffLazyAttachment) {
                     if(startParam == null) {
@@ -424,37 +430,48 @@ public abstract class MessageImpl
                         }
                     }
                 } else {
-                    BMMimeMultipart bmMultipart =
-                        (BMMimeMultipart)multiPart;
-                    InputStream stream = bmMultipart.initStream();
-
-                    SharedInputStream sin = null;
-                    if (stream instanceof SharedInputStream) {
-                        sin = (SharedInputStream)stream;
-                    }
-
-                    String boundary = "--" +
-                        contentType.getParameter("boundary");
-                    byte[] bndbytes = ASCIIUtility.getBytes(boundary);
-                    if (startParam == null) {
-                        soapMessagePart =
-                            bmMultipart.getNextPart(stream, bndbytes, sin);
-                        bmMultipart.removeBodyPart(soapMessagePart);
+                    if (useMimePull) {
+                        MimePullMultipart mpMultipart = (MimePullMultipart)multiPart;
+                        MIMEPart sp = mpMultipart.readAndReturnSOAPPart();
+                        soapMessagePart = new MimeBodyPart(sp);
+                        soapPartInputStream = sp.readOnce();
                     } else {
-                        MimeBodyPart bp = null;
-                        try {
-                            while(!startParam.equals(contentID)) {
-                                bp = bmMultipart.getNextPart(
-                                    stream, bndbytes, sin);
-                                contentID = bp.getContentID();
+                        BMMimeMultipart bmMultipart =
+                                (BMMimeMultipart) multiPart;
+                        InputStream stream = bmMultipart.initStream();
+
+                        SharedInputStream sin = null;
+                        if (stream instanceof SharedInputStream) {
+                            sin = (SharedInputStream) stream;
+                        }
+
+                        String boundary = "--" +
+                                contentType.getParameter("boundary");
+                        byte[] bndbytes = ASCIIUtility.getBytes(boundary);
+                        if (startParam == null) {
+                            soapMessagePart =
+                                    bmMultipart.getNextPart(stream, bndbytes, sin);
+                            bmMultipart.removeBodyPart(soapMessagePart);
+                        } else {
+                            MimeBodyPart bp = null;
+                            try {
+                                while (!startParam.equals(contentID)) {
+                                    bp = bmMultipart.getNextPart(
+                                            stream, bndbytes, sin);
+                                    contentID = bp.getContentID();
+                                }
+                                soapMessagePart = bp;
+                                bmMultipart.removeBodyPart(bp);
+                            } catch (Exception e) {
+                                throw new SOAPExceptionImpl(e);
                             }
-                            soapMessagePart = bp;
-                            bmMultipart.removeBodyPart(bp);
-                        } catch (Exception e) {
-                            throw new SOAPExceptionImpl(e);
                         }
                     }
-                } 
+                }
+
+                if (soapPartInputStream == null && soapMessagePart != null) {
+                    soapPartInputStream = soapMessagePart.getInputStream();
+                }
 
                 ContentType soapPartCType = new ContentType(
                                             soapMessagePart.getContentType());
@@ -475,8 +492,8 @@ public abstract class MessageImpl
                 setMimeHeaders(soapPart, soapMessagePart);
                 soapPart.setContent(isFastInfoset ?
                      (Source) FastInfosetReflection.FastInfosetSource_new(
-                         soapMessagePart.getInputStream()) :
-                     (Source) new StreamSource(soapMessagePart.getInputStream()));
+                         soapPartInputStream) :
+                     (Source) new StreamSource(soapPartInputStream));
             } else {
                 log.severe("SAAJ0534.soap.unknown.Content-Type");
                 throw new SOAPExceptionImpl("Unrecognized Content-Type");

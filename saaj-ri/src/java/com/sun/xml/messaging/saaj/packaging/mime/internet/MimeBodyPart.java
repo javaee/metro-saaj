@@ -41,11 +41,14 @@
 
 package com.sun.xml.messaging.saaj.packaging.mime.internet;
 
+
 import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 import com.sun.xml.messaging.saaj.packaging.mime.util.OutputUtil;
 import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 import com.sun.xml.messaging.saaj.util.FinalArrayList;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -54,6 +57,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import javax.activation.DataSource;
+import org.jvnet.mimepull.MIMEPart;
 
 /**
  * This class represents a MIME body part.
@@ -160,6 +165,8 @@ public final class MimeBodyPart {
      */
     private MimeMultipart parent;
 
+    private MIMEPart mimePart;
+
     /**
      * An empty MimeBodyPart object is created.
      * This body part maybe filled in by a client constructing a multipart
@@ -231,6 +238,14 @@ public final class MimeBodyPart {
         this.contentLength = len;
     }
 
+    public MimeBodyPart(MIMEPart part) {
+       mimePart = part;
+       headers = new InternetHeaders();
+       List<? extends org.jvnet.mimepull.Header> hdrs = mimePart.getAllHeaders();
+        for (org.jvnet.mimepull.Header hd : hdrs) {
+            headers.addHeader(hd.getName(), hd.getValue());
+        }
+    }
     /**
      * Return the containing <code>MimeMultipart</code> object,
      * or <code>null</code> if not known.
@@ -268,6 +283,14 @@ public final class MimeBodyPart {
      * @return size in bytes, or -1 if not known
      */
     public int getSize() {
+
+        if (mimePart != null) {
+            try {
+                return mimePart.read().available();
+            } catch (IOException ex) {
+                return -1;
+            }
+        }
 	if (content != null)
 	    return contentLength;
 	if (contentStream != null) {
@@ -312,6 +335,9 @@ public final class MimeBodyPart {
      * @return	Content-Type of this body part
      */
     public String getContentType() {
+        if (mimePart != null) {
+            return mimePart.getContentType();
+        }
 	String s = getHeader("Content-Type", null);
 	if (s == null)
 	    s = "text/plain";
@@ -728,6 +754,9 @@ public final class MimeBodyPart {
      * @see #content
      */
     /*package*/ InputStream getContentStream() throws MessagingException {
+        if (mimePart != null) {
+            return mimePart.read();
+        }
 	if (contentStream != null)
 	    return ((SharedInputStream)contentStream).newStream(0, -1);
 	if (content != null)
@@ -762,6 +791,27 @@ public final class MimeBodyPart {
      * the implementation in MimeMessage.
      */
     public DataHandler getDataHandler() {
+        if (mimePart != null) {
+            //return an inputstream
+            return new DataHandler(new DataSource() {
+
+                public InputStream getInputStream() throws IOException {
+                    return mimePart.read();
+                }
+
+                public OutputStream getOutputStream() throws IOException {
+                    throw new UnsupportedOperationException("getOutputStream cannot be supported : You have enabled LazyAttachments Option");
+                }
+
+                public String getContentType() {
+                    return mimePart.getContentType();
+                }
+
+                public String getName() {
+                    return "MIMEPart Wrapped DataSource";
+                }
+            });
+        }
         if (dh == null)
             dh = new DataHandler(new MimePartDataSource(this));
         return dh;
@@ -797,6 +847,9 @@ public final class MimeBodyPart {
      *			obtained from a READ_ONLY folder.
      */                 
     public void setDataHandler(DataHandler dh) {
+        if (mimePart != null) {
+            mimePart = null;
+        }
         this.dh = dh;
         this.content = null;
         this.contentStream = null;
@@ -820,6 +873,9 @@ public final class MimeBodyPart {
      *			obtained from a READ_ONLY folder.
      */
     public void setContent(Object o, String type) {
+        if (mimePart != null) {
+            mimePart = null;
+        }
 	if (o instanceof MimeMultipart) {
 	    setContent((MimeMultipart)o);
 	} else {
@@ -873,6 +929,9 @@ public final class MimeBodyPart {
      *			obtained from a READ_ONLY folder.
      */
     public void setContent(MimeMultipart mp) {
+        if (mimePart != null) {
+            mimePart = null;
+        }
 	setDataHandler(new DataHandler(mp, mp.getContentType().toString()));
 	mp.setParent(this);
     }
@@ -912,7 +971,12 @@ public final class MimeBodyPart {
             getDataHandler().writeTo(wos);
             if(os!=wos)
                 wos.flush(); // Needed to complete encoding
-        } else {
+        } else if (mimePart != null) {
+            OutputStream wos = MimeUtility.encode(os, getEncoding());
+            getDataHandler().writeTo(wos);
+            if(os!=wos)
+                wos.flush(); // Needed to complete encoding
+        }else {
             throw new MessagingException("no content");
         }
     }
