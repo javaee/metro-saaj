@@ -90,7 +90,12 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
      * Reference to containing message (may be null)
      */
     protected MessageImpl message;
-    
+
+    static final boolean noContentLength;
+    static {
+        noContentLength = Boolean.getBoolean("saaj.no.contentlength");
+    }
+
     protected SOAPPartImpl() {
         this(null);
     }
@@ -276,7 +281,7 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
         }
     }
     
-    public ByteInputStream getContentAsStream() throws IOException {
+    public InputStream getContentAsStream() throws IOException {
         if (source != null) {
             InputStream is = null;
             
@@ -297,6 +302,9 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
             }
             
             if (is != null) {
+                if (noContentLength) {
+                    return is;
+                }
                 if (!(is instanceof ByteInputStream)) {
                     log.severe("SAAJ0546.soap.stream.incorrect.type");
                     throw new IOException("Internal error: stream not of the right type");
@@ -654,10 +662,14 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
                         "SAAJ0552.soap.xml.decl.parsing.failed");
                     throw new SOAPExceptionImpl(
                         "XML declaration parsing failed", e);
-                }
+                } 
                 String xmlDecl = ev.getXmlDeclaration();
-                if ((xmlDecl != null) && (xmlDecl.length() > 0))
+                if ((xmlDecl != null) && (xmlDecl.length() > 0)) {
                     this.omitXmlDecl = false;
+                }
+                if (noContentLength) {
+                    source = new StreamSource(pushbackReader);
+                }
                 return ev;
             }
         } else if ((source != null) && (source instanceof DOMSource)) {

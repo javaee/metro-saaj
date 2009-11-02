@@ -120,6 +120,8 @@ public abstract class MessageImpl
     // if attachments are present, don't read the entire message in byte stream in saveTo()
     private boolean optimizeAttachmentProcessing = true;
 
+    private InputStream inputStreamAfterSaveChanges = null;
+
     // switch back to old MimeMultipart incase of problem
     private static boolean switchOffBM = false;
     private static boolean switchOffLazyAttachment = false;
@@ -1012,7 +1014,7 @@ public abstract class MessageImpl
         return _part;
     }
     
-    private final ByteInputStream getHeaderBytes()
+    private final InputStream getHeaderBytes()
         throws IOException {
         SOAPPartImpl sp = (SOAPPartImpl) getSOAPPart();
         return sp.getContentAsStream();
@@ -1159,7 +1161,7 @@ public abstract class MessageImpl
 
         try {
             if ((attachmentCount == 0) && !hasXOPContent()) {
-                ByteInputStream in;
+                InputStream in;
                 try{
                 /*
                  * Not sure why this is called getHeaderBytes(), but it actually
@@ -1169,15 +1171,21 @@ public abstract class MessageImpl
                     in = getHeaderBytes();
                     // no attachments, hence this property can be false
                     this.optimizeAttachmentProcessing = false;
+                    if (SOAPPartImpl.noContentLength) {
+                        inputStreamAfterSaveChanges = in;
+                    }
                 } catch (IOException ex) {
                     log.severe("SAAJ0539.soap.cannot.get.header.stream");
                     throw new SOAPExceptionImpl(
                             "Unable to get header stream in saveChanges: ",
                             ex);
                 }
-                
-                messageBytes = in.getBytes();
-                messageByteCount = in.getCount();
+
+                if (in instanceof ByteInputStream) {
+                    ByteInputStream bIn = (ByteInputStream)in;
+                    messageBytes = bIn.getBytes();
+                    messageByteCount = bIn.getCount();
+                }
 
                 setFinalContentType(charset);
                 /*
@@ -1185,9 +1193,11 @@ public abstract class MessageImpl
                         "Content-Type",
                         getExpectedContentType() +
                         (isFastInfoset ? "" : "; charset=" + charset));*/
-                headers.setHeader(
-                    "Content-Length",
-                    Integer.toString(messageByteCount));
+                if (messageByteCount > 0) {
+                    headers.setHeader(
+                            "Content-Length",
+                            Integer.toString(messageByteCount));
+                }
             } else {
                 if(hasXOPContent())
                     mmp = getXOPMessage();
@@ -1292,7 +1302,15 @@ public abstract class MessageImpl
         }
 
         if(!optimizeAttachmentProcessing){
-            out.write(messageBytes, 0, messageByteCount);
+            if (SOAPPartImpl.noContentLength && messageByteCount <= 0) {
+                byte[] buf = new byte[1024];
+                int length = 0;
+                while( (length = inputStreamAfterSaveChanges.read(buf)) != -1) {
+                    out.write(buf,0, length);
+                }
+            } else {
+                out.write(messageBytes, 0, messageByteCount);
+            }
         }
         else{
             try{

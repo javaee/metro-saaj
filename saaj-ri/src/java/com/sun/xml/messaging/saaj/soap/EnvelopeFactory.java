@@ -76,7 +76,9 @@ public class EnvelopeFactory {
         if (src instanceof StreamSource) {
             if (src instanceof JAXMStreamSource) {
                 try {
-                    ((JAXMStreamSource) src).reset();
+                    if (!SOAPPartImpl.noContentLength) {
+                        ((JAXMStreamSource) src).reset();
+                    }
                 } catch (java.io.IOException ioe) {
                     log.severe("SAAJ0515.source.reset.exception");
                     throw new SOAPExceptionImpl(ioe);

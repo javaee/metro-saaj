@@ -47,20 +47,30 @@ import javax.xml.transform.stream.StreamSource;
  * @author Anil Vijendran
  */
 public class JAXMStreamSource extends StreamSource {
-    ByteInputStream in;
+    InputStream in;
     Reader reader;
-    
+    private static final boolean noContentLength;
+    static {
+        noContentLength = Boolean.getBoolean("saaj.no.contentlength");
+    }
     public JAXMStreamSource(InputStream is) throws IOException {
-		if (is instanceof ByteInputStream) {
-			this.in = (ByteInputStream)is;
-		} else {
-			ByteOutputStream bout = new ByteOutputStream();
-                        bout.write(is);
-			this.in = bout.newInputStream();
-		}
+        if (noContentLength) {
+            in = is;
+        } else if (is instanceof ByteInputStream) {
+            this.in = (ByteInputStream) is;
+        } else {
+            ByteOutputStream bout = new ByteOutputStream();
+            bout.write(is);
+            this.in = bout.newInputStream();
+        }
     }
 
     public JAXMStreamSource(Reader rdr) throws IOException {
+
+        if (noContentLength) {
+            this.reader = rdr;
+            return;
+        }
         CharWriter cout = new CharWriter();
         char[] temp = new char[1024];
         int len;
