@@ -569,7 +569,7 @@ public class Fault1_2Impl extends FaultImpl {
     }
 
      public void setFaultActor(String faultActor) throws SOAPException {
-        this.setFaultRole(name);
+        this.setFaultRole(faultActor);
     }
 
 }
