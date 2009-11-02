@@ -1375,6 +1375,31 @@ public class BugfixesTest extends TestCase {
         //m.writeTo(System.out);
     }
 
+    //TODO add asserts and uncomment later. the test should fail if
+    //the system property below is not set.
+    public static void testSAAJIssue50() throws Exception {
+        /*
+        //System.setProperty("saaj.no.contentlength", "true");
+        MessageFactory mf = MessageFactory.newInstance();
+        SOAPMessage m = mf.createMessage();
+        InputStream in = new FileInputStream(new File("BigEnvelope.txt"));
+        InputStreamReader rdr = new InputStreamReader(in);
+        m.getSOAPPart().setContent(new StreamSource(rdr));
+        m.saveChanges();
+
+        SOAPHeader hdr = m.getSOAPHeader();
+        SOAPHeaderElement hdre =
+(SOAPHeaderElement)hdr.addChildElement("MYHeader","test", "http://tmpuri");
+        hdre.addTextNode("This is a test header");
+        m.saveChanges();
+        m.writeTo(new FileOutputStream(new File("bigmessage.xml")));
+
+        SOAPMessage created = mf.createMessage(m.getMimeHeaders(), new
+FileInputStream(new File("bigmessage.xml")));
+        SOAPBody body = created.getSOAPBody();
+        */
+    }
+
 
     public static void main(String[] args) throws Exception {
         if (th.isDebug()) {
