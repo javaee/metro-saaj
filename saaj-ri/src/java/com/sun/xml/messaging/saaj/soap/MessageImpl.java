@@ -1171,7 +1171,7 @@ public abstract class MessageImpl
                     in = getHeaderBytes();
                     // no attachments, hence this property can be false
                     this.optimizeAttachmentProcessing = false;
-                    if (SOAPPartImpl.noContentLength) {
+                    if (SOAPPartImpl.lazyContentLength) {
                         inputStreamAfterSaveChanges = in;
                     }
                 } catch (IOException ex) {
@@ -1302,11 +1302,18 @@ public abstract class MessageImpl
         }
 
         if(!optimizeAttachmentProcessing){
-            if (SOAPPartImpl.noContentLength && messageByteCount <= 0) {
+            if (SOAPPartImpl.lazyContentLength && messageByteCount <= 0) {
                 byte[] buf = new byte[1024];
+
                 int length = 0;
                 while( (length = inputStreamAfterSaveChanges.read(buf)) != -1) {
                     out.write(buf,0, length);
+                    messageByteCount += length;
+                }
+                if (messageByteCount > 0) {
+                    headers.setHeader(
+                            "Content-Length",
+                            Integer.toString(messageByteCount));
                 }
             } else {
                 out.write(messageBytes, 0, messageByteCount);

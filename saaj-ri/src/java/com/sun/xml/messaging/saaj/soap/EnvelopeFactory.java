@@ -76,7 +76,7 @@ public class EnvelopeFactory {
         if (src instanceof StreamSource) {
             if (src instanceof JAXMStreamSource) {
                 try {
-                    if (!SOAPPartImpl.noContentLength) {
+                    if (!SOAPPartImpl.lazyContentLength) {
                         ((JAXMStreamSource) src).reset();
                     }
                 } catch (java.io.IOException ioe) {

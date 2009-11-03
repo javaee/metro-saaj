@@ -91,9 +91,9 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
      */
     protected MessageImpl message;
 
-    static final boolean noContentLength;
+    static final boolean lazyContentLength;
     static {
-        noContentLength = Boolean.getBoolean("saaj.no.contentlength");
+        lazyContentLength = Boolean.getBoolean("saaj.lazy.contentlength");
     }
 
     protected SOAPPartImpl() {
@@ -302,7 +302,7 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
             }
             
             if (is != null) {
-                if (noContentLength) {
+                if (lazyContentLength) {
                     return is;
                 }
                 if (!(is instanceof ByteInputStream)) {
@@ -667,7 +667,7 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
                 if ((xmlDecl != null) && (xmlDecl.length() > 0)) {
                     this.omitXmlDecl = false;
                 }
-                if (noContentLength) {
+                if (lazyContentLength) {
                     source = new StreamSource(pushbackReader);
                 }
                 return ev;

@@ -49,12 +49,12 @@ import javax.xml.transform.stream.StreamSource;
 public class JAXMStreamSource extends StreamSource {
     InputStream in;
     Reader reader;
-    private static final boolean noContentLength;
+    private static final boolean lazyContentLength;
     static {
-        noContentLength = Boolean.getBoolean("saaj.no.contentlength");
+        lazyContentLength = Boolean.getBoolean("saaj.lazy.contentlength");
     }
     public JAXMStreamSource(InputStream is) throws IOException {
-        if (noContentLength) {
+        if (lazyContentLength) {
             in = is;
         } else if (is instanceof ByteInputStream) {
             this.in = (ByteInputStream) is;
@@ -67,7 +67,7 @@ public class JAXMStreamSource extends StreamSource {
 
     public JAXMStreamSource(Reader rdr) throws IOException {
 
-        if (noContentLength) {
+        if (lazyContentLength) {
             this.reader = rdr;
             return;
         }
