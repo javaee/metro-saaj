@@ -1379,7 +1379,7 @@ public class BugfixesTest extends TestCase {
     //the system property below is not set.
     public static void testSAAJIssue50() throws Exception {
         /*
-        //System.setProperty("saaj.no.contentlength", "true");
+        //System.setProperty("saaj.lazy.contentlength", "true");
         MessageFactory mf = MessageFactory.newInstance();
         SOAPMessage m = mf.createMessage();
         InputStream in = new FileInputStream(new File("BigEnvelope.txt"));
@@ -1398,6 +1398,34 @@ public class BugfixesTest extends TestCase {
 FileInputStream(new File("bigmessage.xml")));
         SOAPBody body = created.getSOAPBody();
         */
+
+        /*
+        //System.setProperty("saaj.use.mimepull", "true");
+        System.setProperty("saaj.lazy.contentlength", "true");
+        MessageFactory mf = MessageFactory.newInstance();
+        SOAPMessage m = mf.createMessage();
+
+        SOAPHeader hdr = m.getSOAPHeader();
+        SOAPHeaderElement hdre = (SOAPHeaderElement)hdr.addChildElement("MYHeader","test", "http://tmpuri");
+        hdre.addTextNode("This is a test header");
+        m.saveChanges();
+
+        m.writeTo(new FileOutputStream(new File("C:\\kumar\\workspaces\\latest\\bigmessage.xml")));
+        MimeHeaders hdrs = new MimeHeaders();
+        hdrs.addHeader("Content-Type", "text/xml");
+        SOAPMessage created = mf.createMessage(hdrs, new FileInputStream(new File("C:\\kumar\\workspaces\\latest\\bigmessage.xml")));
+        //SOAPBody body = created.getSOAPBody();
+        created.saveChanges();
+        String[] cls = created.getMimeHeaders().getHeader("Content-Length");
+        if (cls != null) {
+           System.out.println("After Save Changes Content-Length =" + cls[0]);
+        } else {
+           System.out.println("After Save Changes Content-Length =" + 0);
+        }
+        created.writeTo(new FileOutputStream(new File("C:\\kumar\\workspaces\\latest\\bigmessage1.xml")));
+        cls = created.getMimeHeaders().getHeader("Content-Length");
+        System.out.println("After writeTo Content-Length =" + cls[0]);*/
+
     }
 
 
