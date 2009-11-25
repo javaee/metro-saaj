@@ -41,7 +41,7 @@
   <property name="name" value="SAAJ RI"/>
   <property name="version" value="1.3.4"/>
   <property name="api.version" value="1.3"/>
-  <property name="suffix" value="-SNAPSHOT"/>
+  <property name="suffix" value=""/>
   <property name="rpm.version" value="1.3.4"/>
   <property name="rpm.release" value="1"/>
   <property name="zip.release" value="1"/>
@@ -765,7 +765,7 @@
   </target>
 
   <target name="integrate-maven-repository-importer">
-    <get src="http://kohsuke.sfbay/hudson/job/maven-repository-importer/lastSuccessfulBuild/artifact/build/maven-repository-importer.jar"
+    <get src="http://kohsuke.sfbay.sun.com/hudson/job/maven-repository-importer/lastSuccessfulBuild/artifact/build/maven-repository-importer.jar"
          dest="lib/maven-repository-importer.jar" />
   </target>
 
@@ -798,7 +798,7 @@
     <echo>importing to CVS...</echo>
     <cvs dest="build/maven-repo">
       <commandline>
-        <argument value="-d:pserver:kumarjayanti@kohsuke.sfbay:/cvs" />
+        <argument value="-d:pserver:kumarjayanti@kohsuke.sfbay.sun.com:/cvs" />
         <argument line="-z9 import -ko -W *.jar -kb -m" />
         <argument value="deploying new jars to the java.net maven repository" />
   
@@ -809,7 +809,7 @@
   </target>
 
   <target name="integrate-package-rename-task">
-    <get src="http://kohsuke.sfbay/hudson/job/package-rename-task/lastSuccessfulBuild/artifact/target/package-rename-task-1.0.jar"
+    <get src="http://kohsuke.sfbay.sun.com/hudson/job/package-rename-task/lastSuccessfulBuild/artifact/target/package-rename-task-1.0.jar"
          dest="${basedir}/lib/package-rename-task.jar"/>
   </target>
 
