@@ -9,6 +9,11 @@
       <artifactId>saaj-api</artifactId>
       <version>@API_VERSION@</version>
     </dependency>
+    <dependency>
+      <groupId>org.jvnet</groupId>
+      <artifactId>mimepull</artifactId>
+      <version>1.4</version>
+    </dependency>
   </dependencies>
 </project>
 
