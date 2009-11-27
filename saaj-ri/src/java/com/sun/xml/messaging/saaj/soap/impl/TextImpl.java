@@ -95,7 +95,9 @@ public class TextImpl
 
     public boolean isComment() {
         String txt = getNodeValue();
-
+        if (txt == null) {
+            return false;
+        }
         return txt.startsWith("<!--") && txt.endsWith("-->");
     }
 }
