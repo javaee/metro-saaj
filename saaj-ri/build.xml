@@ -629,6 +629,11 @@
       </fileset>
     </copy>
 
+    <copy todir="${zip.build.dir}" overwrite="yes">
+      <fileset dir="${basedir}">
+        <include name="license.html"/>
+      </fileset>
+    </copy>
     <!-- replace parameters in version file  -->
     <replace file="${zip.build.dir}/version" value="${version}${suffix}">
       <replacetoken>@saaj.version@</replacetoken>
