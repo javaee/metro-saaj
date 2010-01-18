@@ -191,6 +191,7 @@ public class AttachmentPartImpl extends AttachmentPart {
 
     public void clearContent() {
         if (mimePart != null) {
+            mimePart.close();
             mimePart = null;
         }
         dataHandler = null;
@@ -220,6 +221,7 @@ public class AttachmentPartImpl extends AttachmentPart {
     public void setContent(Object object, String contentType)
         throws IllegalArgumentException {
         if (mimePart != null) {
+            mimePart.close();
             mimePart = null;
         }
         DataHandler dh = new DataHandler(object, contentType);
@@ -263,6 +265,7 @@ public class AttachmentPartImpl extends AttachmentPart {
     public void setDataHandler(DataHandler dataHandler)
         throws IllegalArgumentException {
         if (mimePart != null) {
+            mimePart.close();
             mimePart = null;
         }
         if (dataHandler == null) {
@@ -396,6 +399,7 @@ public class AttachmentPartImpl extends AttachmentPart {
         throws SOAPException {
 
         if (mimePart != null) {
+            mimePart.close();
             mimePart = null;
         }
         dataHandler = null;
@@ -480,6 +484,7 @@ public class AttachmentPartImpl extends AttachmentPart {
     public void setRawContent(InputStream content, String contentType) 
         throws SOAPException {
         if (mimePart != null) {
+            mimePart.close();
             mimePart = null;
         }
         dataHandler = null;
@@ -527,6 +532,7 @@ public class AttachmentPartImpl extends AttachmentPart {
         byte[] content, int off, int len, String contentType) 
         throws SOAPException {
         if (mimePart != null) {
+            mimePart.close();
             mimePart = null;
         }
         if (content == null) {
