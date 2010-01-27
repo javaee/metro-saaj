@@ -473,6 +473,12 @@ public class AttachmentPartImpl extends AttachmentPart {
                 // throw new SOAPException
                 log.log(Level.SEVERE,"SAAJ0579.soap.attachment.getbase64content.exception", e);
                 throw new SOAPExceptionImpl(e.getLocalizedMessage());
+            } finally {
+                try {
+                    stream.close();
+                } catch (IOException ex) {
+                  //close the stream
+                }
             }
         } else {
           //throw  new SOAPException
