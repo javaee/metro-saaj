@@ -117,6 +117,11 @@ public  class MimeMultipart {
      */
     protected MimeBodyPart parent;
 
+    protected static boolean ignoreMissingEndBoundary = true;
+
+    static {
+        ignoreMissingEndBoundary = Boolean.getBoolean("saaj.mime.multipart.ignoremissingendboundary");
+    }
     /**
      * Default constructor. An empty MimeMultipart object
      * is created. Its content type is set to "multipart/mixed".
@@ -281,6 +286,7 @@ public  class MimeMultipart {
         // put out last boundary
         OutputUtil.writeAsAscii(boundary, os);
         OutputUtil.writeAsAscii("--", os);
+        os.flush();
     }
 
     /**
@@ -299,6 +305,7 @@ public  class MimeMultipart {
 	InputStream in;
 	SharedInputStream sin = null;
 	long start = 0, end = 0;
+        boolean foundClosingBoundary = false;
 
 	try {
 	    in = ds.getInputStream();
@@ -354,7 +361,9 @@ public  class MimeMultipart {
 		    while ((line = lin.readLine()) != null && line.length() > 0)
 			;
 		    if (line == null) {
-			//throw new MessagingException("EOF skipping headers");
+                        if (!ignoreMissingEndBoundary) {
+                           throw new MessagingException("Missing End Boundary for Mime Package : EOF while skipping headers");
+                        }
 			// assume there's just a missing end boundary
 			break getparts;
 		    }
@@ -396,6 +405,7 @@ public  class MimeMultipart {
 			    if (b2 == '-') {
 				if (in.read() == '-') {
 				    done = true;
+                                    foundClosingBoundary = true;
 				    break;	// ignore trailing text
 				}
 			    }
@@ -468,6 +478,9 @@ public  class MimeMultipart {
 	    throw new MessagingException("IO Error", ioex);
 	}
 
+        if (!ignoreMissingEndBoundary && !foundClosingBoundary && sin== null) {
+            throw new MessagingException("Missing End Boundary for Mime Package : EOF while skipping headers");
+        }
 	parsed = true;
     }
 

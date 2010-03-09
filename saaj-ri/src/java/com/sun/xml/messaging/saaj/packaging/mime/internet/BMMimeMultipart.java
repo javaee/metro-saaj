@@ -269,12 +269,11 @@ public  class BMMimeMultipart extends MimeMultipart {
             b = readBody(stream, pattern, v, null, sin); 
             // looks like this check has to be disabled
             // it is allowed to have Mime Package without closing boundary
-            /*
-            if ((b == -1) && !lastBodyPartFound()) {
-                throw new Exception(
-                    "End of Stream encountered without closing boundary");
+            if (!ignoreMissingEndBoundary) {
+                if ((b == -1) && !lastBodyPartFound()) {
+                    throw new MessagingException("Missing End Boundary for Mime Package : EOF while skipping headers");
+                }
             }
-            */
             long end = v[0]; 
             MimeBodyPart mbp = createMimeBodyPart(sin.newStream(start, end));
             addBodyPart(mbp);
@@ -287,11 +286,11 @@ public  class BMMimeMultipart extends MimeMultipart {
             // looks like this check has to be disabled
             // in the old impl it is allowed to have Mime Package 
             // without closing boundary
-            /*
-            if ((b == -1) && !lastBodyPartFound()) {
-                throw new Exception(
-                    "End of Stream encountered without closing boundary");
-            }*/
+            if (!ignoreMissingEndBoundary) {
+                if ((b == -1) && !lastBodyPartFound()) {
+                    throw new MessagingException("Missing End Boundary for Mime Package : EOF while skipping headers");
+                }
+            }
             MimeBodyPart mbp = createMimeBodyPart(
                 headers, baos.getBytes(), baos.getCount());
             addBodyPart(mbp);
@@ -655,7 +654,7 @@ public  class BMMimeMultipart extends MimeMultipart {
             // the last boundary need not have CRLF
             if (!lastPartFound.get(0)) {
                 throw new Exception(
-                    "End of Multipart Stream before encountering  closing boundary delimiter");
+                        "End of Multipart Stream before encountering  closing boundary delimiter");
             }
             return true;
         }
