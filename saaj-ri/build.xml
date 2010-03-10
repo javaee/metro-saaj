@@ -355,7 +355,7 @@
   <target name="prepare-tests" depends="compile-tests, copy-test-resources"/>
 
   <target name="run-tests" depends="prepare-tests">
-    <junit printsummary="no" haltonfailure="no" fork="true">
+    <junit printsummary="no" haltonfailure="yes" fork="true">
       <classpath refid="test.classpath"/>
       <formatter type="brief" usefile="false" />
       <batchtest>
