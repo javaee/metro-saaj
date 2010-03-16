@@ -45,9 +45,10 @@ import junit.framework.TestCase;
 
 import org.w3c.dom.Document;
 
-import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+//import com.sun.xml.internal.messaging.saaj.soap.name.NameImpl;
 
 import java.io.*;
+import java.lang.reflect.Method;
 
 /*
  * Tests to check for namespace rules being followed in SOAP message creation.
@@ -321,7 +322,7 @@ public class NamespaceTest extends TestCase {
                 "Envelope",
                 "env",
                 "http://schemas.xmlsoap.org/soap/envelope/");
-        element.addAttribute(NameImpl.createFromTagName("xmlns:fooName"), "http://foo");
+        element.addAttribute(createFromTagName("xmlns:fooName"), "http://foo");
         
         Iterator eachDeclaration = element.getNamespacePrefixes();
         assertTrue(eachDeclaration.hasNext());
@@ -356,4 +357,43 @@ public class NamespaceTest extends TestCase {
 
     }
 
+    private static Name createFromTagName(String tagName) {
+        Class cls = null;
+        try {
+            cls = Thread.currentThread().getContextClassLoader().
+                    loadClass("com.sun.xml.messaging.saaj.soap.name.NameImpl");
+        } catch (Exception e) {
+            try {
+                cls = Thread.currentThread().getContextClassLoader().loadClass("com.sun.xml.internal.messaging.saaj.soap.name.NameImpl");
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        if (cls != null) {
+            Method meth = null;
+            try {
+                meth = cls.getMethod("create", String.class, String.class, String.class);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                int index = tagName.indexOf(':');
+                if (index < 0) {
+
+                    Name nm = (Name) meth.invoke(null, (Object[]) new String[]{tagName, "", ""});
+                    return nm;
+
+                } else {
+                    Name nm = (Name) meth.invoke(null,(Object[]) new String[]{
+                                tagName.substring(index + 1),
+                                tagName.substring(0, index),
+                                ""});
+                    return nm;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
 }

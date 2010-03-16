@@ -57,43 +57,48 @@ public class MetaFactoryTest extends TestCase {
 
     public void testSOAPFactory11() throws Exception {
         SOAPFactory factory = SOAPFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-        assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_1.SOAPFactory1_1Impl);
+        //assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_1.SOAPFactory1_1Impl);
+        assertTrue(factory.getClass().getName().contains("soap.ver1_1.SOAPFactory1_1Impl"));
     }
 
     public void testMessageFactory11()  throws Exception {
         MessageFactory factory = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
-        assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl);
+        //assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl);
+        assertTrue(factory.getClass().getName().contains("soap.ver1_1.SOAPMessageFactory1_1Impl"));
         // SOAP 11 Msg factory need not look for a Content-Type header
         SOAPMessage msg = factory.createMessage(
                             new MimeHeaders(), 
                             new FileInputStream("src/test/resources/dynamic11.xml"));
         SOAPBody body = msg.getSOAPBody();
-        assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_1.Body1_1Impl);
+        //assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_1.Body1_1Impl);
+        assertTrue(body.getClass().getName().contains("soap.ver1_1.Body1_1Impl"));
     }
 
     public void testSOAPFactory12()  throws Exception {
         SOAPFactory factory = SOAPFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
-        assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_2.SOAPFactory1_2Impl);
-
+        //assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_2.SOAPFactory1_2Impl);
+        assertTrue(factory.getClass().getName().contains("soap.ver1_2.SOAPFactory1_2Impl"));
         QName name = new QName("http://www.w3.org/2003/05/soap-envelope", "Body");
         SOAPElement element = factory.createElement(name);
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
-
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
+        assertTrue(element.getClass().getName().contains("soap.ver1_2.Body1_2Impl"));
         Detail detail = factory.createDetail();
-        assertTrue(detail instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Detail1_2Impl);
+        //assertTrue(detail instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Detail1_2Impl);
+        assertTrue(detail.getClass().getName().contains("soap.ver1_2.Detail1_2Impl"));
     }
 
     public void testMessageFactory12()  throws Exception {
         MessageFactory factory = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
-        assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl);
+        //assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl);
+        assertTrue(factory.getClass().getName().contains("ver1_2.SOAPMessageFactory1_2Impl"));
         // SOAP 12 Msg factory need not look for a Content-Type header
         SOAPMessage msg =
             factory.createMessage(
                 null,
                 new FileInputStream("./src/test/resources/dynamic12.xml"));
         SOAPBody body = msg.getSOAPBody();
-        assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
-
+        //assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
+        assertTrue(body.getClass().getName().contains("soap.ver1_2.Body1_2Impl"));
         SOAPHeader sh = msg.getSOAPHeader();
         SOAPHeaderElement she =
             sh.addHeaderElement(
@@ -107,7 +112,7 @@ public class MetaFactoryTest extends TestCase {
      // try to create elements with standard names and ensure the right SOAPDocument is getting
      // created
         SOAPFactory factory = SOAPFactory.newInstance(SOAPConstants.DYNAMIC_SOAP_PROTOCOL);
-        assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.dynamic.SOAPFactoryDynamicImpl);
+        assertTrue(factory.getClass().getName().contains("SOAPFactoryDynamicImpl"));
 
         // test createName methods
         Name name1 = factory.createName("Envelope","SOAP-ENV","http://schemas.xmlsoap.org/soap/envelope/");
@@ -119,29 +124,32 @@ public class MetaFactoryTest extends TestCase {
 
 
         SOAPElement element = factory.createElement(name1);
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_1.Envelope1_1Impl);
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_1.Envelope1_1Impl);
+        assertTrue(element.getClass().getName().contains("soap.ver1_1.Envelope1_1Impl"));
 
         element = factory.createElement(name2);
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Envelope1_2Impl);
-
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Envelope1_2Impl);
+        assertTrue(element.getClass().getName().contains("soap.ver1_2.Envelope1_2Impl"));
         element = factory.createElement(name3);
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.impl.ElementImpl);
-
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.impl.ElementImpl);
+        assertTrue(element.getClass().getName().contains("soap.impl.ElementImpl"));
         element = factory.createElement(name4);
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
-
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
+        assertTrue(element.getClass().getName().contains("soap.ver1_2.Body1_2Impl"));
         element = factory.createElement(
                     "Header", "SOAP-ENV", "http://www.w3.org/2003/05/soap-envelope");
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Header1_2Impl);
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Header1_2Impl);
+        assertTrue(element.getClass().getName().contains("soap.ver1_2.Header1_2Impl"));
         element = element.addChildElement(
                     factory.createElement("HeaderChild", null, "http://chemas.xmlsoap.org/soap/envelope/"));
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.HeaderElement1_2Impl);
-
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.HeaderElement1_2Impl);
+        assertTrue(element.getClass().getName().contains("soap.ver1_2.HeaderElement1_2Impl"));
         element = factory.createElement("Header");
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.impl.ElementImpl);
-
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.impl.ElementImpl);
+        assertTrue(element.getClass().getName().contains("soap.impl.ElementImpl"));
         element = factory.createElement("Header", null, "http://www.w3.org/2003/05/soap-envelope");
-        assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Header1_2Impl);
+        //assertTrue(element instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Header1_2Impl);
+        assertTrue(element.getClass().getName().contains("soap.ver1_2.Header1_2Impl"));
 
         try {
             Detail detail = factory.createDetail();
@@ -153,7 +161,7 @@ public class MetaFactoryTest extends TestCase {
 
     public void testMessageFactoryDynamic()  throws Exception {
         MessageFactory factory =  MessageFactory.newInstance(SOAPConstants.DYNAMIC_SOAP_PROTOCOL);
-        assertTrue(factory instanceof com.sun.xml.messaging.saaj.soap.dynamic.SOAPMessageFactoryDynamicImpl);
+        assertTrue(factory.getClass().getName().contains("SOAPMessageFactoryDynamicImpl"));
 
         try {
             factory.createMessage();
@@ -167,7 +175,8 @@ public class MetaFactoryTest extends TestCase {
         SOAPMessage msg = factory.createMessage(
                             headers, new FileInputStream("src/test/resources/dynamic11.xml"));
         SOAPBody body = msg.getSOAPBody();
-        assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_1.Body1_1Impl);
+        //assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_1.Body1_1Impl);
+        assertTrue(body.getClass().getName().contains("soap.ver1_1.Body1_1Impl"));
 
         // create message with Content-Type header SOAP 1.2
         headers = new MimeHeaders();
@@ -175,8 +184,8 @@ public class MetaFactoryTest extends TestCase {
         msg = factory.createMessage(
                             headers, new FileInputStream("src/test/resources/dynamic12.xml"));
         body = msg.getSOAPBody();
-        assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
-
+        //assertTrue(body instanceof com.sun.xml.messaging.saaj.soap.ver1_2.Body1_2Impl);
+        assertTrue(body.getClass().getName().contains("soap.ver1_2.Body1_2Impl"));
         // create message with no Content-Type header 
         try {
             headers = new MimeHeaders();

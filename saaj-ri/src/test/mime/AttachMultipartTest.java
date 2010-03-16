@@ -40,21 +40,11 @@
 
 package mime;
 
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.io.*;
-import java.net.URL;
-import java.util.Iterator;
 
-import javax.activation.DataHandler;
-import javax.xml.soap.*;
-import javax.xml.transform.stream.StreamSource;
 
 import junit.framework.TestCase;
 
-import javax.activation.FileDataSource;
 
-import com.sun.xml.messaging.saaj.packaging.mime.internet.*;
 
 /*
  * Attaches an image object and verifies whether it gets the image object back

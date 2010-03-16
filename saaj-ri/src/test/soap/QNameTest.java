@@ -46,8 +46,6 @@ import javax.xml.transform.stream.StreamSource;
 
 import junit.framework.TestCase;
 
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
-
 public class QNameTest extends TestCase {
 
 	public QNameTest(String name) {
@@ -213,7 +211,7 @@ public class QNameTest extends TestCase {
 		
 		assertEquals(
             		"Qualified names of attributes must match",
-            		ElementImpl.getQualifiedName(originalAttributeName),
+            		getQualifiedName(originalAttributeName),
             		theAttributeName.getQualifiedName());
         	assertEquals(
             		"Attribute values must match",
@@ -329,5 +327,18 @@ public class QNameTest extends TestCase {
         	assertEquals("First element is correct", element1, outElement1);
 	        assertEquals("Second element is correct", element2, outElement2);
     	}
+       private static String getQualifiedName(QName name) {
+        String prefix = name.getPrefix();
+        String localName = name.getLocalPart();
+        String qualifiedName = null;
+
+            if (prefix != null && prefix.length() > 0) {
+                qualifiedName = prefix + ":" + localName;
+            } else {
+                qualifiedName = localName;
+            }
+         return qualifiedName;
+    }
+
 }
 

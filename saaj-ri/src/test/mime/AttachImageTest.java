@@ -40,6 +40,7 @@
 
 package mime;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeUtility;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.*;
@@ -52,10 +53,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import junit.framework.TestCase;
 
-import javax.activation.FileDataSource;
 
-import com.sun.xml.messaging.saaj.packaging.mime.internet.MimeUtility;
-import com.sun.xml.messaging.saaj.soap.AttachmentPartImpl;
 
 /*
  * Attaches an image object and verifies whether it gets the image object back
@@ -537,6 +535,7 @@ public class AttachImageTest extends TestCase {
          }
 
         public void testSetBase64Content() throws Exception {
+            
                 MessageFactory mf = MessageFactory.newInstance();
                 SOAPMessage msg = mf.createMessage();
                 SOAPPart sp = msg.getSOAPPart();
@@ -563,6 +562,7 @@ public class AttachImageTest extends TestCase {
 
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 OutputStream ret = MimeUtility.encode(bos, "base64");
+                //OutputStream ret = Base64.encode(bos);
                 buf = new byte[size];
 
                 while ((len = fis.read(buf, 0, size)) != -1) {
@@ -576,7 +576,7 @@ public class AttachImageTest extends TestCase {
                 msg.addAttachmentPart(ap1);
                 InputStream content = ap1.getRawContent();
                 assertTrue(content != null); 
-
+             
                 /*
                 buf = new byte[size];
                 while ((len = content.read(buf, 0, size)) != -1) {
@@ -629,10 +629,11 @@ public class AttachImageTest extends TestCase {
 		SOAPMessage newMsg = mf.createMessage(msg.getMimeHeaders(), fin);
 		Iterator i = newMsg.getAttachments();
                 //System.out.println("Count before remove:" + newMsg.countAttachments());
+                MimeHeaders headers = new MimeHeaders();
+                headers.addHeader("Content-Type", "image/jpeg");
 		while(i.hasNext()) {
 			AttachmentPart att = (AttachmentPart)i.next();
-                        newMsg.removeAttachments(
-                            ((AttachmentPartImpl)att).getMimeHeaders());
+                        newMsg.removeAttachments(headers);
 			break;
 		}
                 //System.out.println("Count after remove:" + newMsg.countAttachments());

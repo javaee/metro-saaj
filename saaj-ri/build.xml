@@ -163,6 +163,11 @@
     <path refid="compile.classpath" />
     <pathelement path="${java.class.path}"/>
   </path>
+  <path id="test.classpath.jdk">
+    <pathelement location="${build.home}/test/classes" />
+    <pathelement location="${junit.jar}"/>
+    <pathelement path="${java.class.path}"/>
+  </path>
 
 
 <!-- ========== Executable Targets ======================================== -->
@@ -333,11 +338,29 @@
     <javac srcdir="${test.home}"
            destdir="${build.home}/test/classes"
            debug="${compile.debug}"
-           deprecation="${compile.deprecation}" >
+           deprecation="${compile.deprecation}"
+           includeJavaRuntime="yes">
       <include name="**/*.java" />
       <classpath refid="test.classpath" />
     </javac>
+    <!-- Make the tests jar -->
+    <jar jarfile="${build.home}/test/saaj-tests.jar"
+         basedir="${build.home}/test/classes">
+    </jar>
+  </target>
 
+  <target name="compile-tests-jdk" depends="image">
+    <mkdir dir="${build.home}/test/classes"/>
+
+    <javac srcdir="${test.home}"
+           destdir="${build.home}/test/classes"
+           debug="${compile.debug}"
+           deprecation="${compile.deprecation}"
+           includeJavaRuntime="yes">
+      <include name="**/*.java" />
+      <exclude name="saajhttpget/**"/>
+      <classpath refid="test.classpath.jdk" />
+    </javac>
     <!-- Make the tests jar -->
     <jar jarfile="${build.home}/test/saaj-tests.jar"
          basedir="${build.home}/test/classes">
@@ -354,9 +377,23 @@
 
   <target name="prepare-tests" depends="compile-tests, copy-test-resources"/>
 
+ <target name="prepare-tests-jdk" depends="compile-tests-jdk, copy-test-resources"/>
+
   <target name="run-tests" depends="prepare-tests">
     <junit printsummary="no" haltonfailure="yes" fork="true">
       <classpath refid="test.classpath"/>
+      <formatter type="brief" usefile="false" />
+      <batchtest>
+        <fileset dir="${build.home}/test/classes">
+          <include name="**/AllTests.class" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="runtests-with-jdk" depends="prepare-tests-jdk">
+    <junit printsummary="no" haltonfailure="yes" fork="true">
+      <classpath refid="test.classpath.jdk"/>
       <formatter type="brief" usefile="false" />
       <batchtest>
         <fileset dir="${build.home}/test/classes">

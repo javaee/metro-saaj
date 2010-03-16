@@ -36,14 +36,12 @@
 
 package soap;
 
-import java.util.*;
 import java.io.*;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.soap.*;
 
-import com.sun.xml.messaging.saaj.util.ByteInputStream;
 
 import junit.framework.TestCase;
 
@@ -64,9 +62,9 @@ public class SourceResetTest extends TestCase {
         // JAXRPC servlet creates SOAP message
         MimeHeaders headers = new MimeHeaders();
         headers.addHeader("Content-Type", "text/xml");
-        ByteInputStream in = new ByteInputStream(message.getBytes(),
-			message.getBytes().length);
-        //ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
+        //ByteInputStream in = new ByteInputStream(message.getBytes(),
+	//		message.getBytes().length);
+        ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
         SOAPMessage msg = MessageFactory.newInstance().createMessage(headers,
 			in);
 

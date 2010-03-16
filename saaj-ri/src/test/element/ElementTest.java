@@ -47,7 +47,6 @@ import java.util.Iterator;
 
 import javax.xml.soap.*;
 import javax.xml.parsers.*;
-import javax.xml.namespace.QName;
 
 import junit.framework.TestCase;
 
@@ -56,7 +55,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 
 public class ElementTest extends TestCase {
@@ -70,7 +70,7 @@ public class ElementTest extends TestCase {
         SOAPElement element = factory.create("testElement");
 
         Name originalAttributeName =
-            NameImpl.createFromTagName("unqualifiedName");
+            createFromTagName("unqualifiedName");
         String originalAttributeValue = "aValue";
         element.addAttribute(originalAttributeName, originalAttributeValue);
 
@@ -109,7 +109,7 @@ public class ElementTest extends TestCase {
         SOAPElement element = factory.create("testElement");
 
         Name originalAttributeName =
-            NameImpl.createFromTagName("unqualifiedName");
+            createFromTagName("unqualifiedName");
         String originalAttributeValue = "aValue";
         element.addAttribute(originalAttributeName, originalAttributeValue);
         element.removeAttribute(originalAttributeName);
@@ -161,7 +161,7 @@ public class ElementTest extends TestCase {
         element.addChildElement("child");
 
         Iterator eachChild =
-            element.getChildElements(NameImpl.createFromTagName("child"));
+            element.getChildElements(createFromTagName("child"));
 
         assertTrue("First element is there", eachChild.hasNext());
         SOAPElement child = (SOAPElement) eachChild.next();
@@ -300,9 +300,8 @@ public class ElementTest extends TestCase {
         SOAPElement element = factory.create("testElement");
 
         element.addChildElement("child", "prefix", "uri");
-
         Iterator eachChild =
-            element.getChildElements(NameImpl.create("child", "prefix", "uri"));
+            element.getChildElements(createName("prefix:child", "uri"));
 
         assertTrue("First element is there", eachChild.hasNext());
         SOAPElement child = (SOAPElement) eachChild.next();
@@ -422,7 +421,7 @@ public class ElementTest extends TestCase {
         soapElement.removeAttribute(soapFactory.createName("junk", "c", "http://bogus1"));
         assertNull(
             soapElement.getAttributeValue(
-                NameImpl.create("junk", "c", "http://bogus1")));
+                createName("junk:c", "http://bogus1")));
     }
 
    public void testGetRole() throws Exception { 
@@ -495,6 +494,86 @@ public class ElementTest extends TestCase {
         SOAPHeader  header = message.getSOAPHeader();
         SOAPHeaderElement hdrElement = (SOAPHeaderElement)header.addChildElement(element);
         hdrElement.setRelay(true);
+
         assertTrue(hdrElement.getRelay() == true);
    }
+   private static Name createFromTagName(String tagName) {
+        Class cls = null;
+        try {
+            cls = Thread.currentThread().getContextClassLoader().
+                    loadClass("com.sun.xml.messaging.saaj.soap.name.NameImpl");
+        } catch (Exception e) {
+            try {
+                cls = Thread.currentThread().getContextClassLoader().loadClass("com.sun.xml.internal.messaging.saaj.soap.name.NameImpl");
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        if (cls != null) {
+            Method meth = null;
+            try {
+                meth = cls.getMethod("create", String.class, String.class, String.class);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                int index = tagName.indexOf(':');
+                if (index < 0) {
+
+                    Name nm = (Name) meth.invoke(null, (Object[]) new String[]{tagName, "", ""});
+                    return nm;
+
+                } else {
+                    Name nm = (Name) meth.invoke(null,(Object[]) new String[]{
+                                tagName.substring(index + 1),
+                                tagName.substring(0, index),
+                                ""});
+                    return nm;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
+    private static Name createName(String tagName, String uri) {
+        Class cls = null;
+        try {
+            cls = Thread.currentThread().getContextClassLoader().
+                    loadClass("com.sun.xml.messaging.saaj.soap.name.NameImpl");
+        } catch (Exception e) {
+            try {
+                cls = Thread.currentThread().getContextClassLoader().loadClass("com.sun.xml.internal.messaging.saaj.soap.name.NameImpl");
+            } catch (ClassNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        if (cls != null) {
+            Method meth = null;
+            try {
+                meth = cls.getMethod("create",String.class, String.class, String.class);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                int index = tagName.indexOf(':');
+                if (index < 0) {
+
+                    Name nm = (Name) meth.invoke(null, (Object[]) new String[]{tagName, "", uri});
+                    return nm;
+
+                } else {
+                    Name nm = (Name) meth.invoke(null,(Object[]) new String[]{
+                                tagName.substring(index + 1),
+                                tagName.substring(0, index),
+                                uri});
+                    return nm;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
+
 }
