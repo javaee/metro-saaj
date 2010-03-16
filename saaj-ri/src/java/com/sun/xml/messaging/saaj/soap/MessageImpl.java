@@ -166,6 +166,7 @@ public abstract class MessageImpl
      */
     private static boolean isSoap1_1Type(String primary, String sub) {
         return primary.equalsIgnoreCase("text") && sub.equalsIgnoreCase("xml")
+            || primary.equalsIgnoreCase("text") && sub.equalsIgnoreCase("xml-soap")
             || primary.equals("application")
                && sub.equals("fastinfoset");
     }
