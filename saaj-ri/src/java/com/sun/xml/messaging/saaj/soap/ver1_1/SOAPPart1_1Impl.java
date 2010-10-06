@@ -86,7 +86,7 @@ public class SOAPPart1_1Impl extends SOAPPartImpl implements SOAPConstants {
             throw new SOAPException("InputStream does not represent a valid SOAP 1.1 Message");
         }
 
-        if (!omitXmlDecl) {
+        if (parser != null && !omitXmlDecl) {
             envelope.setOmitXmlDecl("no");
             envelope.setXmlDecl(parser.getXmlDeclaration());
             envelope.setCharsetEncoding(parser.getEncoding());
