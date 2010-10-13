@@ -53,7 +53,7 @@ import org.w3c.dom.Node;
  * @author Paul.Sandoz@sun.com
  */
 public class FastInfosetReflection {
-    
+
     /**
      * FI DOMDocumentParser constructor using reflection.
      */
@@ -111,32 +111,30 @@ public class FastInfosetReflection {
     
     static {
         try {
-            Class clazz = null;
-            clazz =
-                Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentParser");
-            fiDOMDocumentParser_new = clazz.getConstructor(null);
-            fiDOMDocumentParser_parse = clazz.getMethod("parse", 
+            Class clazz = Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentParser");
+            fiDOMDocumentParser_new = clazz.getConstructor((Class[]) null);
+            fiDOMDocumentParser_parse = clazz.getMethod("parse",
                 new Class[] { org.w3c.dom.Document.class, java.io.InputStream.class });
-            
+
             clazz = Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentSerializer");
-            fiDOMDocumentSerializer_new = clazz.getConstructor(null);
-            fiDOMDocumentSerializer_serialize = clazz.getMethod("serialize", 
+            fiDOMDocumentSerializer_new = clazz.getConstructor((Class[])null);
+            fiDOMDocumentSerializer_serialize = clazz.getMethod("serialize",
                 new Class[] { org.w3c.dom.Node.class });
             fiDOMDocumentSerializer_setOutputStream = clazz.getMethod("setOutputStream",
                 new Class[] { java.io.OutputStream.class });
-            
+
             fiFastInfosetSource_class = clazz = Class.forName("org.jvnet.fastinfoset.FastInfosetSource");
             fiFastInfosetSource_new = clazz.getConstructor(
                 new Class[] { java.io.InputStream.class });
-            fiFastInfosetSource_getInputStream = clazz.getMethod("getInputStream", null);          
-            fiFastInfosetSource_setInputStream = clazz.getMethod("setInputStream", 
-                new Class[] { java.io.InputStream.class });          
-            
+            fiFastInfosetSource_getInputStream = clazz.getMethod("getInputStream", (Class[]) null);
+            fiFastInfosetSource_setInputStream = clazz.getMethod("setInputStream",
+                new Class[] { java.io.InputStream.class });
+
             clazz = Class.forName("org.jvnet.fastinfoset.FastInfosetResult");
             fiFastInfosetResult_new = clazz.getConstructor(
                 new Class[] { java.io.OutputStream.class });
-            fiFastInfosetResult_getOutputStream = clazz.getMethod("getOutputStream", null);           
-        } 
+            fiFastInfosetResult_getOutputStream = clazz.getMethod("getOutputStream", (Class[]) null);
+        }
         catch (Exception e) {
             // falls through
         }
@@ -148,7 +146,7 @@ public class FastInfosetReflection {
         if (fiDOMDocumentParser_new == null) {
             throw new RuntimeException("Unable to locate Fast Infoset implementation");
         }
-        return fiDOMDocumentParser_new.newInstance(null);
+        return fiDOMDocumentParser_new.newInstance((Object[])null);
     }
     
     public static void DOMDocumentParser_parse(Object parser, 
@@ -166,7 +164,7 @@ public class FastInfosetReflection {
         if (fiDOMDocumentSerializer_new == null) {
             throw new RuntimeException("Unable to locate Fast Infoset implementation");
         }
-        return fiDOMDocumentSerializer_new.newInstance(null);
+        return fiDOMDocumentSerializer_new.newInstance((Object[])null);
     }
     
     public static void DOMDocumentSerializer_serialize(Object serializer, Node node)
@@ -216,7 +214,7 @@ public class FastInfosetReflection {
         if (fiFastInfosetSource_getInputStream == null) {
             throw new RuntimeException("Unable to locate Fast Infoset implementation");
         }
-        return (InputStream) fiFastInfosetSource_getInputStream.invoke(source, null);
+        return (InputStream) fiFastInfosetSource_getInputStream.invoke(source, (Object[])null);
     }
     
     public static void FastInfosetSource_setInputStream(Source source,
@@ -241,7 +239,7 @@ public class FastInfosetReflection {
         if (fiFastInfosetResult_new == null) {
             throw new RuntimeException("Unable to locate Fast Infoset implementation");
         }
-        return (Result) fiFastInfosetResult_new.newInstance(new Object[] { os });                
+        return (Result) fiFastInfosetResult_new.newInstance(new Object[] { os });
     }
     
     public static OutputStream FastInfosetResult_getOutputStream(Result result) 
@@ -250,6 +248,6 @@ public class FastInfosetReflection {
         if (fiFastInfosetResult_getOutputStream == null) {
             throw new RuntimeException("Unable to locate Fast Infoset implementation");
         }
-        return (OutputStream) fiFastInfosetResult_getOutputStream.invoke(result, null);
+        return (OutputStream) fiFastInfosetResult_getOutputStream.invoke(result, (Object[])null);
     }
 }
