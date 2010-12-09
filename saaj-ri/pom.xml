@@ -44,7 +44,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.sun.xml.messaging.saaj</groupId>
   <artifactId>saaj-impl</artifactId>
-  <version>1.3.4</version>
+  <version>1.3.6</version>
   <description>
         Open source Reference Implementation of JSR-76: SOAP with Attachments API for Java (SAAJ MR :1.3)
   </description>
@@ -77,6 +77,20 @@
        <target>1.5</target>
      </configuration>
     </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
    </plugins>
     <extensions>
       <extension>
@@ -93,27 +107,24 @@
     </repository>
   </repositories>
   <organization>
-        <name>Sun Microsystems, Inc</name>
-        <url>http://www.sun.com/</url>
+        <name>Oracle</name>
+        <url>http://www.oracle.com/</url>
   </organization>
   <scm>
-	  <connection>scm:cvs:pserver:cvs.dev.java.net:/cvs:saaj/saaj-ri</connection>
-	  <developerConnection>scm:cvs:pserver:cvs.dev.java.net:/cvs:saaj/saaj-ri</developerConnection>
+	  <connection>scm:svn co https://svn.java.net/svn/saaj~svn/trunk</connection>
   </scm>
   <issueManagement>
     <system>issueZilla</system>
-    <url>https://saaj.dev.java.net/servlets/ProjectIssues</url>
+    <url>http://java.net/jira/browse/SAAJ</url>
   </issueManagement>
   <mailingLists>
     <mailingList>
       <name>SAAJ RI Users List</name>
-      <post>users@saaj.dev.java.net</post>
-      <archive>https://saaj.dev.java.net/servlets/SummarizeList?listName=users</archive>
+      <post>users@saaj.java.net</post>
     </mailingList>
     <mailingList>
       <name>SAAJ Implementation Dev List</name>
-      <post>dev@saaj.dev.java.net</post>
-      <archive>https://saaj.dev.java.net/servlets/SummarizeList?listName=dev</archive>
+      <post>dev@saaj.java.net</post>
     </mailingList>
   </mailingLists>
  <licenses>
