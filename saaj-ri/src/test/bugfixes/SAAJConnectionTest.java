@@ -1,3 +1,4 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,28 +39,50 @@
  * holder.
  */
 
-/**
- * 
- *
- * @author Manveen Kaur (manveen.kaur@sun.com)
- */
 package bugfixes;
 
-import junit.framework.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
+import javax.xml.soap.MessageFactory;
+import javax.xml.soap.SOAPConnection;
+import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPException;
+import junit.framework.TestCase;
 
-public class AllTests extends TestCase {
 
-    public AllTests(String name) {
+/*
+ * CR :7013971
+ */ 
+public class SAAJConnectionTest extends TestCase {
+    private static util.TestHelper th = util.TestHelper.getInstance();
+
+    public SAAJConnectionTest(String name) {
         super(name);
     }
 
-    public static Test suite() {
-        TestSuite suite = new TestSuite();
+    public void testBug7013971() throws Exception {
+        /*th.println("Original message:\n"+MESSAGE);
+        th.writeTo(message);*/
+         try {
+         SOAPConnectionFactory scf = SOAPConnectionFactory.newInstance();
+         SOAPConnection con = scf.createConnection();
 
-        suite.addTestSuite(NamespaceTest.class);
-        suite.addTestSuite(BugfixesTest.class);
-        suite.addTestSuite(QuoteTest.class);
-        suite.addTestSuite(SAAJConnectionTest.class);
-        return suite;
+         SOAPMessage reply = MessageFactory.newInstance().createMessage();
+         reply.writeTo(System.out);
+         System.out.println("\n");
+         Thread.sleep(1000);
+         reply = con.call(reply, new URL("http://www.oracle.com"));
+        } catch (java.security.AccessControlException e) {
+            assertTrue(false);
+        }catch(SOAPException ex) {
+            assertTrue(true);
+        } 
     }
+
+    public static void main(String argv[]) {
+        junit.textui.TestRunner.run(SAAJConnectionTest.class);        
+    }
+
 }
