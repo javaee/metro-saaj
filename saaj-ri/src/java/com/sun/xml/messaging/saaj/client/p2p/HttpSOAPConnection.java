@@ -62,7 +62,7 @@ import com.sun.xml.messaging.saaj.util.*;
  * @author Manveen Kaur (manveen.kaur@sun.com)
  *
  */
-public class HttpSOAPConnection extends SOAPConnection {
+class HttpSOAPConnection extends SOAPConnection {
 
     public static final String vmVendor = System.getProperty("java.vendor.url");
     private static final String sunVmVendor = "http://java.sun.com/";
@@ -107,7 +107,7 @@ public class HttpSOAPConnection extends SOAPConnection {
         closed = true;
     }
 
-    public SOAPMessage call(SOAPMessage message, Object endPoint)
+   public SOAPMessage call(SOAPMessage message, Object endPoint)
         throws SOAPException {
         if (closed) {
             log.severe("SAAJ0003.p2p.call.already.closed.conn");
@@ -160,11 +160,7 @@ public class HttpSOAPConnection extends SOAPConnection {
 
         if (endPoint instanceof URL)
             try {
-                PriviledgedPost pp =
-                    new PriviledgedPost(this, message, (URL) endPoint);
-                SOAPMessage response =
-                    (SOAPMessage) AccessController.doPrivileged(pp);
-
+                SOAPMessage response = post(message, (URL)endPoint);
                 return response;
             } catch (Exception ex) {
                 // TBD -- chaining?
@@ -172,26 +168,6 @@ public class HttpSOAPConnection extends SOAPConnection {
             } else {
             log.severe("SAAJ0007.p2p.bad.endPoint.type");
             throw new SOAPExceptionImpl("Bad endPoint type " + endPoint);
-        }
-    }
-
-    static class PriviledgedPost implements PrivilegedExceptionAction {
-
-        HttpSOAPConnection c;
-        SOAPMessage message;
-        URL endPoint;
-
-        PriviledgedPost(
-            HttpSOAPConnection c,
-            SOAPMessage message,
-            URL endPoint) {
-            this.c = c;
-            this.message = message;
-            this.endPoint = endPoint;
-        }
-
-        public Object run() throws Exception {
-            return c.post(message, endPoint);
         }
     }
 
@@ -280,7 +256,7 @@ public class HttpSOAPConnection extends SOAPConnection {
             httpConnection.setDoOutput(true);
             httpConnection.setDoInput(true);
             httpConnection.setUseCaches(false);
-            HttpURLConnection.setFollowRedirects(true);
+            httpConnection.setInstanceFollowRedirects(true);
 
             if (message.saveRequired())
                 message.saveChanges();
@@ -293,7 +269,6 @@ public class HttpSOAPConnection extends SOAPConnection {
                 MimeHeader header = (MimeHeader) it.next();
 
                 String[] values = headers.getHeader(header.getName());
-
                 if (values.length == 1)
                     httpConnection.setRequestProperty(
                         header.getName(),
