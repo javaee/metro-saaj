@@ -396,6 +396,21 @@
       </batchtest>
     </junit>
   </target>
+  <!-- run tests with SecurityManager ON, uses a policy file test.policy -->
+  <target name="run-tests-sm" depends="prepare-tests">
+    <junit printsummary="no" haltonfailure="yes" fork="true">
+      <jvmarg value="-Djava.security.manager"/>
+      <jvmarg value="-Djava.security.policy=./src/test/test.policy"/>
+      <classpath refid="test.classpath"/>
+      <formatter type="brief" usefile="false" />
+      <batchtest>
+        <fileset dir="${build.home}/test/classes">
+          <!--include name="bugfixes/SAAJConnectionTest.class" /-->
+          <include name="**/AllTests.class" />
+        </fileset>
+      </batchtest>
+    </junit>
+  </target>
 
   <target name="runtests-with-jdk" depends="prepare-tests-jdk">
     <junit printsummary="no" haltonfailure="yes" fork="true">
