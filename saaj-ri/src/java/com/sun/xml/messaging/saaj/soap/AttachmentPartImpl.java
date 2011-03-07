@@ -185,11 +185,8 @@ public class AttachmentPartImpl extends AttachmentPart {
                     new String[] { ex.getLocalizedMessage()});
                 throw new SOAPExceptionImpl("Data handler error: " + ex);
             }
-            bytes = bout.getBytes();
-            if (bytes != null)
-                return bytes.length;
+            return bout.size();
         } 
-        return -1;
     }
 
     public void clearContent() {
