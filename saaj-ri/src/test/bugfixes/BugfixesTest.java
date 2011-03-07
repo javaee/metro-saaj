@@ -1447,6 +1447,14 @@ FileInputStream(new File("bigmessage.xml")));
     }
 
 
+    public void testSAAJIssue58() throws Exception {
+        SOAPMessage message = MessageFactory.newInstance().createMessage();;
+        String content = "This is a test";
+        AttachmentPart att = message.createAttachmentPart(content, "text/plain; charset=ascii");
+        assertEquals(content.length(), att.getSize());
+    }
+
+
 // This class just gives access to the underlying buffer without copying.
 
 private static final class ByteInputStream extends ByteArrayInputStream {
