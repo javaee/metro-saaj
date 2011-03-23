@@ -66,6 +66,7 @@ import util.TestHelper;
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.xml.transform.dom.DOMSource;
+import org.w3c.dom.NodeList;
 
 /*
  * A class that contains test cases that verify some of the bug fixes made.
@@ -1454,6 +1455,37 @@ FileInputStream(new File("bigmessage.xml")));
         assertEquals(content.length(), att.getSize());
     }
 
+    public void testCR7020991() throws Exception {
+        MessageFactory fact = MessageFactory.newInstance();
+        MimeHeaders mh = new MimeHeaders();
+        mh.addHeader("Content-Type", "text/xml");
+        SOAPMessage msg = fact.createMessage(mh,
+                new FileInputStream(new File("src/test/bugfixes/data/xml.txt")));
+        //msg.writeTo(System.out);
+        SOAPElement elem = msg.getSOAPBody();
+        NodeList gf = elem.getElementsByTagName("GrandFather");
+        SOAPElement gfE = (SOAPElement) gf.item(0);
+        System.out.println("GrandFather L=" + gfE.getAttributeNode("xmlns:t").getLocalName() + " N="
+                + gfE.getAttributeNode("xmlns:t").getNamespaceURI()
+                + " P=" + gfE.getAttributeNode("xmlns:t").getPrefix());
+
+
+        NodeList fth = gfE.getElementsByTagNameNS("urn:test:001", "Father");
+
+        SOAPElement fthE = (SOAPElement) fth.item(0);
+
+
+        NodeList son = fthE.getElementsByTagNameNS("urn:test:001", "Son");
+
+        SOAPElement sonE = (SOAPElement) son.item(0);
+        assertTrue(fthE.getAttributeNode("xmlns:t").getLocalName() != null);
+        assertTrue(fthE.getAttributeNode("xmlns:t").getNamespaceURI() != null);
+        assertTrue(fthE.getAttributeNode("xmlns:t").getPrefix() != null);
+         assertTrue(sonE.getAttributeNode("xmlns:t").getLocalName() != null);
+        assertTrue(sonE.getAttributeNode("xmlns:t").getNamespaceURI() != null);
+        assertTrue(sonE.getAttributeNode("xmlns:t").getPrefix() != null);
+
+    }
 
 // This class just gives access to the underlying buffer without copying.
 
