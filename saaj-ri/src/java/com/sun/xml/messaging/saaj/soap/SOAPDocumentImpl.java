@@ -55,6 +55,7 @@ import com.sun.xml.messaging.saaj.util.LogDomainConstants;
 
 public class SOAPDocumentImpl extends DocumentImpl implements SOAPDocument {
 
+    private static final String XMLNS = "xmlns".intern();
     protected static final Logger log =
         Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.LocalStrings");
@@ -141,6 +142,18 @@ public class SOAPDocumentImpl extends DocumentImpl implements SOAPDocument {
     }
 
     public Attr createAttribute(String name) throws DOMException {
+        boolean isQualifiedName = (name.indexOf(":") > 0);
+        if (isQualifiedName) {
+            String nsUri = null;
+            String prefix = name.substring(0, name.indexOf(":"));
+            //cannot do anything to resolve the URI if prefix is not
+            //XMLNS.
+            if (XMLNS.equals(prefix)) {
+                nsUri = ElementImpl.XMLNS_URI;
+                return createAttributeNS(nsUri, name);
+            }
+        }
+
         return super.createAttribute(name);
     }
 
