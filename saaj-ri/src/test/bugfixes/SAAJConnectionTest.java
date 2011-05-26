@@ -63,8 +63,6 @@ public class SAAJConnectionTest extends TestCase {
     }
 
     public void testBug7013971() throws Exception {
-        /*th.println("Original message:\n"+MESSAGE);
-        th.writeTo(message);*/
          try {
          SOAPConnectionFactory scf = SOAPConnectionFactory.newInstance();
          SOAPConnection con = scf.createConnection();
@@ -74,6 +72,7 @@ public class SAAJConnectionTest extends TestCase {
          System.out.println("\n");
          Thread.sleep(1000);
          reply = con.call(reply, new URL("http://www.oracle.com"));
+         assertTrue(true);
         } catch (java.security.AccessControlException e) {
             assertTrue(false);
         }catch(SOAPException ex) {
