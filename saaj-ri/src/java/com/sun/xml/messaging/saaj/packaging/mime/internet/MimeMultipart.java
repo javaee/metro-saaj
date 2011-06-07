@@ -54,6 +54,7 @@ import com.sun.xml.messaging.saaj.packaging.mime.*;
 import com.sun.xml.messaging.saaj.packaging.mime.util.*;
 import com.sun.xml.messaging.saaj.util.FinalArrayList;
 import com.sun.xml.messaging.saaj.util.ByteOutputStream;
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 
 /**
  * The MimeMultipart class is an implementation
@@ -125,7 +126,7 @@ public  class MimeMultipart {
     protected static boolean ignoreMissingEndBoundary = true;
 
     static {
-        ignoreMissingEndBoundary = Boolean.getBoolean("saaj.mime.multipart.ignoremissingendboundary");
+        ignoreMissingEndBoundary = SAAJUtil.getSystemBoolean("saaj.mime.multipart.ignoremissingendboundary");
     }
     /**
      * Default constructor. An empty MimeMultipart object

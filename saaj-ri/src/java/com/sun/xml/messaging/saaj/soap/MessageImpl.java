@@ -131,19 +131,16 @@ public abstract class MessageImpl
     private static boolean useMimePull = false;
 
     static {
-        try {
-            String s = System.getProperty("saaj.mime.optimization");
+            String s = SAAJUtil.getSystemProperty("saaj.mime.optimization");
             if ((s != null) && s.equals("false")) {
                 switchOffBM = true;
             }
-            s = System.getProperty("saaj.lazy.mime.optimization");
+            s = SAAJUtil.getSystemProperty("saaj.lazy.mime.optimization");
             if ((s != null) && s.equals("false")) {
                 switchOffLazyAttachment = true;
             }
-            useMimePull = Boolean.getBoolean("saaj.use.mimepull");
-        } catch (SecurityException ex) {
-            // ignore it
-        }
+            useMimePull = SAAJUtil.getSystemBoolean("saaj.use.mimepull");
+      
     }
 
     //property to indicate optimized serialization for lazy attachments

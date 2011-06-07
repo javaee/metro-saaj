@@ -64,7 +64,7 @@ import com.sun.xml.messaging.saaj.util.*;
  */
 class HttpSOAPConnection extends SOAPConnection {
 
-    public static final String vmVendor = System.getProperty("java.vendor.url");
+    public static final String vmVendor = SAAJUtil.getSystemProperty("java.vendor.url");
     private static final String sunVmVendor = "http://java.sun.com/";
     private static final String ibmVmVendor = "http://www.ibm.com/";
     private static final boolean isSunVM = sunVmVendor.equals(vmVendor) ? true: false;
@@ -602,7 +602,7 @@ class HttpSOAPConnection extends SOAPConnection {
     
     private void initHttps() {
         //if(!setHttps) {
-        String pkgs = System.getProperty("java.protocol.handler.pkgs");
+        String pkgs = SAAJUtil.getSystemProperty("java.protocol.handler.pkgs");
         log.log(Level.FINE,
                 "SAAJ0053.p2p.providers", 
                 new String[] { pkgs });

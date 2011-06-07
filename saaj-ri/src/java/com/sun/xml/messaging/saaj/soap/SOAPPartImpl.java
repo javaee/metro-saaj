@@ -60,11 +60,9 @@ import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import com.sun.xml.messaging.saaj.soap.impl.EnvelopeImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.*;
-import java.security.AccessControlException;
 
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
-import org.w3c.dom.Node;
 
 /**
  * SOAPPartImpl is the first attachment. This contains the XML/SOAP document.
@@ -95,14 +93,9 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
      */
     protected MessageImpl message;
 
-    static boolean lazyContentLength;
+    static final boolean lazyContentLength;
     static {
-        try {
-            lazyContentLength = Boolean.getBoolean("saaj.lazy.contentlength");
-        } catch (AccessControlException ex) {
-           //ignore.
-           lazyContentLength = false;
-        }
+            lazyContentLength = SAAJUtil.getSystemBoolean("saaj.lazy.contentlength");
     }
 
     protected SOAPPartImpl() {

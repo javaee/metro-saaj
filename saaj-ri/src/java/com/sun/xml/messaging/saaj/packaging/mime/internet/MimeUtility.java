@@ -54,6 +54,7 @@ import javax.activation.DataSource;
 
 import com.sun.xml.messaging.saaj.packaging.mime.MessagingException;
 import com.sun.xml.messaging.saaj.packaging.mime.util.*;
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 
 /**
  * This is a utility class that provides various MIME related
@@ -149,16 +150,16 @@ public class MimeUtility {
 
     static {
 	try {
-	    String s = System.getProperty("mail.mime.decodetext.strict");
+	    String s = SAAJUtil.getSystemProperty("mail.mime.decodetext.strict");
 	    // default to true
 	    decodeStrict = s == null || !s.equalsIgnoreCase("false");
-	    s = System.getProperty("mail.mime.encodeeol.strict");
+	    s = SAAJUtil.getSystemProperty("mail.mime.encodeeol.strict");
 	    // default to false
 	    encodeEolStrict = s != null && s.equalsIgnoreCase("true");
-	    s = System.getProperty("mail.mime.foldencodedwords");
+	    s = SAAJUtil.getSystemProperty("mail.mime.foldencodedwords");
 	    // default to false
 	    foldEncodedWords = s != null && s.equalsIgnoreCase("true");
-	    s = System.getProperty("mail.mime.foldtext");
+	    s = SAAJUtil.getSystemProperty("mail.mime.foldtext");
 	    // default to true
 	    foldText = s == null || !s.equalsIgnoreCase("false");
 	} catch (SecurityException sex) {
@@ -1111,9 +1112,9 @@ public class MimeUtility {
 	     * Java charset as well.
 	     */
 	    String mimecs = null;
-	    try {
-		mimecs = System.getProperty("mail.mime.charset");
-	    } catch (SecurityException ex) { }	// ignore it
+	    
+            mimecs = SAAJUtil.getSystemProperty("mail.mime.charset");
+	    
 	    if (mimecs != null && mimecs.length() > 0) {
 		defaultJavaCharset = javaCharset(mimecs);
 		return defaultJavaCharset;
@@ -1145,9 +1146,7 @@ public class MimeUtility {
      */
     static String getDefaultMIMECharset() {
 	if (defaultMIMECharset == null) {
-	    try {
-		defaultMIMECharset = System.getProperty("mail.mime.charset");
-	    } catch (SecurityException ex) { }	// ignore it
+		defaultMIMECharset = SAAJUtil.getSystemProperty("mail.mime.charset");
 	}
 	if (defaultMIMECharset == null)
 	    defaultMIMECharset = mimeCharset(getDefaultJavaCharset());

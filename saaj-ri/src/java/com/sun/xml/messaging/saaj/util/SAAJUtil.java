@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,62 +40,27 @@
 
 package com.sun.xml.messaging.saaj.util;
 
-import java.io.*;
-
-import javax.xml.transform.stream.StreamSource;
-
+import java.security.AccessControlException;
 
 /**
  *
- * @author Anil Vijendran
+ * @author vbkumarjayanti
  */
-public class JAXMStreamSource extends StreamSource {
-    InputStream in;
-    Reader reader;
-    private static final boolean lazyContentLength;
-    static {
-        lazyContentLength = SAAJUtil.getSystemBoolean("saaj.lazy.contentlength");
-    }
-    public JAXMStreamSource(InputStream is) throws IOException {
-        if (lazyContentLength) {
-            in = is;
-        } else if (is instanceof ByteInputStream) {
-            this.in = (ByteInputStream) is;
-        } else {
-            ByteOutputStream bout = new ByteOutputStream();
-            bout.write(is);
-            this.in = bout.newInputStream();
+public class SAAJUtil {
+
+    public static final boolean getSystemBoolean(String arg) {
+        try {
+            return Boolean.getBoolean(arg);
+        } catch (AccessControlException ex) {
+            return false;
         }
     }
 
-    public JAXMStreamSource(Reader rdr) throws IOException {
-
-        if (lazyContentLength) {
-            this.reader = rdr;
-            return;
+    public static final String getSystemProperty(String arg) {
+        try {
+            return System.getProperty(arg);
+        } catch (SecurityException ex) {
+            return null;
         }
-        CharWriter cout = new CharWriter();
-        char[] temp = new char[1024];
-        int len;
-                                                                                
-        while (-1 != (len = rdr.read(temp)))
-            cout.write(temp, 0, len);
-                                                                                
-        this.reader = new CharReader(cout.getChars(), cout.getCount());
-    }
-
-    public InputStream getInputStream() {
-	return in;
-    }
-    
-    public Reader getReader() {
-	return reader;
-    }
-
-    public void reset() throws IOException {
-	    if (in != null)
-		in.reset();
-	    if (reader != null)
-		reader.reset();
     }
 }
