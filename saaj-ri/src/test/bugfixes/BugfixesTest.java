@@ -1521,6 +1521,10 @@ FileInputStream(new File("bigmessage.xml")));
         mh.addHeader("Content-Type", "multipart/related; boundary=MIME_boundary; type=\"text/xml\"; start=\"<http://claiming-it.com/claim061400a.xml>\"");
         SOAPMessage msg = fact.createMessage(mh, new FileInputStream(new File("src/test/bugfixes/data/extra-boundary-white-space.txt")));
         SOAPBody body = msg.getSOAPBody();
+         Iterator it = msg.getAttachments();
+        while(it.hasNext()) {
+            AttachmentPart at = (AttachmentPart)it.next();
+        }
     }
 
     public void testMixedCaseContentType() {
