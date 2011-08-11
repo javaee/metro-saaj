@@ -53,6 +53,10 @@ public class StartParameterTest extends TestCase {
 
     public StartParameterTest(String name) {
         super(name);
+        String  mimeOpt = System.getProperty("saaj.mime.optimization");
+        if (mimeOpt != null && "false".equals(mimeOpt)) {
+           System.setProperty("saaj.mime.multipart.ignoremissingendboundary", "true");
+        }
     }
     
     public void changeAndSaveMimeHeaders(SOAPMessage msg, String fileName)

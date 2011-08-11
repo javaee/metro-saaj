@@ -245,7 +245,11 @@ public  class MimeMultipart {
 	for (int i = 0; i < count; i++) {
 	   MimeBodyPart part = getBodyPart(i);
 	   String s = part.getContentID();
-	   if (s != null && s.equals(CID))
+           // Old versions of AXIS2 put angle brackets around the content
+           // id but not the start param
+           String sNoAngle = (s!= null) ? s.replaceFirst("^<", "").replaceFirst(">$", "")
+                   :null;
+	   if (s != null && (s.equals(CID) || CID.equals(sNoAngle)))
 		return part;    
 	}
 	return null;

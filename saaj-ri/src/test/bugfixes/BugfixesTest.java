@@ -1487,6 +1487,49 @@ FileInputStream(new File("bigmessage.xml")));
 
     }
 
+    public void testMissingAngleBrackets() throws Exception {
+        MessageFactory fact = MessageFactory.newInstance();
+        MimeHeaders mh = new MimeHeaders();
+        mh.addHeader("Content-Type", "multipart/related; boundary=MIME_boundary; type=\"text/xml\"; start=\"http://claiming-it.com/claim061400a.xml\"");
+        SOAPMessage msg = fact.createMessage(mh, new FileInputStream(new File("src/test/bugfixes/data/missing-angle-brackets.txt")));
+        SOAPBody body = msg.getSOAPBody();
+    }
+
+    public void testMissingCID() throws Exception {
+        //System.setProperty("saaj.mime.optimization", "false");
+        MessageFactory fact = MessageFactory.newInstance();
+        MimeHeaders mh = new MimeHeaders();
+        mh.addHeader("Content-Type", "multipart/related; boundary=MIME_boundary; type=\"text/xml\"; start=\"http://claiming-it.com/claim061400a.xml\"");
+        SOAPMessage msg = fact.createMessage(mh, new FileInputStream(new File("src/test/bugfixes/data/missing-cid.txt")));
+        SOAPBody body = msg.getSOAPBody();
+
+    }
+
+    public void testMissingQuotes() throws Exception {
+/*
+        MessageFactory fact = MessageFactory.newInstance();
+        MimeHeaders mh = new MimeHeaders();
+        mh.addHeader("Content-Type", "multipart/related; boundary=MIME_boundary; type=text/xml; start=\"<http://claiming-it.com/claim061400a.xml>\"");
+        SOAPMessage msg = fact.createMessage(mh, new FileInputStream(new File("src/test/bugfixes/data/missing-quotes.txt")));
+        SOAPBody body = msg.getSOAPBody();
+*/
+    }
+
+    public void testExtraBoundaryWhiteSpaces() throws Exception {
+        MessageFactory fact = MessageFactory.newInstance();
+        MimeHeaders mh = new MimeHeaders();
+        mh.addHeader("Content-Type", "multipart/related; boundary=MIME_boundary; type=\"text/xml\"; start=\"<http://claiming-it.com/claim061400a.xml>\"");
+        SOAPMessage msg = fact.createMessage(mh, new FileInputStream(new File("src/test/bugfixes/data/extra-boundary-white-space.txt")));
+        SOAPBody body = msg.getSOAPBody();
+    }
+
+    public void testMixedCaseContentType() {
+
+    }
+
+    public void testFoldedContentType() {
+
+    }
 // This class just gives access to the underlying buffer without copying.
 
 private static final class ByteInputStream extends ByteArrayInputStream {

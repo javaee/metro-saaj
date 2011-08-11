@@ -439,6 +439,7 @@ public abstract class MessageImpl
                 MimeBodyPart soapMessagePart = null;
                 InputStream soapPartInputStream = null;
                 String contentID = null;
+                String contentIDNoAngle = null;
                 if (switchOffBM || switchOffLazyAttachment) {
                     if(startParam == null) {
                         soapMessagePart = multiPart.getBodyPart(0);
@@ -449,7 +450,11 @@ public abstract class MessageImpl
                         soapMessagePart = multiPart.getBodyPart(startParam);
                         for (int i = 0; i < multiPart.getCount(); i++) {
                             contentID = multiPart.getBodyPart(i).getContentID();
-                            if(!contentID.equals(startParam))
+                            // Old versions of AXIS2 put angle brackets around the content
+                            // id but not the start param
+                            contentIDNoAngle = (contentID != null) ? 
+                                contentID.replaceFirst("^<", "").replaceFirst(">$", "") : null;
+                            if(!startParam.equals(contentID) && !startParam.equals(contentIDNoAngle))
                                 initializeAttachment(multiPart, i);
                         }
                     }
@@ -479,10 +484,14 @@ public abstract class MessageImpl
                         } else {
                             MimeBodyPart bp = null;
                             try {
-                                while (!startParam.equals(contentID)) {
+                               while (!startParam.equals(contentID) && !startParam.equals(contentIDNoAngle)) {
                                     bp = bmMultipart.getNextPart(
                                             stream, bndbytes, sin);
                                     contentID = bp.getContentID();
+                                    // Old versions of AXIS2 put angle brackets around the content
+                                    // id but not the start param
+                                    contentIDNoAngle = (contentID != null) ?
+                                        contentID.replaceFirst("^<", "").replaceFirst(">$", "") : null;
                                 }
                                 soapMessagePart = bp;
                                 bmMultipart.removeBodyPart(bp);

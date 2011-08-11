@@ -395,6 +395,16 @@
         </fileset>
       </batchtest>
     </junit>
+    <junit printsummary="no" haltonfailure="yes" fork="true">
+      <jvmarg value="-Dsaaj.mime.optimization=false"/>
+      <classpath refid="test.classpath"/>
+      <formatter type="brief" usefile="false" />
+      <batchtest>
+        <fileset dir="${build.home}/test/classes">
+          <include name="**/AllTests.class" />
+        </fileset>
+      </batchtest>
+    </junit>
   </target>
   <!-- run tests with SecurityManager ON, uses a policy file test.policy -->
   <target name="run-tests-sm" depends="prepare-tests">

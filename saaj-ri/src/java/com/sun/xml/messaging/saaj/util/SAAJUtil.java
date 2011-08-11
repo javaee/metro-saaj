@@ -46,9 +46,9 @@ import java.security.AccessControlException;
  *
  * @author vbkumarjayanti
  */
-public class SAAJUtil {
+public final class SAAJUtil {
 
-    public static final boolean getSystemBoolean(String arg) {
+    public static boolean getSystemBoolean(String arg) {
         try {
             return Boolean.getBoolean(arg);
         } catch (AccessControlException ex) {
@@ -56,7 +56,7 @@ public class SAAJUtil {
         }
     }
 
-    public static final String getSystemProperty(String arg) {
+    public static String getSystemProperty(String arg) {
         try {
             return System.getProperty(arg);
         } catch (SecurityException ex) {
