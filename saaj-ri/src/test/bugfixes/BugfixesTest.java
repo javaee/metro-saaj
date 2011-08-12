@@ -1506,6 +1506,8 @@ FileInputStream(new File("bigmessage.xml")));
     }
  
     //Parameter values can be token or quoted string.
+    //missing qoutes in type param value for content-type was reported 
+    //as a potential bug but it is not
     public void testMissingQuotes() throws Exception {
         try {
         MessageFactory fact = MessageFactory.newInstance();
@@ -1531,6 +1533,7 @@ FileInputStream(new File("bigmessage.xml")));
         }
     }
 
+    //mixed case content-type was reported as a potential bug but it is not
     public void testMixedCaseContentType() throws Exception {
         MessageFactory fact = MessageFactory.newInstance();
         MimeHeaders mh = new MimeHeaders();
@@ -1539,6 +1542,7 @@ FileInputStream(new File("bigmessage.xml")));
         SOAPBody body = msg.getSOAPBody();
     }
 
+    //folded content-type was reported as a potential bug but it is not
     public void testFoldedContentType() throws Exception {
         MessageFactory fact = MessageFactory.newInstance();
         MimeHeaders mh = new MimeHeaders();
