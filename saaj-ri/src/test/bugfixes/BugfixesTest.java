@@ -1539,7 +1539,17 @@ FileInputStream(new File("bigmessage.xml")));
         SOAPBody body = msg.getSOAPBody();
     }
 
-    public void testFoldedContentType() {
+    public void testFoldedContentType() throws Exception {
+        MessageFactory fact = MessageFactory.newInstance();
+        MimeHeaders mh = new MimeHeaders();
+        String eol = System.getProperty("line.separator");
+        //String foldedCT = "multipart/related; boundary=MIME_boundary; type=\"text/xml\";" + eol + "start=\"<http://claiming-it.com/claim061400a.txt>\"";
+        //String foldedCT = "multipart/related; boundary=MIME_boundary; type=\"text/xml\";" + "\r\n" + "start=\"<http://claiming-it.com/claim061400a.xml>\"";
+        String foldedCT = "multipart/related; boundary=MIME_boundary; type=\"text/xml\";" + eol + "start=\"<http://claiming-it.com/claim061400a.xml>\"";
+        System.out.println("Folded Header=\n" + foldedCT);
+        mh.addHeader("Content-Type", foldedCT);
+        SOAPMessage msg = fact.createMessage(mh, new FileInputStream(new File("src/test/bugfixes/data/folded-content-type.txt")));
+        SOAPBody body = msg.getSOAPBody();
 
     }
 // This class just gives access to the underlying buffer without copying.
