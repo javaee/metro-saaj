@@ -643,6 +643,9 @@ public  class BMMimeMultipart extends MimeMultipart {
 
         while ((b != -1) && ((b == ' ') || (b == '\t'))) {
             b = is.read();
+            if (b == '\n') {
+                return true;
+            }
             if (b == '\r') {
                 b = is.read();
                 //skip any multiple '\r': "\r\n" --> "\r\r\n" on Win2k

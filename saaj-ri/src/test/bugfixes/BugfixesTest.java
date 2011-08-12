@@ -1504,15 +1504,19 @@ FileInputStream(new File("bigmessage.xml")));
         SOAPBody body = msg.getSOAPBody();
 
     }
-
+ 
+    //Parameter values can be token or quoted string.
     public void testMissingQuotes() throws Exception {
-/*
+        try {
         MessageFactory fact = MessageFactory.newInstance();
         MimeHeaders mh = new MimeHeaders();
         mh.addHeader("Content-Type", "multipart/related; boundary=MIME_boundary; type=text/xml; start=\"<http://claiming-it.com/claim061400a.xml>\"");
         SOAPMessage msg = fact.createMessage(mh, new FileInputStream(new File("src/test/bugfixes/data/missing-quotes.txt")));
         SOAPBody body = msg.getSOAPBody();
-*/
+        assertTrue(false);
+        } catch (Exception ex) {
+          assertTrue(true);
+        }
     }
 
     public void testExtraBoundaryWhiteSpaces() throws Exception {
