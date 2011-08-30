@@ -80,6 +80,21 @@ public class SAAJConnectionTest extends TestCase {
         } 
     }
 
+    public void testBug12308187() throws Exception {
+         try {
+         SOAPConnectionFactory scf = SOAPConnectionFactory.newInstance();
+         SOAPConnection con = scf.createConnection();
+         SOAPMessage reply = con.get(new URL("http://www.oracle.com"));
+         reply.writeTo(System.out);
+         assertTrue(true);
+        } catch (java.security.AccessControlException e) {
+            assertTrue(false);
+        }catch(SOAPException ex) {
+            assertTrue(true);
+        } 
+    }
+
+
     public static void main(String argv[]) {
         junit.textui.TestRunner.run(SAAJConnectionTest.class);        
     }

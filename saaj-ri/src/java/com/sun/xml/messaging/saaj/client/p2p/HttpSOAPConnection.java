@@ -404,10 +404,7 @@ class HttpSOAPConnection extends SOAPConnection {
 
         if (endPoint instanceof URL)
             try {
-                PriviledgedGet pg = new PriviledgedGet(this, (URL) endPoint);
-                SOAPMessage response =
-                    (SOAPMessage) AccessController.doPrivileged(pg);
-
+                SOAPMessage response = doGet((URL)endPoint);
                 return response;
             } catch (Exception ex) {
                 throw new SOAPExceptionImpl(ex);
@@ -415,22 +412,7 @@ class HttpSOAPConnection extends SOAPConnection {
             throw new SOAPExceptionImpl("Bad endPoint type " + endPoint);
     }
 
-    static class PriviledgedGet implements PrivilegedExceptionAction {
-
-        HttpSOAPConnection c;
-        URL endPoint;
-
-        PriviledgedGet(HttpSOAPConnection c, URL endPoint) {
-            this.c = c;
-            this.endPoint = endPoint;
-        }
-
-        public Object run() throws Exception {
-            return c.get(endPoint);
-        }
-    }
-
-    SOAPMessage get(URL endPoint) throws SOAPException {
+    SOAPMessage doGet(URL endPoint) throws SOAPException {
         boolean isFailure = false;
 
         URL url = null;
