@@ -837,50 +837,6 @@
         </java>
   </target>
 
-  <target name="integrate-maven-repository-importer">
-    <get src="http://kohsuke.sfbay.sun.com/hudson/job/maven-repository-importer/lastSuccessfulBuild/artifact/build/maven-repository-importer.jar"
-         dest="lib/maven-repository-importer.jar" />
-  </target>
-
-  <target name="push-to-maven-prepare" depends="jar, create.src.zip">
-    <taskdef resource="maven-repository-importer.properties">
-      <classpath>
-        <pathelement path="${basedir}/lib/maven-repository-importer.jar" />
-      </classpath>
-    </taskdef>
-    <delete dir="build/maven-repo" /><!-- clean it -->
-    <maven-repository-importer
-        destdir="build/maven-repo" version="${version}${suffix}">
-      <artifact
-        jar="${build.home}/lib/saaj-api.jar"
-        srczip="lib/saaj-api-src.zip"
-        pom="${basedir}/poms/saaj-api.pom" />
-      <artifact
-        jar="${build.home}/lib/saaj-impl.jar"
-        srczip="${zip.release.dir}/saaj${version}${suffix}.src.zip"
-        pom="${basedir}/poms/saaj-impl.pom" />
-      <filterset>
-        <filter token="API_VERSION" value="${api.version}"/>
-      </filterset>
-    </maven-repository-importer>
-  </target>
-  
-  <target name="push-to-maven" depends="push-to-maven-prepare">
-    <!-- import to CVS -->
-    <tstamp />
-    <echo>importing to CVS...</echo>
-    <cvs dest="build/maven-repo">
-      <commandline>
-        <argument value="-d:pserver:kumarjayanti@kohsuke.sfbay.sun.com:/cvs" />
-        <argument line="-z9 import -ko -W *.jar -kb -m" />
-        <argument value="deploying new jars to the java.net maven repository" />
-  
-        <argument value="saaj/repo" />
-        <argument line="deployment-to-maven-repository t${DSTAMP}${TSTAMP}" />
-      </commandline>
-    </cvs>
-  </target>
-
   <target name="integrate-package-rename-task">
     <get src="http://kohsuke.sfbay.sun.com/hudson/job/package-rename-task/lastSuccessfulBuild/artifact/target/package-rename-task-1.0.jar"
          dest="${basedir}/lib/package-rename-task.jar"/>
