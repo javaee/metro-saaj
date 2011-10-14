@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2011 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -50,10 +50,8 @@ package com.sun.xml.messaging.saaj.util;
 
 public interface LogDomainConstants {
 
-    // TBD -- this should be configurable from a properties
-    // file or something .. Leaving it as it is for now.     
     public static String MODULE_TOPLEVEL_DOMAIN = 
-                    "javax.xml.messaging.saaj";
+                    "com.sun.xml.messaging.saaj";
 
     // First Level Domain 
     public static String CLIENT_DOMAIN = 
