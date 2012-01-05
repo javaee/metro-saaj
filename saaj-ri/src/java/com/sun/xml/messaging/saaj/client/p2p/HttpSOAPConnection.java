@@ -167,7 +167,7 @@ class HttpSOAPConnection extends SOAPConnection {
         }
     }
 
-    SOAPMessage post(SOAPMessage message, URL endPoint) throws SOAPException {
+    SOAPMessage post(SOAPMessage message, URL endPoint) throws SOAPException, IOException {
         boolean isFailure = false;
 
         URL url = null;
@@ -248,10 +248,12 @@ class HttpSOAPConnection extends SOAPConnection {
             }
 
             OutputStream out = httpConnection.getOutputStream();
-            message.writeTo(out);
-
-            out.flush();
-            out.close();
+            try {
+                message.writeTo(out);
+                out.flush();
+            } finally {
+                out.close();
+            }
 
             httpConnection.connect();
 
@@ -294,6 +296,7 @@ class HttpSOAPConnection extends SOAPConnection {
         }
 
         SOAPMessage response = null;
+        InputStream httpIn = null;
         if (responseCode == HttpURLConnection.HTTP_OK || isFailure) {
             try {
                 MimeHeaders headers = new MimeHeaders();
@@ -320,7 +323,7 @@ class HttpSOAPConnection extends SOAPConnection {
                     i++;
                 }
 
-                InputStream httpIn =
+                httpIn =
                     (isFailure
                         ? httpConnection.getErrorStream()
                         : httpConnection.getInputStream());
@@ -341,9 +344,6 @@ class HttpSOAPConnection extends SOAPConnection {
                     ByteInputStream in = new ByteInputStream(bytes, length);
                     response = messageFactory.createMessage(headers, in);
                 }
-                        
-                httpIn.close();
-                httpConnection.disconnect();
 
             } catch (SOAPException ex) {
                 throw ex;
@@ -351,6 +351,9 @@ class HttpSOAPConnection extends SOAPConnection {
                 log.log(Level.SEVERE,"SAAJ0010.p2p.cannot.read.resp", ex);
                 throw new SOAPExceptionImpl(
                     "Unable to read response: " + ex.getMessage());
+            } finally {
+               httpIn.close();
+               httpConnection.disconnect();
             }
         }
         return response;
@@ -412,7 +415,7 @@ class HttpSOAPConnection extends SOAPConnection {
             throw new SOAPExceptionImpl("Bad endPoint type " + endPoint);
     }
 
-    SOAPMessage doGet(URL endPoint) throws SOAPException {
+    SOAPMessage doGet(URL endPoint) throws SOAPException, IOException {
         boolean isFailure = false;
 
         URL url = null;
@@ -490,6 +493,7 @@ class HttpSOAPConnection extends SOAPConnection {
         }
 
         SOAPMessage response = null;
+        InputStream httpIn = null;
         if (responseCode == HttpURLConnection.HTTP_OK || isFailure) {
             try {
                 MimeHeaders headers = new MimeHeaders();
@@ -516,7 +520,7 @@ class HttpSOAPConnection extends SOAPConnection {
                     i++;
                 }
 
-                InputStream httpIn =
+                httpIn =
                         (isFailure
                         ? httpConnection.getErrorStream()
                         : httpConnection.getInputStream());
@@ -535,9 +539,6 @@ class HttpSOAPConnection extends SOAPConnection {
                     response = messageFactory.createMessage(headers, httpIn);
                 }
 
-                httpIn.close();
-                httpConnection.disconnect();
-
             } catch (SOAPException ex) {
                 throw ex;
             } catch (Exception ex) {
@@ -546,6 +547,9 @@ class HttpSOAPConnection extends SOAPConnection {
                         ex);
                 throw new SOAPExceptionImpl(
                     "Unable to read response: " + ex.getMessage());
+            } finally {
+               httpIn.close();
+               httpConnection.disconnect();
             }
         }
         return response;
