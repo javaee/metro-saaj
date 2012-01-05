@@ -50,6 +50,7 @@ import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPException;
 import junit.framework.TestCase;
+import org.apache.tools.ant.types.resources.Files;
 
 
 /*
@@ -62,6 +63,25 @@ public class SAAJConnectionTest extends TestCase {
         super(name);
     }
 
+    public void testSAAJ65() throws Exception {
+        
+        for (int i = 0; i < 2; i++) {
+            try {
+                //Runtime.getRuntime().exec("ulimit -a");
+                //TODO, need to add an assert.
+                SOAPConnectionFactory scf = SOAPConnectionFactory.newInstance();
+                SOAPConnection con = scf.createConnection();
+
+                SOAPMessage reply = MessageFactory.newInstance().createMessage();
+                reply.writeTo(System.out);
+                System.out.println("\n");
+                reply = con.call(reply, new URL("http://www.oracle.com"));
+            } catch (Exception ex) {
+            }
+        }
+        
+    }
+    
     public void testBug7013971() throws Exception {
          try {
          SOAPConnectionFactory scf = SOAPConnectionFactory.newInstance();
