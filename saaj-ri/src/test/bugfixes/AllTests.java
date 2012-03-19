@@ -60,6 +60,7 @@ public class AllTests extends TestCase {
         suite.addTestSuite(BugfixesTest.class);
         suite.addTestSuite(QuoteTest.class);
         suite.addTestSuite(SAAJConnectionTest.class);
+        suite.addTestSuite(SAAJ67Test.class);
         return suite;
     }
 }

@@ -47,7 +47,9 @@ import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * TestCase for http://java.net/jira/browse/SAAJ-67
@@ -61,20 +63,22 @@ public class SAAJ67Test extends TestCase {
         MimeHeaders headers = new MimeHeaders();
         headers.addHeader("Content-Type", contentType);
         headers.addHeader("Some-Header", "Some-Value");
-        SOAPMessage msg = factory.createMessage(headers, getClass().getResourceAsStream(messagePath));
+        InputStream is = new FileInputStream(messagePath);
+        SOAPMessage msg = factory.createMessage(headers, is);
         assertNotNull(msg.getMimeHeaders().getHeader("Some-Header"));
 
         headers = new MimeHeaders();
         headers.addHeader("Some-Header", "Some-Value");
-        msg = factory.createMessage(headers, getClass().getResourceAsStream(messagePath));
+        is = new FileInputStream(messagePath);
+        msg = factory.createMessage(headers, is);
         assertNotNull(msg.getMimeHeaders().getHeader("Some-Header"));
     }
 
     public void testFactory1_1() throws IOException, SOAPException {
-        runWithFactory(new SOAPMessageFactory1_1Impl(), "/bugfixes/data/empty-message.xml", "text/xml");
+        runWithFactory(new SOAPMessageFactory1_1Impl(), "src/test/bugfixes/data/empty-message.xml", "text/xml");
     }
 
     public void testFactory1_2() throws IOException, SOAPException {
-        runWithFactory(new SOAPMessageFactory1_2Impl(), "/bugfixes/data/empty-message12.xml", "application/soap+xml");
+        runWithFactory(new SOAPMessageFactory1_2Impl(), "src/test/bugfixes/data/empty-message12.xml", "application/soap+xml");
     }
 }
