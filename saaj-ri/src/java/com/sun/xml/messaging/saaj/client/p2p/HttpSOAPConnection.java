@@ -179,8 +179,8 @@ class HttpSOAPConnection extends SOAPConnection {
                 //if(!setHttps)
                 initHttps();
             // Process the URL
-            JaxmURI uri = new JaxmURI(endPoint.toString());
-            String userInfo = uri.getUserinfo();
+            URI uri = new URI(endPoint.toString());
+            String userInfo = uri.getRawUserInfo();
 
             url = endPoint;
 
@@ -352,7 +352,8 @@ class HttpSOAPConnection extends SOAPConnection {
                 throw new SOAPExceptionImpl(
                     "Unable to read response: " + ex.getMessage());
             } finally {
-               httpIn.close();
+               if (httpIn != null)
+                   httpIn.close();
                httpConnection.disconnect();
             }
         }
@@ -427,8 +428,8 @@ class HttpSOAPConnection extends SOAPConnection {
             if (endPoint.getProtocol().equals("https"))
                 initHttps();
             // Process the URL
-            JaxmURI uri = new JaxmURI(endPoint.toString());
-            String userInfo = uri.getUserinfo();
+            URI uri = new URI(endPoint.toString());
+            String userInfo = uri.getRawUserInfo();
 
             url = endPoint;
 
@@ -548,7 +549,8 @@ class HttpSOAPConnection extends SOAPConnection {
                 throw new SOAPExceptionImpl(
                     "Unable to read response: " + ex.getMessage());
             } finally {
-               httpIn.close();
+               if (httpIn != null)
+                   httpIn.close();
                httpConnection.disconnect();
             }
         }

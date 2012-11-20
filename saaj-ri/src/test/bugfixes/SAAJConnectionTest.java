@@ -41,8 +41,6 @@
 
 package bugfixes;
 
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.SOAPConnection;
@@ -50,7 +48,6 @@ import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPException;
 import junit.framework.TestCase;
-import org.apache.tools.ant.types.resources.Files;
 
 
 /*
@@ -113,6 +110,22 @@ public class SAAJConnectionTest extends TestCase {
             assertTrue(true);
         } 
     }
+    
+    public void testSAAJ56() throws Exception {
+		try {
+			SOAPConnectionFactory scf = SOAPConnectionFactory.newInstance();
+			SOAPConnection con = scf.createConnection();
+			SOAPMessage msg = MessageFactory.newInstance().createMessage();
+			con.call(msg, new URL("http://username:pass%25word@www.oracle.com"));
+			// IPv6 - note this is the address from the bug, not www.oracle.com
+			//con.call(msg, new URL("http://username:pass%25word@[fe80:0:0:0:2e0:81ff:fe33:1874]:9992"));
+			assertTrue(true);
+		} catch (java.security.AccessControlException e) {
+			assertTrue(false);
+		} catch (SOAPException ex) {
+			assertTrue(true);
+		}
+   }
 
 
     public static void main(String argv[]) {

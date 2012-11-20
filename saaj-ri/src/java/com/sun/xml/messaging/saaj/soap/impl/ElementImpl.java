@@ -40,6 +40,8 @@
 
 package com.sun.xml.messaging.saaj.soap.impl;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -814,8 +816,8 @@ public class ElementImpl
     public void setEncodingStyle(String encodingStyle) throws SOAPException {
         if (!"".equals(encodingStyle)) {
             try {
-                JaxmURI uri = new JaxmURI(encodingStyle);
-            } catch (JaxmURI.MalformedURIException m) {
+                new URI(encodingStyle);
+            } catch (URISyntaxException m) {
                 log.log(
                     Level.SEVERE,
                     "SAAJ0105.impl.encoding.style.mustbe.valid.URI",
@@ -1241,15 +1243,11 @@ public class ElementImpl
     public void setAttributeNS(
         String namespaceURI,String qualifiedName, String value) {
         int index = qualifiedName.indexOf(':');
-        String prefix, localName;
-        if (index < 0) {
-            prefix = null;
+        String localName;
+        if (index < 0)
             localName = qualifiedName;
-        }
-        else {
-            prefix = qualifiedName.substring(0, index);
+        else
             localName = qualifiedName.substring(index + 1);
-        }
         
         // Workaround for bug 6467808 - This needs to be fixed in JAXP
 
