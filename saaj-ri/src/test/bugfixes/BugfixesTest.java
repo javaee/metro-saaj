@@ -68,11 +68,13 @@ import javax.activation.FileDataSource;
 import javax.xml.transform.dom.DOMSource;
 import org.w3c.dom.NodeList;
 
+import com.sun.xml.messaging.saaj.packaging.mime.internet.ContentType;
+
 /*
  * A class that contains test cases that verify some of the bug fixes made.
- * This is just a convinience class that makes sure the fix is in place,
+ * This is just a convenience class that makes sure the fix is in place,
  * and is intended to be a part of our local test package and is not meant
- * to be shipped ofcourse.
+ * to be shipped of course.
  *
  * @author Manveen Kaur (manveen.kaur@sun.com)
  */
@@ -1556,6 +1558,18 @@ FileInputStream(new File("bigmessage.xml")));
         SOAPBody body = msg.getSOAPBody();
 
     }
+    
+    // http://java.net/jira/browse/SAAJ-63
+    // com.sun.xml.messaging.saaj.packaging.mime.internet.ContentType.toString()
+    // produces unparsable string
+	public void testEmptyContentTypeParam() throws Exception {
+		ContentType ct = new ContentType(
+				"application/soap+xml;charset=utf-8;action=\"\"");
+		ContentType ct2 = new ContentType(ct.toString());
+		assertEquals("Expected null value for action", "",
+				ct2.getParameter("action"));
+	}
+
 // This class just gives access to the underlying buffer without copying.
 
 private static final class ByteInputStream extends ByteArrayInputStream {

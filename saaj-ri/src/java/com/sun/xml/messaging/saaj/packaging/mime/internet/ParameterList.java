@@ -241,7 +241,9 @@ public final class ParameterList {
   
     // Quote a parameter value token if required.
     private String quote(String value) {
-	return MimeUtility.quote(value, HeaderTokenizer.MIME);
+    	if ("".equals(value))
+        	return "\"\"";
+    	return MimeUtility.quote(value, HeaderTokenizer.MIME);
     }
 
     public ParameterList copy() {
