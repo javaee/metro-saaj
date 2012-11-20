@@ -56,7 +56,7 @@ import com.sun.xml.messaging.saaj.util.FastInfosetReflection;
  * @author Santiago Pericas-Geertsen
  */
 public class FastInfosetDataContentHandler implements DataContentHandler {
-    public final String STR_SRC = "org.jvnet.fastinfoset.FastInfosetSource";
+    public static final String STR_SRC = "org.jvnet.fastinfoset.FastInfosetSource";
 
     public FastInfosetDataContentHandler() {
     }

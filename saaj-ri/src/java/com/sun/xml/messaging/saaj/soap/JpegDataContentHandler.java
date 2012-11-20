@@ -59,7 +59,7 @@ import javax.imageio.ImageIO;
 public class JpegDataContentHandler
     extends Component
     implements DataContentHandler {
-    public final String STR_SRC = "java.awt.Image";
+    public static final String STR_SRC = "java.awt.Image";
 
     /**
      * return the DataFlavors for this <code>DataContentHandler</code>
@@ -140,7 +140,7 @@ public class JpegDataContentHandler
                     + mimeType
                     + "\" for ImageContentHandler");
 
-        if (obj.equals(null)) {
+        if (obj == null) {
             throw new IOException("Null object for ImageContentHandler");
         }
 

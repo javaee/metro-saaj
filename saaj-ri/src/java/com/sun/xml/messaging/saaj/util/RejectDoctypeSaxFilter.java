@@ -191,7 +191,7 @@ public class RejectDoctypeSaxFilter extends XMLFilterImpl implements XMLReader, 
             }
             super.startElement(namespaceURI,localName, qName,attrImpl);
         }else{
-            super.startElement(namespaceURI,localName, qName, atts);
+            super.startElement(namespaceURI,localName, qName, null);
         }
     }
 }

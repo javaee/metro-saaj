@@ -250,6 +250,10 @@ public class NameImpl implements Name {
 
         return true;
     }
+    
+    public int hashCode() {
+    	return localName.hashCode();
+    }
 
     /**
      * Get the local name part of this XML Name.
