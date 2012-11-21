@@ -275,10 +275,9 @@ public class AttachmentPartImpl extends AttachmentPart {
         this.dataHandler = dataHandler;
         rawContent = null;
 
-        log.log( 
-            Level.FINE,
-            "SAAJ0580.soap.set.Content-Type",
-            new String[] { dataHandler.getContentType()});
+        if (log.isLoggable(Level.FINE))
+            log.log(Level.FINE, "SAAJ0580.soap.set.Content-Type",
+                    new String[] { dataHandler.getContentType() });
         setMimeHeader("Content-Type", dataHandler.getContentType());
     }
 

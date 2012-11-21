@@ -120,7 +120,8 @@ class HttpSOAPConnection extends SOAPConnection {
             }
         } catch (ClassNotFoundException ex) {
             //Do nothing. URLEndpoint is available only when JAXM is there.
-            log.finest("SAAJ0090.p2p.endpoint.available.only.for.JAXM");
+            if (log.isLoggable(Level.FINEST))
+                log.finest("SAAJ0090.p2p.endpoint.available.only.for.JAXM");
         }
 
         if (urlEndpointClass != null) {
@@ -239,7 +240,8 @@ class HttpSOAPConnection extends SOAPConnection {
 
                 if ("Authorization".equals(header.getName())) {
                     hasAuth = true;
-                    log.fine("SAAJ0091.p2p.https.auth.in.POST.true");
+                    if (log.isLoggable(Level.FINE))
+                        log.fine("SAAJ0091.p2p.https.auth.in.POST.true");
                 }
             }
 
@@ -591,9 +593,8 @@ class HttpSOAPConnection extends SOAPConnection {
     private void initHttps() {
         //if(!setHttps) {
         String pkgs = SAAJUtil.getSystemProperty("java.protocol.handler.pkgs");
-        log.log(Level.FINE,
-                "SAAJ0053.p2p.providers", 
-                new String[] { pkgs });
+        if (log.isLoggable(Level.FINE))
+            log.log(Level.FINE, "SAAJ0053.p2p.providers", new String[] { pkgs });
 
         if (pkgs == null || pkgs.indexOf(SSL_PKG) < 0) {
             if (pkgs == null)
@@ -601,16 +602,16 @@ class HttpSOAPConnection extends SOAPConnection {
             else
                 pkgs = pkgs + "|" + SSL_PKG;
             System.setProperty("java.protocol.handler.pkgs", pkgs);
-            log.log(Level.FINE,
-                    "SAAJ0054.p2p.set.providers", 
-                    new String[] { pkgs });
+            if (log.isLoggable(Level.FINE))
+                log.log(Level.FINE, "SAAJ0054.p2p.set.providers",
+                        new String[] { pkgs });
             try {
                 Class c = Class.forName(SSL_PROVIDER);
                 Provider p = (Provider) c.newInstance();
                 Security.addProvider(p);
-                log.log(Level.FINE,
-                        "SAAJ0055.p2p.added.ssl.provider",
-                        new String[] { SSL_PROVIDER });
+                if (log.isLoggable(Level.FINE))
+                    log.log(Level.FINE, "SAAJ0055.p2p.added.ssl.provider",
+                            new String[] { SSL_PROVIDER });
                 //System.out.println("Added SSL_PROVIDER " + SSL_PROVIDER);
                 //setHttps = true;
             } catch (Exception ex) {
