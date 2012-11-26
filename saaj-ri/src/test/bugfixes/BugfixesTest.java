@@ -68,8 +68,6 @@ import javax.activation.FileDataSource;
 import javax.xml.transform.dom.DOMSource;
 import org.w3c.dom.NodeList;
 
-import com.sun.xml.messaging.saaj.packaging.mime.internet.ContentType;
-
 /*
  * A class that contains test cases that verify some of the bug fixes made.
  * This is just a convenience class that makes sure the fix is in place,
@@ -1432,6 +1430,24 @@ FileInputStream(new File("bigmessage.xml")));
         System.out.println("After writeTo Content-Length =" + cls[0]);*/
 
     }
+    
+    // getOwnerDocument() should work for an element that begins in
+    // a SOAPMessage and is adopted by another non-saaj Document.
+    public static void testSAAJIssue69() throws Exception {
+        SOAPMessage message = MessageFactory.newInstance().createMessage();
+        SOAPHeader header = message.getSOAPHeader();
+        SOAPElement elt = header.addHeaderElement(new QName("http://foo/bar",
+                "headerElt"));
+        assertTrue("Unexpected owner document type", (elt.getOwnerDocument()
+                .getClass().getName().contains("SOAPDocument")));
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        Document doc = db.newDocument();
+        doc.adoptNode(elt);
+        assertFalse("Unexpected SAAJ owner document type",
+                (elt.getOwnerDocument().getClass().getName()
+                        .contains("SOAPDocument")));
+    }
 
 
     public static void main(String[] args) throws Exception {
@@ -1451,7 +1467,7 @@ FileInputStream(new File("bigmessage.xml")));
 
 
     public void testSAAJIssue58() throws Exception {
-        SOAPMessage message = MessageFactory.newInstance().createMessage();;
+        SOAPMessage message = MessageFactory.newInstance().createMessage();
         String content = "This is a test";
         AttachmentPart att = message.createAttachmentPart(content, "text/plain; charset=ascii");
         assertEquals(content.length(), att.getSize());
@@ -1563,11 +1579,21 @@ FileInputStream(new File("bigmessage.xml")));
     // com.sun.xml.messaging.saaj.packaging.mime.internet.ContentType.toString()
     // produces unparsable string
 	public void testEmptyContentTypeParam() throws Exception {
-		ContentType ct = new ContentType(
-				"application/soap+xml;charset=utf-8;action=\"\"");
-		ContentType ct2 = new ContentType(ct.toString());
-		assertEquals("Expected null value for action", "",
-				ct2.getParameter("action"));
+	    // Commented-out code what we are really testing and exercising, but
+	    // need to avoid com.sun dependencies here for repackaging.  Calling
+	    // saveChanges() causes the MessageImpl to do a ContentType.toString().
+	    // This would throw an exception before the fix.
+        /*
+        ContentType ct = new ContentType(
+                "application/soap+xml;charset=utf-8;action=\"\"");
+        ContentType ct2 = new ContentType(ct.toString());
+         */
+	    MessageFactory fact = MessageFactory.newInstance();
+	    SOAPMessage msg = fact.createMessage();
+        MimeHeaders mh = msg.getMimeHeaders();
+        mh.addHeader("Content-Type",
+                "application/soap+xml;charset=utf-8;action=\"\"");
+        msg.saveChanges(); 
 	}
 
 // This class just gives access to the underlying buffer without copying.

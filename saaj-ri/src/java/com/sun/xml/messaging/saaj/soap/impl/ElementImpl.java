@@ -126,12 +126,11 @@ public class ElementImpl
     }
 
     public Document getOwnerDocument() {
-        SOAPDocument ownerSOAPDocument =
-            ((SOAPDocument) super.getOwnerDocument());
-        if (ownerSOAPDocument == null) {
-            return null;
-        }
-        return ownerSOAPDocument.getDocument();
+        Document doc = super.getOwnerDocument();
+        if (doc instanceof SOAPDocument)
+            return ((SOAPDocument) doc).getDocument();
+        else
+            return doc;
     }
 
     public SOAPElement addChildElement(Name name) throws SOAPException {
