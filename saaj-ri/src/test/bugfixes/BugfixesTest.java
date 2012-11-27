@@ -1433,7 +1433,7 @@ FileInputStream(new File("bigmessage.xml")));
     
     // getOwnerDocument() should work for an element that begins in
     // a SOAPMessage and is adopted by another non-saaj Document.
-    public static void testSAAJIssue69() throws Exception {
+    public static void testSAAJIssue54() throws Exception {
         SOAPMessage message = MessageFactory.newInstance().createMessage();
         SOAPHeader header = message.getSOAPHeader();
         SOAPElement elt = header.addHeaderElement(new QName("http://foo/bar",
