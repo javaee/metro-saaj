@@ -37,3 +37,9 @@ CDDL+GPLv2.html
 .svn
 www
 site
+zip
+src/test/bugfixes/data/empty-message.xml
+src/test/bugfixes/data/empty-message12.xml
+src/test/bugfixes/data/examine.xml
+src/test/bugfixes/data/tempFile
+etc

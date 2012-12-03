@@ -48,8 +48,6 @@
   <property name="version" value="1.3.4"/>
   <property name="api.version" value="1.3.1"/>
   <property name="suffix" value=""/>
-  <property name="rpm.version" value="1.3.4"/>
-  <property name="rpm.release" value="1"/>
   <property name="zip.release" value="1"/>
 
 <!-- ************ Per user local properties ****************************** -->
@@ -94,39 +92,11 @@
   <!-- The base directory for distribution targets -->
   <property name="dist.home"   value="${basedir}/dist"/>
 
-  <!-- The package name -->
-  <property name="pkg.saaj"    value="SUNWxsrt"/>
-
-  <!-- The package product name -->
-  <property name="pkg.prod.name"    value="Sun Java(TM) Enterprise System"/>
-
-  <!-- The package product version -->
-  <property name="pkg.prod.version"    value="5.0"/>
-
-  <!-- The package build directory -->
-  <property name="pkg.build.dir"    value="${build.home}/pkg"/>
-
-  <!-- The package distribution directory -->
-  <property name="pkg.release.dir"    value="${basedir}/pkg-dist"/>
-
-  <!-- The rpm build directory -->
-  <property name="rpm.build.dir"    value="${build.home}/rpm/SAAJ"/>
-
-  <!-- The rpm distribution directory -->
-  <property name="rpm.release.dir"    value="${basedir}/rpm-dist"/>
-
   <!-- The zip file build directory -->
   <property name="zip.build.dir"    value="${build.home}/zip"/>
 
   <!-- The zip file distribution directory -->
   <property name="zip.release.dir"    value="${basedir}/zip-dist"/>
-
-  <!-- The hpux build directory -->
-  <property name="hpux.build.dir"    value="${build.home}/hpux"/>
-                                                                                
-  <!-- The hpux distribution directory -->
-  <property name="hpux.release.dir"    value="${basedir}/hpux-dist"/>
-
 
 <!-- ************ Dependencies **** ************************************** -->
 
@@ -474,8 +444,6 @@
     <delete    dir="${build.home}"/>
     <delete    dir="${wspack.home}"/>
     <delete    dir="${dist.home}"/>
-    <delete    dir="${pkg.release.dir}"/>
-    <delete    dir="${rpm.release.dir}"/>
     <delete    dir="${zip.release.dir}"/>
     <delete    dir="${basedir}/j2se-integration" />
     <delete    dir="${basedir}/remove-rename" />
@@ -506,159 +474,6 @@
 
     <copy    todir="${dist.home}/docs">
       <fileset dir="${build.home}/docs"/>
-    </copy>
-
-  </target>
-
-
-
-  <!-- SAAJ package creation -->
-  <!-- assumes the dist target has been called -->
-  <target name="create.pkg" description="Create SAAJ package">
-
-    <!-- copy pkginfo.tmpl to pkginfo in build dir and replace variables -->
-    <copy tofile="${pkg.build.dir}/${pkg.saaj}/pkginfo" file="${basedir}/pkg/${pkg.saaj}/pkginfo.tmpl"
-      overwrite="yes"/>
-
-    <replace file="${pkg.build.dir}/${pkg.saaj}/pkginfo" value="all">
-      <replacetoken>@arch@</replacetoken>
-    </replace>
-
-    <!-- replace date stamp... 1st specify correct format  -->
-    <tstamp>
-      <format property="pkg.datestamp" pattern="yyyy.MM.dd.hh.mm"/>
-    </tstamp>
-
-    <replace file="${pkg.build.dir}/${pkg.saaj}/pkginfo" value="${pkg.datestamp}">
-      <replacetoken>@datestamp@</replacetoken>
-    </replace>
-
-    <!-- replace saaj version -->
-    <replace file="${pkg.build.dir}/${pkg.saaj}/pkginfo" value="${version}${suffix}">
-      <replacetoken>@saaj.version@</replacetoken>
-    </replace>
-
-    <!-- replace product version -->
-    <replace file="${pkg.build.dir}/${pkg.saaj}/pkginfo" value="${pkg.prod.version}">
-
-      <replacetoken>@prod.version@</replacetoken>
-    </replace>
-
-    <!-- replace product name -->
-    <replace file="${pkg.build.dir}/${pkg.saaj}/pkginfo" value="${pkg.prod.name}">
-      <replacetoken>@prod.name@</replacetoken>
-    </replace>
-
-    <!-- copy prototype, depend, and copyright files -->
-    <copy todir="${pkg.build.dir}/${pkg.saaj}" overwrite="yes">
-      <fileset dir="${basedir}/pkg/${pkg.saaj}">
-        <include name="prototype*"/>
-        <include name="depend"/>
-        <include name="copyright"/>
-      </fileset>
-    </copy>
-
-    <!-- copy saaj jar files into the right directory structure -->
-    <copy todir="${pkg.build.dir}/${pkg.saaj}/usr/share/lib" overwrite="yes">
-      <fileset dir="${dist.home}/lib">
-        <include name="saaj-*.jar"/>
-      </fileset>
-   </copy>
-
-    <!-- make output directory -->
-    <mkdir dir="${pkg.release.dir}"/>
-
-    <!-- run pkgmk -f prototype_sparc -d tmp_dir -o PKGNAME -->
-    <exec executable="pkgmk" failonerror="true"
-     dir="${pkg.build.dir}/${pkg.saaj}">
-      <arg value="-f"/>
-      <arg value="prototype_sparc"/>
-      <arg value="-d"/>
-      <arg value="${pkg.release.dir}"/>
-      <arg value="-r"/>
-      <arg value="."/>
-      <arg value="-o"/>
-      <arg value="${pkg.saaj}"/>
-    </exec>
-
-  </target>
-
- <!-- SAAJ rpm creation -->
-  <!-- assumes the dist target has been called -->
-  <target name="create.rpm" description="Create SAAJ RPM">
-
-    <!-- assign prefix of where files will be installed on system -->
-    <property name="rpm.install.base"    value="/opt/sun"/>
-
-    <!-- make sure this directory is initially clean -->
-    <delete dir="${rpm.build.dir}/SOURCES"/>
-
-    <!-- Create build subdirectories -->
-    <mkdir dir="${rpm.build.dir}/BUILD"/>
-    <mkdir dir="${rpm.build.dir}/RPMS"/>
-    <mkdir dir="${rpm.build.dir}/SOURCES"/>
-    <mkdir dir="${rpm.build.dir}/SPECS"/>
-    <mkdir dir="${rpm.build.dir}/SRPMS"/>
-
-    <!-- copy template spec file to spec file in build dir and replace variables
- -->
-    <copy tofile="${rpm.build.dir}/SPECS/SAAJ.spec" file="${basedir}/rpm/SAAJ.spec.tmpl"
-      overwrite="yes"/>
-   <!-- replace saaj version -->
-    <replace file="${rpm.build.dir}/SPECS/SAAJ.spec" value="${rpm.version}">
-      <replacetoken>@saaj.version@</replacetoken>
-    </replace>
-
-    <!-- replace saaj release -->
-    <replace file="${rpm.build.dir}/SPECS/SAAJ.spec" value="${rpm.release}">
-      <replacetoken>@saaj.release@</replacetoken>
-    </replace>
-
-    <!-- replace product name -->
-    <replace file="${rpm.build.dir}/SPECS/SAAJ.spec" value="${pkg.prod.name}">
-      <replacetoken>@prod.name@</replacetoken>
-    </replace>
-
-    <!-- if the product name is blank then remove this field from the spec file
--->
-    <replace file="${rpm.build.dir}/SPECS/SAAJ.spec" value="">
-      <replacetoken>Distribution:  </replacetoken>
-    </replace>
-
-    <!-- replace build dir  -->
-    <replace file="${rpm.build.dir}/SPECS/SAAJ.spec" value="${rpm.build.dir}">
-      <replacetoken>@build.dir@</replacetoken>
-    </replace>
-
-    <!-- replace prefix value  -->
-    <replace file="${rpm.build.dir}/SPECS/SAAJ.spec" value="${rpm.install.base}">
-      <replacetoken>@install.prefix@</replacetoken>
-    </replace>
-
-    <!-- copy saaj jar files into the right directory structure, but first
-         make sure this directory is empty -->
-    <copy todir="${rpm.build.dir}/SOURCES/sun-saaj-${rpm.version}${rpm.install.base}/share/lib" overwrite="yes">
-      <fileset dir="${dist.home}/lib">
-        <include name="saaj-*.jar"/>
-      </fileset>
-    </copy>
-
-   <!-- compress saaj files -->
-    <tar destfile="${rpm.build.dir}/SOURCES/sun-saaj-${rpm.version}.tar" basedir="${rpm.build.dir}/SOURCES"/>
-
-    <!-- build rpm -->
-    <exec executable="rpmbuild" failonerror="true"
-     dir="${rpm.build.dir}">
-      <arg value="-bb"/>
-      <arg value="SPECS/SAAJ.spec"/>
-    </exec>
-
-    <!-- make output directory -->
-    <mkdir dir="${rpm.release.dir}"/>
-
-    <!-- copy rpm to dist directory -->
-    <copy todir="${rpm.release.dir}">
-      <fileset dir="${rpm.build.dir}/RPMS"/>
     </copy>
 
   </target>
@@ -721,53 +536,6 @@
     <zip destfile="${zip.release.dir}/saaj.zip" basedir="${zip.build.dir}" whenempty="fail"/>
 
   </target>
-  
-  <!-- =======================
-       HPUX FILE DISTRIBUTION 
-      ======================= -->
-  <!-- assumes the dist target has been called -->
-    <target name="create.hpux" description="Create SAAJ HPUX package">
-
-    <!-- copy template spec file to spec file in build dir and replace variables -->
-    <copy tofile="${hpux.build.dir}/sun-saaj.psf" file="${basedir}/hpux/sun-saaj.psf.tmpl" overwrite="yes"/>
-
-    <!-- replace saaj version -->
-    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${version}${suffix}">
-      <replacetoken>@saaj.version@</replacetoken>
-    </replace>
-
-    <!-- replace date stamp... 1st specify correct format  -->
-    <tstamp>
-      <format property="pkg.datestamp" pattern="yyyy.MM.dd.hh.mm"/>
-    </tstamp>
-    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${pkg.datestamp}">
-      <replacetoken>@datestamp@</replacetoken>
-    </replace>
-
-    <!-- replace bindir, libdir  -->
-    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${basedir}/hpux">
-      <replacetoken>@bindir@</replacetoken>
-    </replace>
-
-    <mkdir dir="${hpux.build.dir}/lib"/>
-
-    <copy todir="${hpux.build.dir}/lib" overwrite="yes">
-      <fileset dir="${dist.home}/lib">
-        <include name="saaj-api.jar"/>
-        <include name="saaj-impl.jar"/>
-      </fileset>
-    </copy>
-
-    <replace file="${hpux.build.dir}/sun-saaj.psf" value="${hpux.build.dir}/lib">
-      <replacetoken>@libdir@</replacetoken>
-    </replace>
-
-    <!-- make output directory -->
-    <mkdir dir="${hpux.release.dir}/sun-saaj"/>
-      <exec  executable="/usr/sbin/swpackage" failonerror="true">
-      <arg line="-x follow_symlinks=true -x compression_type=gzip -x compress_cmd=/usr/contrib/bin/gzip -x uncompress_files=false -x compress_files=true -x reinstall_files=true -x package_in_place=false -x target_type=directory -x write_remote_files=true -x run_as_superuser=false -s ${hpux.build.dir}/sun-saaj.psf @ ${hpux.release.dir}/sun-saaj"/>
-      </exec>
-   </target>
   
   <target name="create.src.zip" description="Create SAAJ source zip file">
     <mkdir dir="${zip.release.dir}"/>
@@ -836,31 +604,6 @@
             <arg value="mime.AttachImageTest"/>
         </java>
   </target>
-
-  <target name="integrate-package-rename-task">
-    <get src="http://kohsuke.sfbay.sun.com/hudson/job/package-rename-task/lastSuccessfulBuild/artifact/target/package-rename-task-1.0.jar"
-         dest="${basedir}/lib/package-rename-task.jar"/>
-  </target>
-
-  <target name="j2se-integration"  description="prepare renamed source code for J2SE integration">
-	<taskdef name="prename" classname="com.sun.wts.tools.ant.PackageRenameTask">
-	    <classpath>
-              <pathelement path="${basedir}/lib/package-rename-task.jar"/>
-            </classpath>
-        </taskdef>
-	<prename srcdir="src/java" destdir="j2se-integration/saaj-ri/src/java">
-	    <pattern from="com.sun.xml" to="com.sun.xml.internal"/>
-	    <pattern from="org.jvnet.fastinfoset" to="com.sun.xml.internal.org.jvnet.fastinfoset" />
-            <pattern from="org.jvnet.mimepull" to="com.sun.xml.internal.org.jvnet.mimepull" />
-        </prename>
-        <!-- sanity test -->
-        <mkdir dir="build/renamed-classes"/>
-	<javac srcdir="j2se-integration/saaj-ri/src/java" destdir="build/renamed-classes">
-	<classpath>
-            <fileset dir="lib" includes="*.jar"/>
-        </classpath>
-        </javac>
-   </target>
 
   <target name="remove-rename"  description="remove renaming to make saaj wore">
 	<taskdef name="prename" classname="com.sun.wts.tools.ant.PackageRenameTask">
