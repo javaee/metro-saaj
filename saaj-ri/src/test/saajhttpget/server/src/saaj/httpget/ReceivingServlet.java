@@ -259,7 +259,7 @@ public  class ReceivingServlet extends HttpServlet {
         MimeHeaders headers = new MimeHeaders();
         headers.setHeader("Content-Type","text/xml");
 
-        StringBufferInputStream strStream= new StringBufferInputStream("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><abc:find_service xmlns:abc=\"urn:uddi-org:api_v2\"><name/></abc:find_service></SOAP-ENV:Body></SOAP-ENV:Envelope>");
+        ByteArrayInputStream strStream= new ByteArrayInputStream("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Header/><SOAP-ENV:Body><abc:find_service xmlns:abc=\"urn:uddi-org:api_v2\"><name/></abc:find_service></SOAP-ENV:Body></SOAP-ENV:Envelope>".getBytes("utf-8"));
 
         SOAPMessage msg = factory.createMessage(headers, strStream);
         resp.setStatus(HttpServletResponse.SC_OK);
@@ -305,7 +305,7 @@ public  class ReceivingServlet extends HttpServlet {
         MimeHeaders headers = new MimeHeaders();
         headers.setHeader("Content-Type",SOAPConstants.SOAP_1_2_CONTENT_TYPE);
 
-        StringBufferInputStream strStream= new StringBufferInputStream("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://www.w3.org/2003/05/soap-envelope\"><SOAP-ENV:Header/><SOAP-ENV:Body><abc:find_service xmlns:abc=\"urn:uddi-org:api_v2\"><name/></abc:find_service></SOAP-ENV:Body></SOAP-ENV:Envelope>");
+        ByteArrayInputStream strStream= new ByteArrayInputStream("<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://www.w3.org/2003/05/soap-envelope\"><SOAP-ENV:Header/><SOAP-ENV:Body><abc:find_service xmlns:abc=\"urn:uddi-org:api_v2\"><name/></abc:find_service></SOAP-ENV:Body></SOAP-ENV:Envelope>".getBytes("utf-8"));
 
         SOAPMessage msg = factory.createMessage(headers, strStream);
         resp.setStatus(HttpServletResponse.SC_OK);
