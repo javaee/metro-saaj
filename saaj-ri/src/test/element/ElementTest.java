@@ -68,8 +68,8 @@ public class ElementTest extends TestCase {
     }
 
     public void testGetAnAttribute() throws Exception {
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("testElement");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("testElement");
 
         Name originalAttributeName =
             createFromTagName("unqualifiedName");
@@ -107,8 +107,8 @@ public class ElementTest extends TestCase {
     }
 
     public void testGetAttributeValue() throws Exception {
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("testElement");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("testElement");
 
         Name originalAttributeName =
             createFromTagName("unqualifiedName");
@@ -146,8 +146,8 @@ public class ElementTest extends TestCase {
     }
 
     public void testAddTextNode() throws Exception {
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("testElement");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("testElement");
 
         String originalText = "<txt>text</txt>";
         element.addTextNode(originalText);
@@ -157,8 +157,8 @@ public class ElementTest extends TestCase {
     }
 
     public void testAddChildElement() throws Exception {
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("testElement");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("testElement");
 
         element.addChildElement("child");
 
@@ -175,8 +175,8 @@ public class ElementTest extends TestCase {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage msg = messageFactory.createMessage();
 
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("testElement");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("testElement");
         element.addChildElement("child");
 
         SOAPHeader header = msg.getSOAPHeader();
@@ -251,8 +251,8 @@ public class ElementTest extends TestCase {
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage msg = messageFactory.createMessage();
 
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("testElement");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("testElement");
         element.addChildElement("child");
 
         SOAPBody body = msg.getSOAPBody();
@@ -273,8 +273,8 @@ public class ElementTest extends TestCase {
     }
 
     public void testDetachChildElements() throws Exception {
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("parent");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("parent");
 
         element.addChildElement("one");
         element.addChildElement("two");
@@ -298,8 +298,8 @@ public class ElementTest extends TestCase {
     }
 
     public void testAddChildElementWithQName() throws Exception {
-        SOAPElementFactory factory = SOAPElementFactory.newInstance();
-        SOAPElement element = factory.create("testElement");
+        SOAPFactory factory = SOAPFactory.newInstance();
+        SOAPElement element = factory.createElement("testElement");
 
         element.addChildElement("child", "prefix", "uri");
         Iterator eachChild =

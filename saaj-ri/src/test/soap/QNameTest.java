@@ -180,8 +180,8 @@ public class QNameTest extends TestCase {
     	}
 
 	public void testAddChildElement() throws Exception {
-		SOAPElementFactory factory = SOAPElementFactory.newInstance();
-	        SOAPElement element = factory.create("testElement");
+		SOAPFactory factory = SOAPFactory.newInstance();
+	        SOAPElement element = factory.createElement("testElement");
 
         	element.addChildElement(new QName("uri", "child", "prefix"));
 
@@ -193,8 +193,8 @@ public class QNameTest extends TestCase {
 	}
 
 	public void testAddAttribute() throws Exception {
-		SOAPElementFactory factory = SOAPElementFactory.newInstance();
-	        SOAPElement element = factory.create("testElement");
+	    SOAPFactory factory = SOAPFactory.newInstance();
+	        SOAPElement element = factory.createElement("testElement");
 
         	QName originalAttributeName = new QName("unqualifiedName");
 	        String originalAttributeValue = "aValue";
@@ -225,8 +225,8 @@ public class QNameTest extends TestCase {
 	}
 
 	public void testGetAttributeValue() throws Exception {
-		SOAPElementFactory factory = SOAPElementFactory.newInstance();
-	        SOAPElement element = factory.create("testElement");
+	    SOAPFactory factory = SOAPFactory.newInstance();
+	        SOAPElement element = factory.createElement("testElement");
 
         	QName originalAttributeName = new QName("unqualifiedName");
 	        String originalAttributeValue = "aValue";

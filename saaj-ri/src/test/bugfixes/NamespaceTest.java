@@ -90,7 +90,7 @@ public class NamespaceTest extends TestCase {
         headers.addHeader("SOAP-Action", "www.foo.com#function");
         headers.addHeader("Content-Type", "text/xml");
         MessageFactory factory = MessageFactory.newInstance();
-        InputStream istream = new StringBufferInputStream(message);
+        InputStream istream = new ByteArrayInputStream(message.getBytes("utf-8"));
         BufferedInputStream bistream = new BufferedInputStream(istream);
         return factory.createMessage(headers, bistream);
     }

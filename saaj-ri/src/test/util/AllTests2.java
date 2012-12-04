@@ -116,8 +116,8 @@ public class AllTests2 extends TestSuite
                     {
                         Test tests = null;
                         try {
-                            Method m = testClass.getMethod("suite", null);
-                            tests = (Test) m.invoke(null, null);
+                            Method m = testClass.getMethod("suite");
+                            tests = (Test) m.invoke(null);
                         } catch (Exception ex) {
                             throw new RuntimeException(
                                 "Unexpected Exception: " + ex);

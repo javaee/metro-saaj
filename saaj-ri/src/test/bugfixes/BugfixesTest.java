@@ -524,6 +524,10 @@ public class BugfixesTest extends TestCase {
      */
     public void testRejectDtd() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("../rejectDtd.xml");
+        // So old run-tests ant target will work if used.
+        if (is == null)
+            is = th.getInputStream("rejectDtd.xml");
+        assertNotNull("no resource found for rejectDtd.xml", is);
         MimeHeaders mimeHeaders = new MimeHeaders();
         mimeHeaders.addHeader("Content-Type", "text/xml");
 
@@ -546,6 +550,10 @@ public class BugfixesTest extends TestCase {
      */
     public void testSanity() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("../sanity.xml");
+        // So old run-tests ant target will work if used.
+        if (is == null)
+            is = th.getInputStream("sanity.xml");
+        assertNotNull("no resource found for sanity.xml", is);
         MimeHeaders mimeHeaders = new MimeHeaders();
         mimeHeaders.addHeader("Content-Type", "text/xml");
 
@@ -727,7 +735,7 @@ public class BugfixesTest extends TestCase {
         headers.addHeader("Content-Type", "text/xml");
 
         MessageFactory factory = MessageFactory.newInstance();
-        InputStream istream = new StringBufferInputStream(RPC);
+        InputStream istream = new ByteArrayInputStream(RPC.getBytes("utf-8"));
         BufferedInputStream bistream = new BufferedInputStream(istream);
         try {
             SOAPMessage m = factory.createMessage(headers, bistream);
@@ -753,7 +761,7 @@ public class BugfixesTest extends TestCase {
         headers.addHeader("Content-Type", "text/xml");
 
         MessageFactory factory = MessageFactory.newInstance();
-        InputStream istream = new StringBufferInputStream(RPC);
+        InputStream istream = new ByteArrayInputStream(RPC.getBytes("utf-8"));
         BufferedInputStream bistream = new BufferedInputStream(istream);
         SOAPMessage m = factory.createMessage(headers, bistream);
 
@@ -854,8 +862,8 @@ public class BugfixesTest extends TestCase {
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
 
-        InputStream istream =
-            new StringBufferInputStream("<foo> bar <w> we </w> </foo>");
+        InputStream istream = new ByteArrayInputStream(
+                "<foo> bar <w> we </w> </foo>".getBytes("utf-8"));
         Document doc = builder.parse(istream);
 
         MessageFactory mfactory = MessageFactory.newInstance();
@@ -888,10 +896,10 @@ public class BugfixesTest extends TestCase {
         SOAPEnvelope envelope = part.getEnvelope();
         SOAPBody body = envelope.getBody();
 
-        SOAPElementFactory sfactory = SOAPElementFactory.newInstance();
+        SOAPFactory sfactory = SOAPFactory.newInstance();
         Name name = envelope.createName("MyName1", "MyPrefix1", "MyUri1");
 
-        SOAPElement myse = sfactory.create(name);
+        SOAPElement myse = sfactory.createElement(name);
         SOAPElement se = body.addChildElement(myse);
 
         if (se == null) {
