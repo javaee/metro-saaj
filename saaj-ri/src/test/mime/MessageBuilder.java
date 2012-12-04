@@ -274,8 +274,7 @@ public class MessageBuilder {
             transformer.transform(domSource, streamResult);
             baos = (ByteArrayOutputStream) streamResult.getOutputStream();
             
-            byte[] byteArray = new byte[baos.size()];
-            byteArray = baos.toByteArray();
+            byte[] byteArray = baos.toByteArray();
             ByteArrayInputStream bais = new ByteArrayInputStream(byteArray);
             
             InputStreamReader isReader = new InputStreamReader(bais);
@@ -359,8 +358,9 @@ public class MessageBuilder {
                     
                     //SAXSource puts prolog in the beginning which is not the
                     //case with StreamSource. This stmt ignores xml prolog
-                    if (str.startsWith("<?xml"))
-                        str = reader.readLine();
+                    if (str.startsWith("<?xml")) {
+                        str = str.substring(str.indexOf('<', 5));
+                    }
                     // System.out.println(str);
                     readerMore = true;
                 }

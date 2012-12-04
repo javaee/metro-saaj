@@ -92,16 +92,16 @@ public class MimeRecreateTest extends TestCase {
         "ztrade",
         "http://wombat.ztrade.com"))
         .addTextNode("SUNW");
-        
-        URL url = new URL("file", null, 
-                  "src/test/mime/data/attach1.xml");
+
+        URL url = getClass().getResource("../attach1.xml");
         
         //-----This code is written as a work around for one problem.
         
         class XmlDataSource extends URLDataSource {
             public XmlDataSource(URL u) { super(u); }
+            @Override
             public String getContentType() { return "text/xml"; }
-        };
+        }
         DataSource xmlDataSource = new XmlDataSource(url);
                 
         AttachmentPart ap = msg.createAttachmentPart(
@@ -123,16 +123,15 @@ public class MimeRecreateTest extends TestCase {
         msg.addAttachmentPart(ap);  
         */
         
-        FileOutputStream sentFile =
-        new FileOutputStream("src/test/mime/data/golden.msg");
+        FileOutputStream sentFile = new FileOutputStream("golden.msg");
         
         msg.saveChanges();
 
-        mBuilder.saveMimeHeaders(msg, "src/test/mime/data/golden.mh");
+        mBuilder.saveMimeHeaders(msg, "golden.mh");
         
         msg.writeTo(sentFile);
         sentFile.close();
-        
+
         //System.out.println("\n\n------Original message----------");
         //msg.writeTo(System.out);
         
@@ -147,12 +146,12 @@ public class MimeRecreateTest extends TestCase {
             MessageBuilder mBuilder = new MessageBuilder();
                        
             SOAPMessage newMsg = mBuilder.constructMessage(
-            "src/test/mime/data/golden.mh" ,
-            "src/test/mime/data/golden.msg");
+            "golden.mh" ,
+            "golden.msg");
             
             //System.out.println("\n\n------Recreated message---------");
             //newMsg.writeTo(System.out);
-
+            
             assertTrue( 
                     "Messages must match",
                     mBuilder.verifyMessage(originalMsg, newMsg));

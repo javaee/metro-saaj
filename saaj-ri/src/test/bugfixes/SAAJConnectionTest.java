@@ -67,7 +67,6 @@ public class SAAJConnectionTest extends TestCase {
                 //TODO, need to add an assert.
                 SOAPConnectionFactory scf = SOAPConnectionFactory.newInstance();
                 SOAPConnection con = scf.createConnection();
-
                 SOAPMessage reply = MessageFactory.newInstance().createMessage();
                 reply.writeTo(System.out);
                 System.out.println("\n");

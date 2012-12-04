@@ -523,7 +523,7 @@ public class BugfixesTest extends TestCase {
      * 17dec02]
      */
     public void testRejectDtd() throws Exception {
-        InputStream is = th.getInputStream("rejectDtd.xml");
+        InputStream is = this.getClass().getResourceAsStream("../rejectDtd.xml");
         MimeHeaders mimeHeaders = new MimeHeaders();
         mimeHeaders.addHeader("Content-Type", "text/xml");
 
@@ -545,7 +545,7 @@ public class BugfixesTest extends TestCase {
      * Parse a simple SOAP message
      */
     public void testSanity() throws Exception {
-        InputStream is = th.getInputStream("sanity.xml");
+        InputStream is = this.getClass().getResourceAsStream("../sanity.xml");
         MimeHeaders mimeHeaders = new MimeHeaders();
         mimeHeaders.addHeader("Content-Type", "text/xml");
 
