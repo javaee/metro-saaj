@@ -44,7 +44,7 @@
 
 package mime;
 
-import java.io.FileOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.net.URL;
 
 import javax.activation.*;
@@ -65,11 +65,10 @@ import junit.framework.TestCase;
 
 public class MimeRecreateTest extends TestCase {
 
-    public MimeRecreateTest(String name) {
-        super(name);
-    }
-     
-    public SOAPMessage createMessage() throws Exception {
+    private static final int MESSAGE_HEADERS = 0;
+    private static final int MESSAGE_BYTES = 1;
+
+    public SOAPMessage createMessage(byte[][] result) throws Exception {
         
         MessageBuilder mBuilder = new MessageBuilder();
         
@@ -79,8 +78,6 @@ public class MimeRecreateTest extends TestCase {
         SOAPPart sp = msg.getSOAPPart();
         
         SOAPEnvelope envelope = sp.getEnvelope();
-        
-        SOAPHeader hdr = envelope.getHeader();
         SOAPBody bdy = envelope.getBody();
         
         SOAPBodyElement gltp
@@ -123,14 +120,14 @@ public class MimeRecreateTest extends TestCase {
         msg.addAttachmentPart(ap);  
         */
         
-        FileOutputStream sentFile = new FileOutputStream("golden.msg");
-        
         msg.saveChanges();
 
-        mBuilder.saveMimeHeaders(msg, "golden.mh");
+        result[MESSAGE_HEADERS] = mBuilder.saveMimeHeaders(msg);
         
-        msg.writeTo(sentFile);
-        sentFile.close();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        msg.writeTo(baos);
+        result[MESSAGE_BYTES] = baos.toByteArray();
+        baos.close();
 
         //System.out.println("\n\n------Original message----------");
         //msg.writeTo(System.out);
@@ -140,14 +137,10 @@ public class MimeRecreateTest extends TestCase {
     
     public void testMessageRecreation() {
         try {
-            
-            SOAPMessage originalMsg = createMessage();
-
+            byte[][] result = new byte[2][];
+            SOAPMessage originalMsg = createMessage(result);
             MessageBuilder mBuilder = new MessageBuilder();
-                       
-            SOAPMessage newMsg = mBuilder.constructMessage(
-            "golden.mh" ,
-            "golden.msg");
+            SOAPMessage newMsg = mBuilder.constructMessage(result[0], result[1]);
             
             //System.out.println("\n\n------Recreated message---------");
             //newMsg.writeTo(System.out);

@@ -65,60 +65,55 @@ import org.xml.sax.InputSource;
 
 public class MessageBuilder {
     
-    public void saveMimeHeaders(SOAPMessage msg, String fileName)
-    throws IOException {
-                
-        FileOutputStream fos = new FileOutputStream(fileName);        
-        ObjectOutputStream oos = new ObjectOutputStream(fos);
-        
-        Hashtable hashTable = new Hashtable();
-        MimeHeaders mimeHeaders = msg.getMimeHeaders();
-        Iterator iterator = mimeHeaders.getAllHeaders();
-        
-        while(iterator.hasNext()) {
-            MimeHeader mimeHeader = (MimeHeader) iterator.next();
-            hashTable.put(mimeHeader.getName(), mimeHeader.getValue());
+    public byte[] saveMimeHeaders(SOAPMessage msg) throws IOException {
+
+        ObjectOutputStream oos = null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+
+            Map<String, String> hashTable = new HashMap<String, String>();
+            MimeHeaders mimeHeaders = msg.getMimeHeaders();
+            @SuppressWarnings("unchecked")
+            Iterator<MimeHeader> iterator = mimeHeaders.getAllHeaders();
+
+            while (iterator.hasNext()) {
+                MimeHeader mimeHeader = iterator.next();
+                hashTable.put(mimeHeader.getName(), mimeHeader.getValue());
+            }
+
+            oos.writeObject(hashTable);
+            oos.flush();
+            return bos.toByteArray();
+        } finally {
+            if (oos != null)
+                oos.close();
         }
-        
-        oos.writeObject(hashTable);
-        oos.flush();
-        oos.close();
-        
-        fos.flush();
-        fos.close();
     }
     
-    public SOAPMessage constructMessage(String mimeHdrsFile, String msgFile)
+    public SOAPMessage constructMessage(byte[] mimeHdrBytes, byte[] msgBytes)
     throws Exception {
         SOAPMessage message;
         
         MimeHeaders mimeHeaders = new MimeHeaders();
-        FileInputStream fis = new FileInputStream(msgFile);
+        ByteArrayInputStream bis = new ByteArrayInputStream(msgBytes);
         
         ObjectInputStream ois = new ObjectInputStream(
-        new FileInputStream(mimeHdrsFile));
-        Hashtable hashTable = (Hashtable) ois.readObject();
+        new ByteArrayInputStream(mimeHdrBytes));
+        @SuppressWarnings("unchecked")
+        Map<String, String> hashTable = (Map<String, String>) ois.readObject();
         ois.close();
         
-        if(hashTable.isEmpty())
+        if (hashTable.isEmpty())
             System.out.println("MimeHeaders Hashtable is empty");
         else {
-            for(int i=0; i < hashTable.size(); i++) {
-                Enumeration keys = hashTable.keys();
-                Enumeration values = hashTable.elements();
-                while (keys.hasMoreElements() && values.hasMoreElements()) {
-                    String name = (String) keys.nextElement();
-                    String value = (String) values.nextElement();
-                    mimeHeaders.addHeader(name, value);
-                }
-            }
+            for (Map.Entry<String, String> me : hashTable.entrySet())
+                mimeHeaders.addHeader(me.getKey(), me.getValue());
         }
         
         MessageFactory messageFactory = MessageFactory.newInstance();
-        message = messageFactory.createMessage(mimeHeaders, fis);
-        
-        message.saveChanges();
-        
+        message = messageFactory.createMessage(mimeHeaders, bis);
+        message.saveChanges(); 
         return message;
     }
     
@@ -164,12 +159,14 @@ public class MessageBuilder {
         if (count < 1)
             return true;
         
-        Iterator attachmentIterator = msg.getAttachments();
-        Iterator gAttachmentIterator = gMsg.getAttachments();
+        @SuppressWarnings("unchecked")
+        Iterator<AttachmentPart> attachmentIterator = msg.getAttachments();
+        @SuppressWarnings("unchecked")
+        Iterator<AttachmentPart> gAttachmentIterator = gMsg.getAttachments();
         
         for (int i=0; i < count; i++) {
-            ap = (AttachmentPart)attachmentIterator.next();
-            gAp = (AttachmentPart)gAttachmentIterator.next();
+            ap = attachmentIterator.next();
+            gAp = gAttachmentIterator.next();
             
             String contentType = ap.getContentType();
             String gContentType = gAp.getContentType();
@@ -377,21 +374,6 @@ public class MessageBuilder {
         
         return true;
     }
-    
-    public void copyStreamToFile(InputStream is, String fileName)
-    throws Exception {
-        FileOutputStream fos = new FileOutputStream(fileName);
-        
-        int byteRead;
-        while( (byteRead = is.read()) != -1) {
-            fos.write(byteRead);
-        }
-        
-        // System.out.println("File copied to " + fileName );
-        fos.flush();
-        fos.close();
-    }
-    
 }
 
 
