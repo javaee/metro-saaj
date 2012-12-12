@@ -40,12 +40,13 @@
 
 package bugfixes;
 
-import com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl;
-import com.sun.xml.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl;
+//import com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl;
+//import com.sun.xml.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl;
 import junit.framework.TestCase;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPConstants;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import java.io.FileInputStream;
@@ -59,6 +60,10 @@ import java.io.InputStream;
  * @author Miroslav Kos (miroslav.kos at oracle.com)
  */
 public class SAAJ67Test extends TestCase {
+    private static final String EXTERNAL_1_1_NAME = "com.sun.xml.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl";
+    private static final String EXTERNAL_1_2_NAME = "com.sun.xml.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl";
+    private static final String INTERNAL_1_1_NAME = "com.sun.xml.internal.messaging.saaj.soap.ver1_1.SOAPMessageFactory1_1Impl";
+    private static final String INTERNAL_1_2_NAME = "com.sun.xml.internal.messaging.saaj.soap.ver1_2.SOAPMessageFactory1_2Impl";
 
     void runWithFactory(MessageFactory factory, String messagePath, String contentType) throws SOAPException, IOException {
         MimeHeaders headers = new MimeHeaders();
@@ -76,10 +81,22 @@ public class SAAJ67Test extends TestCase {
     }
 
     public void testFactory1_1() throws IOException, SOAPException {
-        runWithFactory(new SOAPMessageFactory1_1Impl(), "src/test/bugfixes/data/empty-message.xml", "text/xml");
+        MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
+        String isJDK = System.getProperty("jdk.build", "false");
+        if ("true".equalsIgnoreCase(isJDK))
+            assertTrue(INTERNAL_1_1_NAME.equals(mf.getClass().getName()));
+        else
+            assertTrue(EXTERNAL_1_1_NAME.equals(mf.getClass().getName()));
+        runWithFactory(mf, "src/test/bugfixes/data/empty-message.xml", "text/xml");
     }
 
     public void testFactory1_2() throws IOException, SOAPException {
-        runWithFactory(new SOAPMessageFactory1_2Impl(), "src/test/bugfixes/data/empty-message12.xml", "application/soap+xml");
+        MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
+        String isJDK = System.getProperty("jdk.build", "false");
+        if ("true".equalsIgnoreCase(isJDK))
+            assertTrue(INTERNAL_1_2_NAME.equals(mf.getClass().getName()));
+        else
+            assertTrue(EXTERNAL_1_2_NAME.equals(mf.getClass().getName()));
+        runWithFactory(mf, "src/test/bugfixes/data/empty-message12.xml", "application/soap+xml");
     }
 }

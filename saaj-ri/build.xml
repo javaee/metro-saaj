@@ -394,6 +394,7 @@
 
   <target name="runtests-with-jdk" depends="prepare-tests-jdk">
     <junit printsummary="yes" haltonfailure="yes" fork="true">
+      <jvmarg value="-Djdk.build=true"/>
       <classpath refid="test.classpath.jdk"/>
       <formatter type="brief" usefile="false" />
       <batchtest>
@@ -401,6 +402,21 @@
           <include name="**/AllTests.class" />
         </fileset>
       </batchtest>
+    </junit>
+  </target>
+	
+  <target name="runtests-with-jdk-sm" depends="prepare-tests-jdk">
+  	<junit printsummary="yes" haltonfailure="yes" fork="true">
+      <jvmarg value="-Djava.security.manager"/>
+      <jvmarg value="-Djava.security.policy=./src/test/test.policy"/>
+      <jvmarg value="-Djdk.build=true"/>
+  	  <classpath refid="test.classpath.jdk"/>
+        <formatter type="brief" usefile="false" />
+        <batchtest>
+          <fileset dir="${build.home}/test/classes">
+            <include name="**/AllTests.class" />
+          </fileset>
+       </batchtest>
     </junit>
   </target>
 
@@ -605,7 +621,7 @@
         </java>
   </target>
 
-  <target name="remove-rename"  description="remove renaming to make saaj wore">
+  <target name="remove-rename"  description="remove renaming to make saaj work">
 	<taskdef name="prename" classname="com.sun.wts.tools.ant.PackageRenameTask">
 	    <classpath>
               <pathelement path="${basedir}/lib/package-rename-task.jar"/>

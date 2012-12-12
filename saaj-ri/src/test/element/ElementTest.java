@@ -72,7 +72,7 @@ public class ElementTest extends TestCase {
         SOAPElement element = factory.createElement("testElement");
 
         Name originalAttributeName =
-            createFromTagName("unqualifiedName");
+            factory.createName("unqualifiedName");
         String originalAttributeValue = "aValue";
         element.addAttribute(originalAttributeName, originalAttributeValue);
 
@@ -111,7 +111,7 @@ public class ElementTest extends TestCase {
         SOAPElement element = factory.createElement("testElement");
 
         Name originalAttributeName =
-            createFromTagName("unqualifiedName");
+            factory.createName("unqualifiedName");
         String originalAttributeValue = "aValue";
         element.addAttribute(originalAttributeName, originalAttributeValue);
         element.removeAttribute(originalAttributeName);
@@ -163,7 +163,7 @@ public class ElementTest extends TestCase {
         element.addChildElement("child");
 
         Iterator eachChild =
-            element.getChildElements(createFromTagName("child"));
+            element.getChildElements(factory.createName("child"));
 
         assertTrue("First element is there", eachChild.hasNext());
         SOAPElement child = (SOAPElement) eachChild.next();
@@ -303,7 +303,7 @@ public class ElementTest extends TestCase {
 
         element.addChildElement("child", "prefix", "uri");
         Iterator eachChild =
-            element.getChildElements(createName("prefix:child", "uri"));
+            element.getChildElements(factory.createName("child", "prefix", "uri"));
 
         assertTrue("First element is there", eachChild.hasNext());
         SOAPElement child = (SOAPElement) eachChild.next();
@@ -423,7 +423,7 @@ public class ElementTest extends TestCase {
         soapElement.removeAttribute(soapFactory.createName("junk", "c", "http://bogus1"));
         assertNull(
             soapElement.getAttributeValue(
-                createName("junk:c", "http://bogus1")));
+                soapFactory.createName("junk", "c", "http://bogus1")));
     }
 
    public void testGetRole() throws Exception { 

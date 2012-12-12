@@ -326,7 +326,7 @@ public class NamespaceTest extends TestCase {
                 "Envelope",
                 "env",
                 "http://schemas.xmlsoap.org/soap/envelope/");
-        element.addAttribute(createFromTagName("xmlns:fooName"), "http://foo");
+        element.addAttribute(SOAPFactory.newInstance().createName("fooName", "xmlns", ""), "http://foo");
         
         Iterator eachDeclaration = element.getNamespacePrefixes();
         assertTrue(eachDeclaration.hasNext());
