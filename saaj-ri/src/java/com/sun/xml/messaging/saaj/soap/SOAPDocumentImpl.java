@@ -122,11 +122,11 @@ public class SOAPDocumentImpl extends DocumentImpl implements SOAPDocument {
     }
 
     public org.w3c.dom.Text createTextNode(String data) {
-        return new TextImpl(this, data);
+        return new SOAPTextImpl(this, data);
     }
 
     public Comment createComment(String data) {
-        return new CommentImpl(this, data);
+        return new SOAPCommentImpl(this, data);
     }
 
     public CDATASection createCDATASection(String data) throws DOMException {
