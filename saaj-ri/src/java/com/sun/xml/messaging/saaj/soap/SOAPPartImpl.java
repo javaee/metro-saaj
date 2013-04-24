@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -260,12 +260,18 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
                  * getBytes() is called on a ByteInputStream.
                  */
                 if (!(is instanceof ByteInputStream)) {
-                    ByteOutputStream bout = new ByteOutputStream();
-                    bout.write(is);
+                    ByteOutputStream bout = null;
+                    try {
+                        bout = new ByteOutputStream();
+                        bout.write(is);
 
-                    // source.setInputStream(new ByteInputStream(...))
-                    FastInfosetReflection.FastInfosetSource_setInputStream(
-                        source, bout.newInputStream());
+                        // source.setInputStream(new ByteInputStream(...))
+                        FastInfosetReflection.FastInfosetSource_setInputStream(
+                                source, bout.newInputStream());
+                    } finally {
+                        if (bout != null)
+                            bout.close();
+                    }
                 }
                 this.source = source;
             }

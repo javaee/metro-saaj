@@ -68,7 +68,8 @@ public class JAXMStreamSource extends StreamSource {
                 bout.write(is);
                 this.in = bout.newInputStream();
             } finally {
-                bout.close();
+                if (bout != null)
+                    bout.close();
             }
         }
     }

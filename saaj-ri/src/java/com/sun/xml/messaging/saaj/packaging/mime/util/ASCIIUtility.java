@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -156,10 +156,13 @@ public class ASCIIUtility {
      *      Use {@link ByteOutputStream} and {@link ByteOutputStream#write(InputStream)}.
      */
     public static byte[] getBytes(InputStream is) throws IOException {
-        ByteOutputStream bos = new ByteOutputStream();
+        ByteOutputStream bos = null; 
         try {
+            bos = new ByteOutputStream();
             bos.write(is);
         } finally {
+            if (bos != null)
+                bos.close();
             is.close();
         }
         return bos.toByteArray();
