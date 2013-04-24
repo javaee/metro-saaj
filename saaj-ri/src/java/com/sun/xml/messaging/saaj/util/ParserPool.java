@@ -57,15 +57,13 @@ import org.xml.sax.SAXNotSupportedException;
 public class ParserPool {
     private final BlockingQueue queue;
     private SAXParserFactory factory;
-    private int capacity;
 
     public ParserPool(int capacity) {
-        this.capacity = capacity;
         queue = new ArrayBlockingQueue(capacity);
         //factory = SAXParserFactory.newInstance();
         factory = new com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl();
         factory.setNamespaceAware(true);
-        for (int i=0; i < capacity; i++) {
+        for (int i = 0; i < capacity; i++) {
            try {
                 queue.put(factory.newSAXParser());
             } catch (InterruptedException ex) {

@@ -62,9 +62,14 @@ public class JAXMStreamSource extends StreamSource {
         } else if (is instanceof ByteInputStream) {
             this.in = (ByteInputStream) is;
         } else {
-            ByteOutputStream bout = new ByteOutputStream();
-            bout.write(is);
-            this.in = bout.newInputStream();
+            ByteOutputStream bout = null;
+            try {
+                bout = new ByteOutputStream();
+                bout.write(is);
+                this.in = bout.newInputStream();
+            } finally {
+                bout.close();
+            }
         }
     }
 

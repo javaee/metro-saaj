@@ -66,7 +66,7 @@ public class ElementImpl
     public static final String XENC_NS = "http://www.w3.org/2001/04/xmlenc#".intern();
     public static final String WSU_NS = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd".intern();
 
-    private AttributeManager encodingStyleAttribute = new AttributeManager();
+    private transient AttributeManager encodingStyleAttribute = new AttributeManager();
 
     protected QName elementQName;
 

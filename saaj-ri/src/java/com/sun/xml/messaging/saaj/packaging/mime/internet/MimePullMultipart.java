@@ -122,7 +122,7 @@ public class MimePullMultipart  extends MimeMultipart {
         List<MIMEPart> prts = mm.getAttachments();
         for(MIMEPart part : prts) {
             if (part != soapPart) {
-                AttachmentPart attach = new AttachmentPartImpl(part);
+                new AttachmentPartImpl(part);
                 this.addBodyPart(new MimeBodyPart(part));
             }
        }

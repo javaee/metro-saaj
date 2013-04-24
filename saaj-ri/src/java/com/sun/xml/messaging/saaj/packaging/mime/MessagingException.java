@@ -99,7 +99,7 @@ public class MessagingException extends Exception {
      *
      * @return	next Exception, null if none.
      */
-    public Exception getNextException() {
+    public synchronized Exception getNextException() {
 	return next;
     }
 

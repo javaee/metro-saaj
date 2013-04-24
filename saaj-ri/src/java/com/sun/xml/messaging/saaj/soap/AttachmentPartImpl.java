@@ -153,7 +153,6 @@ public class AttachmentPartImpl extends AttachmentPart {
     }
 
     public int getSize() throws SOAPException {
-        byte[] bytes;
         if (mimePart != null) {
             try {
                 return mimePart.read().available();
@@ -403,6 +402,7 @@ public class AttachmentPartImpl extends AttachmentPart {
         }
         dataHandler = null;
         InputStream decoded = null;
+        ByteOutputStream bos = null;
         try {
             decoded = MimeUtility.decode(content, "base64");
             InternetHeaders hdrs = new InternetHeaders();
@@ -410,7 +410,7 @@ public class AttachmentPartImpl extends AttachmentPart {
             //TODO: reading the entire attachment here is ineffcient. Somehow the MimeBodyPart
             // Ctor with inputStream causes problems based on the InputStream 
             // has markSupported()==true
-            ByteOutputStream bos = new ByteOutputStream();
+            bos = new ByteOutputStream();
             bos.write(decoded);
             rawContent = new MimeBodyPart(hdrs, bos.getBytes(), bos.getCount());
             setMimeHeader("Content-Type", contentType);
@@ -418,8 +418,11 @@ public class AttachmentPartImpl extends AttachmentPart {
             log.log(Level.SEVERE, "SAAJ0578.soap.attachment.setbase64content.exception", e);
             throw new SOAPExceptionImpl(e.getLocalizedMessage());
         } finally {
+            if (bos != null)
+                bos.close();
             try {
-                decoded.close();
+                if (decoded != null)
+                    decoded.close();
             } catch (IOException ex) {
                 throw new SOAPException(ex);
             }
@@ -493,13 +496,14 @@ public class AttachmentPartImpl extends AttachmentPart {
             mimePart = null;
         }
         dataHandler = null;
+        ByteOutputStream bos = null;
         try {
             InternetHeaders hdrs = new InternetHeaders();
             hdrs.setHeader("Content-Type", contentType);
             //TODO: reading the entire attachment here is ineffcient. Somehow the MimeBodyPart
             // Ctor with inputStream causes problems based on whether the InputStream has 
             // markSupported()==true or false
-            ByteOutputStream bos = new ByteOutputStream();
+            bos = new ByteOutputStream();
             bos.write(content);
             rawContent = new MimeBodyPart(hdrs, bos.getBytes(), bos.getCount());
             setMimeHeader("Content-Type", contentType);
@@ -507,6 +511,8 @@ public class AttachmentPartImpl extends AttachmentPart {
             log.log(Level.SEVERE, "SAAJ0576.soap.attachment.setrawcontent.exception", e);
             throw new SOAPExceptionImpl(e.getLocalizedMessage());
         } finally {
+            if (bos != null)
+                bos.close();
             try {
                 content.close();
             } catch (IOException ex) {

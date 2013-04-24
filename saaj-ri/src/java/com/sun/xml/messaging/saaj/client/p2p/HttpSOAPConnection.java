@@ -636,9 +636,8 @@ class HttpSOAPConnection extends SOAPConnection {
 
             String plain = user + ":";
             byte[] nameBytes = plain.getBytes();
-            byte[] passwdBytes = password.getBytes();
-            if (passwdBytes == null)
-                passwdBytes = new byte[0];
+            byte[] passwdBytes = (password == null ? new byte[0] : password
+                    .getBytes());
 
             // concatenate user name and password bytes and encode them
             byte[] concat = new byte[nameBytes.length + passwdBytes.length];
