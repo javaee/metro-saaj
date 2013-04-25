@@ -55,11 +55,11 @@ import org.xml.sax.SAXNotSupportedException;
  * Pool of SAXParser objects
  */
 public class ParserPool {
-    private final BlockingQueue queue;
+    private final BlockingQueue<SAXParser> queue;
     private SAXParserFactory factory;
 
     public ParserPool(int capacity) {
-        queue = new ArrayBlockingQueue(capacity);
+        queue = new ArrayBlockingQueue<SAXParser>(capacity);
         //factory = SAXParserFactory.newInstance();
         factory = new com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl();
         factory.setNamespaceAware(true);
@@ -88,8 +88,8 @@ public class ParserPool {
 
     }
 
-    public void put(SAXParser parser) {
-        queue.offer(parser);
+    public boolean put(SAXParser parser) {
+        return queue.offer(parser);
     }
     
     public void returnParser(SAXParser saxParser) {

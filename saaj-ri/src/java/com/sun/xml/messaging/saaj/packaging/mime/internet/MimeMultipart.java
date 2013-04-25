@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -333,6 +333,7 @@ public  class MimeMultipart {
 	byte[] bndbytes = ASCIIUtility.getBytes(boundary);
 	int bl = bndbytes.length;
 
+	ByteOutputStream buf = null;
 	try {
 	    // Skip the preamble
 	    LineInputStream lin = new LineInputStream(in);
@@ -385,7 +386,7 @@ public  class MimeMultipart {
 		if (!in.markSupported())
 		    throw new MessagingException("Stream doesn't support mark");
 
-		ByteOutputStream buf = null;
+		buf = null;
 		// if we don't have a shared input stream, we copy the data
 		if (sin == null)
 		    buf = new ByteOutputStream();
@@ -486,6 +487,9 @@ public  class MimeMultipart {
 	    }
 	} catch (IOException ioex) {
 	    throw new MessagingException("IO Error", ioex);
+	} finally {
+	    if (buf != null)
+	        buf.close();
 	}
 
         if (!ignoreMissingEndBoundary && !foundClosingBoundary && sin== null) {

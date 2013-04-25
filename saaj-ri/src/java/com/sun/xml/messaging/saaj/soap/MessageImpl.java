@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -502,7 +502,17 @@ public abstract class MessageImpl
                     }
                 }
 
-                if (soapPartInputStream == null && soapMessagePart != null) {
+                // findbugs correctly points out that we'd NPE instantiating
+                // the ContentType (just below here) if soapMessagePart were
+                // null.  Hence are better off throwing a controlled exception
+                // at this point if it is null.
+                if (soapMessagePart == null) {
+                    log.severe("SAAJ0510.soap.cannot.create.envelope");
+                    throw new SOAPExceptionImpl(
+                        "Unable to create envelope from given source: SOAP part not found");
+                }
+
+                if (soapPartInputStream == null) {
                     soapPartInputStream = soapMessagePart.getInputStream();
                 }
 
