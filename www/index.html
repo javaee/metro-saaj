@@ -1,187 +1,105 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-  <style>
-    .app H3 {
-      clear: none;
-    }
-    .axial {
-      display: none;
-    }
-    #apphead {
-      display: none;
-    }
-    #download-icon {
-      text-align: center;
-      padding-top: 1em;
-      padding-bottom: 1em;
-      background-color: white;
-    }
-    .floatbox {
-      width:190px;
-      
-      // background:rgb(254,236,219);
-      background:rgb(238,238,238);
-      margin-top: 1em;
-      padding: 5px;
-      // border: 1px solid rgb(252,142,37);
-      border: 1px solid rgb(170,170,170);
-    }
-  </style>
-  <link rel="alternate" type="application/rss+xml"
- href="/servlets/ProjectNewsRSS">
-  <link rel="SHORTCUT ICON"
- href="http://jaxb.dev.java.net/images/glassfish_favicon.gif">
-  <title>SAAJ Standard Implementation</title>
+    <style>
+        .app H3 {
+            clear: none;
+        }
+
+        .axial {
+            display: none;
+        }
+
+        #apphead {
+            display: none;
+        }
+
+        #helptext {
+            display: none;
+        }
+
+        #searchbox {
+            display: none;
+        }
+
+        #download-icon {
+            text-align: center;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            background-color: white;
+        }
+
+	#subprojects {
+		display: none;
+	}
+
+        .floatbox {
+            width: 190px;
+
+        / / background : rgb ( 254, 236, 219 );
+            background: rgb( 238, 238, 238 );
+            margin-top: 1em;
+            padding: 5px;
+        / / border : 1 px solid rgb ( 252, 142, 37 );
+            border: 1px solid rgb( 170, 170, 170 );
+        }
+
+        #creditfooter IMG {
+            display: none;
+        }
+
+    </style>
+    <title>SAAJ Reference Implementation Project</title>
 </head>
 <body>
-<script>
-// kill "description" h3 bar
-ld = document.getElementById("longdescription");
-for( n=ld.firstChild; n!=null; n=n.nextSibling ) {
-  if(n.nodeType==1 && n.innerHTML=="Description" ) {
-    n.parentNode.removeChild(n);
-    break;
-  }
-}
-</script>
-<table border="0" width="100%">
-  <tbody>
-    <tr>
-      <td><a href="http://glassfish.dev.java.net"
- alt="GlassFish Community"><img align="left"
- src="images/glassfish_logo.gif" valign="top"
- style="border: 0px solid ;"></a></td>
-      <td>
-      <h1>SAAJ Project</h1>
-Part of <a href="http://glassfish.dev.java.net">Project GlassFish</a>
-      <div style="padding-bottom: 1em;">&nbsp;</div>
-      </td>
-      <td width="">
-      <div align="right"> <a href="/servlets/ProjectNewsRSS"><img
- src="/images/rss1.gif" border="0"></a><br>
-      <small> (<a
- href="http://wiki.java.net/bin/view/Javawsxml/RssCorner">new to RSS?</a>)
-      </small> </div>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<div style="border-left: 1em solid white; float: right;">
-<div id="download-icon"> <a
- href="https://saaj.dev.java.net/files/documents/52/32730/saaj1.3.zip"><img
- src="images/download.png" alt="download 1.3 now" border="0"></a></div>
-<!--div class="floatbox">
-<b>JAXB 2.0 Javadoc &amp; RI Early Access 3 (Subject to Change)</b><br>
-<ul>
-<li><a href="https://jaxb.dev.java.net/jaxb20-ea3/">JAXB RI 2.0 EA3 is available now! (2005/12/23)</a></li> 
-<li>Browse the <a href="https://jaxb.dev.java.net/jaxb20-pfd/jaxb20pfdJavadoc.html">Proposed Final Draft Javadoc</a></li> 
 
-<li>Download the <a href="https://jaxb.dev.java.net/jaxb20-pfd/jaxb20pfdDrops.html">Proposed Final Draft API jar, javadoc, and sources</a></li> 
-</ul>
-</div-->
-</div>
-<div class="app">
-<h3>Welcome</h3>
-<p>Welcome to the SAAJ Standard Implementation Project.
-This is a project in the
-<a href="http://jwsdp.dev.java.net/index.html">JWSDP</a>
-subcommunity of the Java community on
-<a href="http://community.java.net/java-ws-xml">Web Services and XML</a>
-at java.net.
-</p>
-<p>
-Your participation is fundamental to make this project useful
-to the Java Community. We encourage you to download and use our
-implementation.<br>
-</p>
-<h3><a name="Overview_"></a>Overview<br>
-</h3>
-<p></p>
-<ul>
-  <li><a
- href="https://saaj.dev.java.net/source/browse/*checkout*/saaj/saaj-ri/docs/index.html">Overview
-of the SAAJ project</a></li>
-  <li><strong>Licenses:</strong> <a
- href="http://www.opensource.org/licenses/cddl1.php">Common Development
-and Distribution License</a>.
-<!--
-	http://www.sun.com/cddl/CDDL_why_details.html.
-	https://glassfish.dev.java.net/public/CDDLv1.0.html
---></li>
-  <li><strong>Status:</strong> Product Quality.<br>
-  </li>
-  <li><a
- href="https://saaj.dev.java.net/source/browse/*checkout*/saaj/saaj-ri/docs/ReleaseNotes.html">
-    <strong>Status Notes</strong></a></li>
-  <li><span style="font-weight: bold;">Tutorial </span>: The <a
- href="http://java.sun.com/javaee/5/docs/tutorial/doc/JavaEETutorial.pdf">Java
-EE 5 Tutorial</a>&nbsp; (Part Two) chapter 18 contains a&nbsp; SAAJ 1.3
-tutorial with samples.</li>
-  <li><a href="overview.html">Platform Requirements</a></li>
-  <li><a href="https://saaj.dev.java.net/nonav/spec-1.3/api/">SAAJ 1.3
-API Javadocs</a> <br>
-  </li>
-  <li><a
- href="https://saaj.dev.java.net/servlets/NewsItemView?newsItemID=28">Awards</a><br>
-  </li>
-</ul>
-<h3>Downloads</h3>
-<ul>
-  <li><a
- href="/servlets/ProjectDocumentList?folderID=5116&amp;expandFolder=5116&amp;folderID=0">Releases</a>:
-the stable release
-of the SAAJ SI; SAAJ 1.3 is the latest release.</li>
-  <li><a
- href="/servlets/ProjectDocumentList?folderID=5118&amp;expandFolder=5118&amp;folderID=0">Snapshots</a>:
-the latest continous build of the SAAJ SI. Potentially unstable but
-contains the latest bug fixes.</li>
-  <li><a href="/spec-1.3/">Specification</a>: Link to the SAAJ 1.3
-specification.</li>
-  <li><a
- href="https://maven-repository.dev.java.net/repository/com.sun.xml.messaging.saaj/">Download
-jars/poms from Maven Repository</a><br>
-  </li>
-</ul>
-<h3>Support<br>
-</h3>
-<ul>
-  <li><a href="http://saaj.dev.java.net/issues/enter_bug.cgi">Report a
-bug</a></li>
-  <li>Join <a
- href="https://saaj.dev.java.net/servlets/ProjectMailingListList">the
-users list</a> for general discussion.</li>
-  <li>Read <a href="faq/index.html">the FAQ</a>!</li>
-  <li>Contribute to the <a
- href="http://wiki.java.net/bin/view/Javawsxml/SaajSI">Wiki</a>,
-collecting uses of the implementation and listing additional platforms.</li>
-</ul>
-<h3>Source Code</h3>
-<ul>
-  <li><b>CVS:</b> &nbsp;&nbsp; <code>cvs -d
-:pserver:yourid@cvs.dev.java.net:/cvs co saaj/saaj-ri</code> </li>
-  <li><b>FishEye:</b> <a href="http://fisheye5.cenqua.com/browse/saaj">http://fisheye5.cenqua.com/browse/saaj</a></li>
-</ul>
-<h3>&nbsp;Platform Requirements</h3>
-&nbsp;The SAAJ 1.3 Reference Implementation currently has the
-following platform
-requirements :<br>
-<ol>
-  <li>&nbsp;Sun's JDK/JRE 1.4 + <a
- href="https://jaxp.dev.java.net/servlets/ProjectDocumentList?folderID=4584&amp;expandFolder=4584&amp;folderID=0">Sun's
-JAXP 1.3 Implementation</a> (Placed
-in jre/lib/endorsed)</li>
-  <li>&nbsp;OR Sun's&nbsp; JDK/JRE 1.5 or Later</li>
-  <li>&nbsp;AND&nbsp; <span class="twikiNewLink"
- style="background: rgb(255, 255, 206) none repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-inline-policy: initial; -moz-background-origin: initial;"><font
- color="#0000ff">JavaBeans</font><sup>TM</sup> </span>Activation
-Framework (<a href="http://java.sun.com/beans/glasgow/jaf.html"
- target="_top">http://java.sun.com/beans/glasgow/jaf.html</a>)</li>
-</ol>
-<br>
-<br>
-<p><br>
-</p>
-</div>
+    <div align="left">
+        <table valign="middle" class="directory" border="0">
+            <tbody>
+                <tr>
+                    <table border="0" class="icon"><tbody>
+                        <tr>
+                            <td>
+                                    <a href="http://maven.java.net/content/repositories/releases/com/sun/xml/messaging/saaj/saaj-impl/"><img src="images/download.png" class="logo"></a>
+                            </td>
+                            <td>
+                                    <a href="http://java.net/projects/saaj/lists"><img src="images/communicate.gif" class="logo"></a>
+                            </td>
+                            <td>
+                                    <a href="http://java.net/projects/saaj/sources/svn/show/trunk"><img src="images/extend.gif" class="logo"></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; font-weight: bold">
+                                    <a href="http://maven.java.net/content/repositories/releases/com/sun/xml/messaging/saaj/saaj-impl/"><div class="title">Download</div></a>
+                            </td>
+                            <td style="text-align: center; font-weight: bold">
+                                    <a href="http://java.net/projects/saaj/lists"><div class="title">Communicate</div></a>
+                            </td>
+                            <td style="text-align: center; font-weight: bold">
+                                    <a href="http://java.net/projects/saaj/sources/svn/show/trunk"><div class="title">Contribute</div></a>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class=app><br/>
+        <p>Welcome to the SAAJ Standard Implementation Project. This project is an independently reusable part of the Metro project. SAAJ 1.3 supports 
+            both <span style="font-weight: bold;">SOAP 1.1</span> and <span style="font-weight: bold;">SOAP 1.2</span>.</p><br/>
+        <ul>
+            <li><strong>License:</strong> <a href="http://glassfish.java.net/public/CDDL+GPL_1_1.html"> CDDL v1.1 and GPL v2</a></li>
+            <li><strong>Status:</strong> Production Quality
+            <li><strong>Governance:</strong> <a href="http://glassfish.java.net/public/GovernancePolicy.html">Same as Project GlassFish</a></li>
+        </ul>
+        <p><h2>More Information</h2></p>
+        <ul>
+            <li><a href="spec-1.3">Specification</a>
+            <li><a href="http://saaj.java.net/nonav/spec-1.3/api/">API Javadoc</a></li>
+            <li><a href="http://java.sun.com/javaee/5/docs/tutorial/doc/JavaEETutorial.pdf">Java EE Tutorial</a></li>
+            <li><a href="http://www.java.net/blog/kumarjayanti/archive/2009/12/10/summary-proprietary-features-saaj-ri-134">Proprietary Features in SAAJ 1.3.4</a></li>
+        </ul>
+    </div>
 </body>
 </html>

@@ -1,0 +1,28 @@
+<script>
+var info = {
+    title: "SAAJ",
+    logo: "/images/javaxml-duke.gif"
+}
+</script>
+
+	  <div id="navcol">
+	    <dl id="projecttools" class="navgroup" style="text-align: left;">
+	      <dt id="current-zone" class="depth0">
+		<a href="http://glassfish.java.net/">GlassFish Community</a>
+	      </dt>
+	      <dd class="depth0 parent parent" id="menubar">
+<ul id="main-menubar">
+    <li><a href="http://maven.java.net/content/repositories/releases/com/sun/xml/messaging/saaj/saaj-impl/">Downloads</a></li>
+    <li><a href="http://java.net/projects/saaj/lists">Mailing lists</a></li>
+    <li><a href="http://java.net/jira/browse/SAAJ">Issue tracker</a></li>
+    <li><a href="http://java.net/projects/saaj/sources/svn/show/trunk">Source code</a></li>
+</ul>
+
+<script>
+var info = {
+	title: "SAAJ",
+    logo: "/images/javaxml-duke.gif"
+}
+</script>
+<script src="http://glassfish-theming.java.net/zone-ws.js"></script>
+<script src="http://glassfish-theming.java.net/theme.js"></script>
