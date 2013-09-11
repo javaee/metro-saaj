@@ -2,7 +2,7 @@
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
 
-    Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+    Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
 
     The contents of this file are subject to the terms of either the GNU
     General Public License Version 2 only ("GPL") or the Common Development
@@ -40,29 +40,10 @@
 
 -->
 
-<project name="SAAJ Reference Implementation" default="wspack" basedir=".">
-
-<!-- ************ What the heck are we building ************************** -->
-
-  <property name="name" value="SAAJ RI"/>
-  <property name="version" value="1.3.4"/>
-  <property name="api.version" value="1.3.1"/>
-  <property name="suffix" value=""/>
-  <property name="zip.release" value="1"/>
-
-<!-- ************ Per user local properties ****************************** -->
-
-  <property file="${user.home}/build.properties"/>   <!-- User local        -->
-  <property file="build.properties"/>                <!-- Component local   -->
-  <property file="../build.properties"/>             <!-- Commons local     -->
-
-<!-- ************ Where are we building into? **************************** -->
+<project name="SAAJ Reference Implementation" basedir=".">
 
   <!-- The base directory for compilation targets -->
   <property name="build.home"              value="${basedir}/build"/>
-
-  <!-- The base directory for the saaj APIs -->
-  <property name="saaj.api.home"           value ="../jaxm-api/"/>
 
   <!-- The directory into which saaj APIs are built -->
   <property name="saaj.api.build.home"     value="${saaj.api.home}/build"/>
@@ -70,44 +51,8 @@
   <!-- The base directory for component sources -->
   <property name="source.home"             value="${basedir}/src/java"/>
 
-  <!-- The base directory for dependent jars -->
-  <property name="lib.home"                value="${basedir}/lib"/>
-
-
   <!-- The base directory for samples -->
   <property name="samples.home"            value="${basedir}/samples"/>
-
-  <!-- The base directory for tools -->
-  <property name="tools.home"            value="${basedir}/tools"/>
-
-  <!-- The base directory for unit test sources -->
-  <property name="test.home"               value="src/test"/>
-
-  <!-- The home directory for Ant -->
-  <property name="ant.home" value="${basedir}/lib"/>
-
-  <!-- what goes into wspack -->
-  <property name="wspack.home" value="${basedir}/wspack-test"/>
-
-  <!-- The base directory for distribution targets -->
-  <property name="dist.home"   value="${basedir}/dist"/>
-
-  <!-- The zip file build directory -->
-  <property name="zip.build.dir"    value="${build.home}/zip"/>
-
-  <!-- The zip file distribution directory -->
-  <property name="zip.release.dir"    value="${basedir}/zip-dist"/>
-
-<!-- ************ Dependencies **** ************************************** -->
-
-  <!-- The locations of necessary jar files -->
-  <property name="jaf.jar"                    	value="${lib.home}/activation.jar"/>
-  <property name="servlet.jar"                	value="${lib.home}/servlet.jar"/>
-  <property name="qname.jar"             	value="${lib.home}/jax-qname.jar"/>
-  <property name="saaj.jar"                   	value="${lib.home}/saaj-api.jar"/>
-  <property name="FastInfoset.jar"             	value="${lib.home}/FastInfoset.jar"/>
-  <property name="mimepull.jar"             	value="${lib.home}/mimepull.jar"/>
-<!-- ************ Compiler Defaults ************************************** -->
 
   <!-- Should Java compilations set the 'debug' compiler option? -->
   <property name="compile.debug"           value="true"/>
@@ -121,33 +66,7 @@
   <!-- Construct compile classpath -->
   <path id="compile.classpath">
     <pathelement location="${build.home}/classes"/>
-    <pathelement location="${jaf.jar}"/>
-    <pathelement location="${servlet.jar}"/>
-    <pathelement location="${saaj.jar}"/>
-    <pathelement location="${qname.jar}"/>
-    <pathelement location="${FastInfoset.jar}"/>
-    <pathelement location="${mimepull.jar}"/>
   </path>
-
-  <property name="junit.jar"             value="${lib.home}/junit.jar"/>
-
-  <path id="test.classpath">
-    <pathelement location="${build.home}/classes" />
-    <pathelement location="${build.home}/test/classes" />
-    <pathelement location="${qname.jar}"/>
-    <pathelement location="${junit.jar}"/>
-    <path refid="compile.classpath" />
-    <pathelement path="${java.class.path}"/>
-  </path>
-  <path id="test.classpath.jdk">
-    <pathelement location="${build.home}/test/classes" />
-    <pathelement location="${junit.jar}"/>
-    <pathelement path="${java.class.path}"/>
-  </path>
-
-
-<!-- ========== Executable Targets ======================================== -->
-
 
   <target name="init"
    description="Initialize and evaluate conditionals">
@@ -158,8 +77,6 @@
    description="Prepare build directory">
     <mkdir dir="${build.home}"/>
     <mkdir dir="${build.home}/classes"/>
-    <mkdir dir="${build.home}/docs"/>
-    <mkdir dir="${build.home}/lib"/>
     <mkdir dir="${build.home}/tests"/>
 
     <copy    todir="${build.home}/classes">
@@ -167,403 +84,11 @@
     </copy>
   </target>
 
-  <target name="compile" depends="prepare"
-   description="Just compile the classes">
-    <!-- Run javac through everything -->
-    <javac  srcdir="${source.home}"
-           destdir="${build.home}/classes"
-             debug="${compile.debug}"
-       deprecation="${compile.deprecation}"
-          optimize="${compile.optimize}">
-      <classpath refid="compile.classpath"/>
-    </javac>
-    <!-- Copy default Factories info -->
-    <copy todir="${build.home}/classes/META-INF/services">
-      <fileset dir="${basedir}/etc/" includes="javax.xml.soap.*"/>
-    </copy>
-
-  </target>
-
-  <target name="jar" depends="image"
-          description="Commonly used target name.  Alias for 'image'."/>
-
-  <target name="image" depends="compile, prepare"
-	  description="Build into build.home">
-   
-    <!-- Copy resource files etc -->
-    <copy    todir="${build.home}/classes" filtering="on">
-      <fileset dir="${source.home}" excludes="**/*.java"/>
-    </copy>
-
-
-    <!-- Copy dependent jars -->
-    <copy    todir="${build.home}/lib">
-      <fileset dir="${lib.home}/" 
-               includes="**/*.jar"
-	       excludes="servlet.jar, ant.jar, optional.jar"/>
-    </copy>
-
-    <tstamp>
-        <format pattern="yyyy-MM-dd" property="TODAY.ISO"/>
-    </tstamp>
-    <filter token="today.iso" value="${TODAY.ISO}"/>
-        
-    <jar jarfile="${build.home}/lib/saaj-impl.jar"
-         basedir="${build.home}/classes">
-     <manifest>
-        <attribute name="Specification-Title" value="SOAP with Attachments API for Java"/>    
-        <attribute name="Specification-Version" value="${api.version}"/> 
-        <attribute name="Implementation-Title" value="SAAJ Implementation"/>    
-        <attribute name="Implementation-Version" value="${version}${suffix}"/>     
-        <attribute name="Implementation-Vendor" value="Sun Microsystems Inc"/>    
-        <attribute name="Implementation-Vendor-Id" value="com.sun"/> 
-        <attribute name="Build-Id" value="${build.number}-${TODAY.ISO}"/>
-        <attribute name="Extension-Name" value="com.sun.xml.messaging.saaj"/>
-        <attribute name="Class-Path" value="saaj-api.jar activation.jar"/> 
-    </manifest> 
-    </jar>
-
-  </target>
-
-    <target name="wspack" depends="wspack-specific, image, wspackdocs">
-    <mkdir dir="${wspack.home}"/>
-    <mkdir dir="${wspack.home}/webapps"/>
-    <mkdir dir="${wspack.home}/samples"/>
-    
-    <copy file="${build.home}/lib/saaj-api.jar"
-              todir="${wspack.home}/lib/"/>
-    <copy file="${build.home}/lib/saaj-impl.jar"
-              todir="${wspack.home}/lib/"/>
-              
-    <copy    todir="${wspack.home}/docs/">
-      <fileset dir="${build.home}/docs" excludes="api/**"/>
-    </copy>
-    
-    <ant dir="${basedir}/samples"/>
-
-    <copy    todir="${wspack.home}/webapps">
-      <fileset dir="${dist.home}/samples" includes="*.war" />
-    </copy>
-
-    <copy    todir="${wspack.home}/samples">
-      <fileset dir="${build.home}/samples" excludes="**/*run*" 
-               includes="uddiping/**" />
-      <fileset dir="${build.home}/samples"
-               includes="soapprocessor/lib/**" />
-      <fileset dir="${basedir}/samples"
-               includes="soapprocessor/**"
-               excludes="soapprocessor/build.xml"/>
-    </copy>
-
-    <copy file="${build.home}/samples/uddiping/run-wspack.sh"
-              tofile="${wspack.home}/samples/uddiping/run.sh" overwrite="yes"/>
-              
-    <copy file="${build.home}/samples/uddiping/run-wspack.bat"
-              tofile="${wspack.home}/samples/uddiping/run.bat" overwrite="yes"/>
-
-	<!-- progress sample application -->
-    <copy    todir="${wspack.home}/samples">
-      <fileset dir="${build.home}/samples" excludes="**/*run*" 
-               includes="progress/**" />
-    </copy>
-    <copy file="${build.home}/samples/progress/run-wspack-client.sh"
-       tofile="${wspack.home}/samples/progress/run-client.sh" overwrite="yes"/>
-    <copy file="${build.home}/samples/progress/run-wspack-client.bat"
-       tofile="${wspack.home}/samples/progress/run-client.bat" overwrite="yes"/>
-    <copy file="${build.home}/samples/progress/run-wspack-server.sh"
-       tofile="${wspack.home}/samples/progress/run-server.sh" overwrite="yes"/>
-    <copy file="${build.home}/samples/progress/run-wspack-server.bat"
-       tofile="${wspack.home}/samples/progress/run-server.bat" overwrite="yes"/>
-  </target>
-
-    <target name="wspackdocs" depends="prepare">
-
-    <copy todir="${wspack.home}/docs/">
-       <fileset dir="${basedir}/docs" />
-    </copy>
-
-    <mkdir dir="${wspack.home}/samples/soapprocessor/javadocs"/>
-    <!-- create Javadocs for SOAPProcessor -->
-    <javadoc packagenames="com.sun.xml.soap"
-             sourcepath="${basedir}/samples/soapprocessor/src"
-             destdir="${wspack.home}/samples/soapprocessor/javadocs"
-             author="false"
-             version="false"
-             windowtitle="${Name} ${version}${suffix}"
-             doctitle="${Name} ${version}${suffix}"
-             bottom="Copyright &#169; 2004 Sun Microsystems, Inc. All Rights Reserved.">
-        <classpath refid="compile.classpath"/>
-    </javadoc>
-
-	
-  </target>
-
-
-  <target name="wspack-specific" depends="prepare">    
-    <!-- do not copy the sources
-    <mkdir dir="${wspack.home}/src/"/>
-    <copy todir="${wspack.home}/src" overwrite="yes">
-      <fileset dir="src/java/"/>
-    </copy>
-    -->
-  </target>
-
-  <target name="compile-tests" depends="image">
-    <mkdir dir="${build.home}/test/classes"/>
-
-    <javac srcdir="${test.home}"
-           destdir="${build.home}/test/classes"
-           debug="${compile.debug}"
-           deprecation="${compile.deprecation}"
-           includeJavaRuntime="yes">
-      <include name="**/*.java" />
-      <classpath refid="test.classpath" />
-    </javac>
-    <!-- Make the tests jar -->
-    <jar jarfile="${build.home}/test/saaj-tests.jar"
-         basedir="${build.home}/test/classes">
-    </jar>
-  </target>
-
-  <target name="compile-tests-jdk" depends="image">
-    <mkdir dir="${build.home}/test/classes"/>
-
-    <javac srcdir="${test.home}"
-           destdir="${build.home}/test/classes"
-           debug="${compile.debug}"
-           deprecation="${compile.deprecation}"
-           includeJavaRuntime="yes">
-      <include name="**/*.java" />
-      <exclude name="saajhttpget/**"/>
-      <classpath refid="test.classpath.jdk" />
-    </javac>
-    <!-- Make the tests jar -->
-    <jar jarfile="${build.home}/test/saaj-tests.jar"
-         basedir="${build.home}/test/classes">
-    </jar>
-  </target>
-
-  <target name="copy-test-resources">
-    <copy todir="${build.home}/test/classes">
-      <fileset dir="${test.home}">
-        <include name="resources/"/>
-      </fileset>
-    </copy>
-  </target>
-
-  <target name="prepare-tests" depends="compile-tests, copy-test-resources"/>
-
- <target name="prepare-tests-jdk" depends="compile-tests-jdk, copy-test-resources"/>
-
-  <target name="run-tests" depends="prepare-tests">
-    <junit printsummary="no" haltonfailure="yes" fork="true">
-      <classpath refid="test.classpath"/>
-      <formatter type="brief" usefile="false" />
-      <batchtest>
-        <fileset dir="${build.home}/test/classes">
-          <include name="**/AllTests.class" />
-        </fileset>
-      </batchtest>
-    </junit>
-    <junit printsummary="no" haltonfailure="yes" fork="true">
-      <jvmarg value="-Dsaaj.mime.optimization=false"/>
-      <classpath refid="test.classpath"/>
-      <formatter type="brief" usefile="false" />
-      <batchtest>
-        <fileset dir="${build.home}/test/classes">
-          <include name="**/AllTests.class" />
-        </fileset>
-      </batchtest>
-    </junit>
-  </target>
-  <!-- run tests with SecurityManager ON, uses a policy file test.policy -->
-  <target name="run-tests-sm" depends="prepare-tests">
-    <junit printsummary="no" haltonfailure="yes" fork="true">
-      <jvmarg value="-Djava.security.manager"/>
-      <jvmarg value="-Djava.security.policy=./src/test/test.policy"/>
-      <classpath refid="test.classpath"/>
-      <formatter type="brief" usefile="false" />
-      <batchtest>
-        <fileset dir="${build.home}/test/classes">
-          <!--include name="bugfixes/SAAJConnectionTest.class" /-->
-          <include name="**/AllTests.class" />
-        </fileset>
-      </batchtest>
-    </junit>
-  </target>
-
-  <target name="runtests-with-jdk" depends="prepare-tests-jdk">
-    <junit printsummary="yes" haltonfailure="yes" fork="true">
-      <jvmarg value="-Djdk.build=true"/>
-      <classpath refid="test.classpath.jdk"/>
-      <formatter type="brief" usefile="false" />
-      <batchtest>
-        <fileset dir="${build.home}/test/classes">
-          <include name="**/AllTests.class" />
-        </fileset>
-      </batchtest>
-    </junit>
-  </target>
-	
-  <target name="runtests-with-jdk-sm" depends="prepare-tests-jdk">
-  	<junit printsummary="yes" haltonfailure="yes" fork="true">
-      <jvmarg value="-Djava.security.manager"/>
-      <jvmarg value="-Djava.security.policy=./src/test/test.policy"/>
-      <jvmarg value="-Djdk.build=true"/>
-  	  <classpath refid="test.classpath.jdk"/>
-        <formatter type="brief" usefile="false" />
-        <batchtest>
-          <fileset dir="${build.home}/test/classes">
-            <include name="**/AllTests.class" />
-          </fileset>
-       </batchtest>
-    </junit>
-  </target>
-
-  <target name="run-single-test" if="testcase" depends="prepare-tests"
-          description="Use -Dtestcase=bugfixes.BugfixesTest on command line">
-    <junit printsummary="no" haltonfailure="no" fork="true">
-      <classpath refid="test.classpath"/>
-      <formatter type="brief" usefile="false" />
-      <test name="${testcase}" />
-    </junit>
-  </target>
-
-  <target name="run-test" depends="test-1"/>
-
-  <target name="test-all" depends="prepare-tests"
-          description="Runs all regression tests that should pass.  Result
-          of tests can be easily verified.">
-    <java classname="junit.textui.TestRunner" fork="yes">
-      <jvmarg value="-Dsaaj.run.only.AllTests"/>
-      <arg value="util.AllTests2"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="test-1" depends="prepare-tests"
-          description="Run a single subset of tests.  Feel free to change
-          the actual test that gets run by this target as needed.">
-    <java classname="bugfixes.BugfixesTest" fork="yes">
-      <jvmarg value="-Dsaaj.debug=1"/>
-      <classpath refid="test.classpath"/>
-    </java>
-  </target>
-
-  <target name="print-cp">
-    <property refid="test.classpath" name="cp.prop"/>
-    <echo>cp= ${cp.prop}</echo>
-  </target>
-
   <target name="clean"
-   description="Clean build and distribution directories">
+   description="Clean temporary directories">
     <delete    dir="${build.home}"/>
-    <delete    dir="${wspack.home}"/>
-    <delete    dir="${dist.home}"/>
-    <delete    dir="${zip.release.dir}"/>
-    <delete    dir="${basedir}/j2se-integration" />
-    <delete    dir="${basedir}/remove-rename" />
   </target>
-
-
-  <target name="all" depends="clean, compile"
-   description="Clean and compile all components"/>
-
-
-  <target name="dist" depends="image">
-    <mkdir dir="${dist.home}"/>
-    <mkdir dir="${dist.home}/lib"/>
-    <mkdir dir="${dist.home}/samples"/>
-    <mkdir dir="${dist.home}/docs"/>
-
-    <copy    todir="${dist.home}/lib">
-      <fileset dir="${build.home}/lib" excludes="servlet.jar, ant.jar"/>
-    </copy>
-
-    <ant dir="${basedir}/samples"/>
-
-    <copy    todir="${dist.home}/samples">
-      <fileset dir="${build.home}/samples" >
-        <include name="*.war" />
-      </fileset>
-    </copy>
-
-    <copy    todir="${dist.home}/docs">
-      <fileset dir="${build.home}/docs"/>
-    </copy>
-
-  </target>
-
-  <!-- SAAJ zip file distribution creation -->
-  <!-- assumes the dist target has been called -->
-  <target name="create.zip" description="Create SAAJ zip file distribution">
-
-    <echo message="-------- Extracting MimePull classes to ${build.home}/classes --------"/>
-    <exec dir="${build.home}/classes" executable="jar" >
-            <arg line="xvf ${lib.home}/mimepull.jar"/>
-    </exec>
-
-    <echo message="-------- Adding MimePull classes to saaj-impl.jar--------"/>
-    <jar jarfile="${build.home}/lib/saaj-impl.jar"
-             basedir="${build.home}/classes"
-             index="false"
-             update="true"
-             excludes="com/**, META-INF/**">
-    </jar>
-    <!-- make build and output directories -->
-    <mkdir dir="${zip.build.dir}"/>
-    <mkdir dir="${zip.release.dir}"/>
-
-    <!-- copy saaj jar files into the right directory structure -->
-    <copy todir="${zip.build.dir}/saaj/lib" overwrite="yes">
-      <fileset dir="${build.home}/lib">
-        <include name="saaj-*.jar"/>
-      </fileset>
-    </copy>
-
-    <copy todir="${zip.build.dir}" overwrite="yes">
-      <fileset dir="${basedir}/zip">
-        <include name="filelist.txt"/>
-        <include name="version"/>
-      </fileset>
-    </copy>
-
-    <copy todir="${zip.build.dir}" overwrite="yes">
-      <fileset dir="${basedir}">
-        <include name="license.html"/>
-      </fileset>
-    </copy>
-    <!-- replace parameters in version file  -->
-    <replace file="${zip.build.dir}/version" value="${version}${suffix}">
-      <replacetoken>@saaj.version@</replacetoken>
-    </replace>
-    <!-- replace date stamp... 1st specify correct format  -->
-    <tstamp>
-      <format property="pkg.datestamp" pattern="yyyyMMdd"/>
-    </tstamp>
-    <replace file="${zip.build.dir}/version" value="${pkg.datestamp}">
-      <replacetoken>@datestamp@</replacetoken>
-    </replace>
-    <replace file="${zip.build.dir}/version" value="${zip.release}">
-      <replacetoken>@zip.release@</replacetoken>
-    </replace>
-
-    <!-- make zip file -->
-    <zip destfile="${zip.release.dir}/saaj.zip" basedir="${zip.build.dir}" whenempty="fail"/>
-
-  </target>
-  
-  <target name="create.src.zip" description="Create SAAJ source zip file">
-    <mkdir dir="${zip.release.dir}"/>
-    <copy todir="${zip.release.dir}" overwrite="yes">
-      <fileset dir="${lib.home}">
-        <include name="saaj-api-src.zip"/>
-      </fileset>
-   </copy>
-    <zip destfile="${zip.release.dir}/saaj${version}${suffix}.src.zip" basedir="${source.home}" />
-  </target>
-
-
+    
   <target name="copytotck"  description="Run the SAAJ TCK tests">
   <property file="${basedir}/tckprops/tck.properties"/>
   <echo> "Copying SAAJ specific build.properties" </echo>
@@ -572,7 +97,7 @@
   <copyfile src="${saajtck.home}/lib/saajtck.jar" dest="${jwsdp.home}/common/lib/saajtck.jar"/>
   </target>
 
-  <target name="runtck" depends="dist" description="Run the SAAJ TCK tests">
+  <target name="runtck" description="Run the SAAJ TCK tests">
   <echo> "TCK tests running...." </echo>
   <copyfile src="${basedir}/build/lib/saaj-impl.jar" dest="${jwsdp.home}/saaj/lib/saaj-impl.jar"/>
   <copyfile src="${basedir}/build/lib/saaj-api.jar" dest="${jwsdp.home}/saaj/lib/saaj-api.jar"/>
@@ -605,38 +130,5 @@
   <exec dir="${jwsdp.home}/bin" executable="${jwsdp.home}/bin/shutdown.sh" os="Linux">
   </exec>
   </target>
-  
-  <target name="debug-nb">
-        <nbjpdastart addressproperty="jpda.address" name="SAAJ Reference Implementation 2.0" transport="dt_socket">
-            <classpath refid="test.classpath"/>
-        </nbjpdastart>
-        <!-- TODO configure the main class for your project here: -->
-        <java classname="junit.ui.TestRunner" fork="true">
-            <classpath refid="test.classpath"/>
-            <jvmarg value="-Xdebug"/>
-            <jvmarg value="-Xnoagent"/>
-            <jvmarg value="-Djava.compiler=none"/>
-            <jvmarg value="-Xrunjdwp:transport=dt_socket,address=${jpda.address}"/>
-            <arg value="mime.AttachImageTest"/>
-        </java>
-  </target>
-
-  <target name="remove-rename"  description="remove renaming to make saaj work">
-	<taskdef name="prename" classname="com.sun.wts.tools.ant.PackageRenameTask">
-	    <classpath>
-              <pathelement path="${basedir}/lib/package-rename-task.jar"/>
-            </classpath>
-        </taskdef>
-	<prename srcdir="src/java" destdir="remove-rename/saaj-ri/src/java">
-            <pattern from="com.sun.org.apache.xerces.internal" to="org.apache.xerces"/>
-        </prename>
-        <!-- sanity test -->
-        <mkdir dir="build/nonrenamed-classes"/>
-	<javac srcdir="remove-rename/saaj-ri/src/java" destdir="build/nonrenamed-classes" >
-	<classpath>
-            <fileset dir="lib" includes="*.jar"/>
-        </classpath>
-        </javac>
-   </target>
   
 </project>
