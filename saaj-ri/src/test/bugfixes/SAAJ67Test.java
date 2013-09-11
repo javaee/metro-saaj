@@ -83,20 +83,22 @@ public class SAAJ67Test extends TestCase {
     public void testFactory1_1() throws IOException, SOAPException {
         MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL);
         String isJDK = System.getProperty("jdk.build", "false");
-        if ("true".equalsIgnoreCase(isJDK))
-            assertTrue(INTERNAL_1_1_NAME.equals(mf.getClass().getName()));
-        else
-            assertTrue(EXTERNAL_1_1_NAME.equals(mf.getClass().getName()));
+        if ("true".equalsIgnoreCase(isJDK)) {
+            assertEquals(INTERNAL_1_1_NAME, mf.getClass().getName());
+        } else {
+            assertEquals(EXTERNAL_1_1_NAME, mf.getClass().getName());
+        }
         runWithFactory(mf, "src/test/bugfixes/data/empty-message.xml", "text/xml");
     }
 
     public void testFactory1_2() throws IOException, SOAPException {
         MessageFactory mf = MessageFactory.newInstance(SOAPConstants.SOAP_1_2_PROTOCOL);
         String isJDK = System.getProperty("jdk.build", "false");
-        if ("true".equalsIgnoreCase(isJDK))
-            assertTrue(INTERNAL_1_2_NAME.equals(mf.getClass().getName()));
-        else
-            assertTrue(EXTERNAL_1_2_NAME.equals(mf.getClass().getName()));
+        if ("true".equalsIgnoreCase(isJDK)) {
+            assertEquals(INTERNAL_1_2_NAME, mf.getClass().getName());
+        } else {
+            assertEquals(EXTERNAL_1_2_NAME, mf.getClass().getName());
+        }
         runWithFactory(mf, "src/test/bugfixes/data/empty-message12.xml", "application/soap+xml");
     }
 }
