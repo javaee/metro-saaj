@@ -15,7 +15,7 @@ var info = {
     <li><a href="http://maven.java.net/content/repositories/releases/com/sun/xml/messaging/saaj/saaj-impl/">Downloads</a></li>
     <li><a href="http://java.net/projects/saaj/lists">Mailing lists</a></li>
     <li><a href="http://java.net/jira/browse/SAAJ">Issue tracker</a></li>
-    <li><a href="http://java.net/projects/saaj/sources/svn/show/trunk">Source code</a></li>
+    <li><a href="https://java.net/projects/saaj/sources/git/show">Source code</a></li>
 </ul>
 
 <script>
