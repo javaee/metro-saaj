@@ -832,4 +832,6 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
     public String getSourceCharsetEncoding() {
         return sourceCharsetEncoding;
     }
+
+    public abstract String getSOAPNamespace();
 }

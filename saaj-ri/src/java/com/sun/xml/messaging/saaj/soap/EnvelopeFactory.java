@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,18 +44,22 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.soap.SOAPException;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import com.sun.xml.messaging.saaj.LazyEnvelopeSource;
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
 import com.sun.xml.messaging.saaj.util.*;
-
 import com.sun.xml.messaging.saaj.util.transform.EfficientStreamingTransformer;
 
 /**
@@ -73,20 +77,73 @@ public class EnvelopeFactory {
     public static Envelope createEnvelope(Source src, SOAPPartImpl soapPart)
         throws SOAPException 
     {
+        if (src instanceof JAXMStreamSource) {
+            try {
+                if (!SOAPPartImpl.lazyContentLength) {
+                    ((JAXMStreamSource) src).reset();
+                }
+            } catch (java.io.IOException ioe) {
+                log.severe("SAAJ0515.source.reset.exception");
+                throw new SOAPExceptionImpl(ioe);
+            }
+        }
+        if (src instanceof LazyEnvelopeSource) {  
+          return lazy((LazyEnvelopeSource)src, soapPart);
+      }
+        if (soapPart.message.isLazySoapBodyParsing()) {
+            return parseEnvelopeStax(src, soapPart);
+        } else {
+            return parseEnvelopeSax(src, soapPart);
+        }
+    }
+    
+    private static Envelope lazy(LazyEnvelopeSource src, SOAPPartImpl soapPart) throws SOAPException {
+        try {
+        	StaxBridge staxBridge = new StaxLazySourceBridge(src, soapPart);
+        	staxBridge.bridgeEnvelopeAndHeaders();            
+            Envelope env = (Envelope) soapPart.getEnvelope();
+            env.setStaxBridge(staxBridge);
+            return env;
+        } catch (XMLStreamException e) {
+            throw new SOAPException(e);
+        }
+    }
+    
+    static private XMLInputFactory xmlInputFactory = null;
+    
+    private static Envelope parseEnvelopeStax(Source src, SOAPPartImpl soapPart)
+            throws SOAPException {
+        XMLStreamReader streamReader = null;
+        if (src instanceof StAXSource) {
+           streamReader = ((StAXSource) src).getXMLStreamReader(); 
+        }
+        try {
+            if (streamReader == null) {
+                if (xmlInputFactory == null) xmlInputFactory = XMLInputFactory.newInstance();
+                streamReader = xmlInputFactory.createXMLStreamReader(src);
+            }
+//            SaajStaxWriter saajWriter = new SaajStaxWriter(soapPart.message, soapPart.document);
+//            XMLStreamReaderToXMLStreamWriter readerWriterBridge = new XMLStreamReaderToXMLStreamWriter(
+//                    streamReader, saajWriter, soapPart.getSOAPNamespace());
+            
+            StaxBridge readerWriterBridge = new StaxReaderBridge(streamReader, soapPart); 
+            //bridge will stop reading at body element, and parse upon request, so save it
+            //on the envelope
+            readerWriterBridge.bridgeEnvelopeAndHeaders();
+            
+            Envelope env = (Envelope) soapPart.getEnvelope();
+            env.setStaxBridge(readerWriterBridge);
+            return env;
+        } catch (Exception e) {
+            throw new SOAPException(e);
+        }
+    }
+    private static Envelope parseEnvelopeSax(Source src, SOAPPartImpl soapPart)
+            throws SOAPException {
         // Insert SAX filter to disallow Document Type Declarations since
         // they are not legal in SOAP
         SAXParser saxParser = null;
         if (src instanceof StreamSource) {
-            if (src instanceof JAXMStreamSource) {
-                try {
-                    if (!SOAPPartImpl.lazyContentLength) {
-                        ((JAXMStreamSource) src).reset();
-                    }
-                } catch (java.io.IOException ioe) {
-                    log.severe("SAAJ0515.source.reset.exception");
-                    throw new SOAPExceptionImpl(ioe);
-                }
-            }
             try {
                 saxParser = parserPool.get();
             } catch (Exception e) {

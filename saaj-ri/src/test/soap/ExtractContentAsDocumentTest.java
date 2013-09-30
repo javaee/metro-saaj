@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -70,6 +70,7 @@ public class ExtractContentAsDocumentTest extends TestCase {
 	}
 
 	private void createMessageOne() throws Exception {
+        System.setProperty("saaj.lazy.contentlength", "true");
         	String testDoc =
 	 	"<env:Envelope"
                 + " xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'"
@@ -96,6 +97,7 @@ public class ExtractContentAsDocumentTest extends TestCase {
 	}
         
     	public void testExtractContentAsDocument() throws Exception {
+
 		SOAPBody body = envelopeOne.getBody();
 		String exception = null;
 		Document document = null;
