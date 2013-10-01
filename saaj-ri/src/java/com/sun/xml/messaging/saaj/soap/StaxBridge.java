@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,36 +40,43 @@
 
 package com.sun.xml.messaging.saaj.soap;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.xml.soap.SOAPEnvelope;
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
-import javax.xml.transform.Source;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+import org.jvnet.staxex.util.SaajStaxWriter;
+import org.jvnet.staxex.util.XMLStreamReaderToXMLStreamWriter;
+
 
 /**
- * Different implementations for SOAP Envelope must all implement this
- * interface.
+ * StaxBridge builds Envelope using a XMLStreamReaderToXMLStreamWriter 
  *
- * @author Anil Vijendran (akv@eng.sun.com)
+ * @author shih-chang.chen@oracle.com
  */
-public interface Envelope extends SOAPEnvelope {
-    /**
-     * Get the content as a JAXP Source.
-     */
-    Source getContent();
+public abstract class StaxBridge {
+	protected SaajStaxWriter saajWriter;
+	protected XMLStreamReaderToXMLStreamWriter readerToWriter;
+	protected XMLStreamReaderToXMLStreamWriter.Breakpoint breakpoint;
+	
+	
+	public StaxBridge(SOAPPartImpl soapPart) throws SOAPException {
+		readerToWriter = new XMLStreamReaderToXMLStreamWriter();
+		saajWriter = new SaajStaxWriter(soapPart.message, soapPart.getSOAPNamespace());
+	}
 
-    /**
-     * Output the content.
-     */
-    void output(OutputStream out) throws IOException;
+	public void bridgeEnvelopeAndHeaders() throws XMLStreamException {
+		readerToWriter.bridge(breakpoint);
+	}
+	
+	public void bridgePayload() throws XMLStreamException {
+		readerToWriter.bridge(breakpoint);
+	}
+
+    abstract public XMLStreamReader getPayloadReader();
+
+    abstract public QName getPayloadQName();
     
-    /**
-     * Output the content.
-     */
-    void output(OutputStream out, boolean isFastInfoset) throws IOException;
-    
-    void setStaxBridge(StaxBridge bridge) throws SOAPException;
-    
-    StaxBridge getStaxBridge() throws SOAPException;
+    abstract public String getPayloadAttributeValue(String attName) ;
+
+    abstract public String getPayloadAttributeValue(QName attName) ;
 }

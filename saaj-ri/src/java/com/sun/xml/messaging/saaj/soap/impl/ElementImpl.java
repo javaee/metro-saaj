@@ -439,18 +439,31 @@ public class ElementImpl
 
     }
 
-    protected SOAPElement findChild(NameImpl name) {
-        Iterator eachChild = getChildElementNodes();
-        while (eachChild.hasNext()) {
-            SOAPElement child = (SOAPElement) eachChild.next();
-            if (child.getElementName().equals(name)) {
-                return child;
+    Element getFirstChildElement() {
+        Node child = getFirstChild();
+        while (child != null) {
+            if (child instanceof Element) {
+                return ((Element) child);
             }
+            child = child.getNextSibling();
         }
-
         return null;
     }
-
+    
+    protected SOAPElement findChild(NameImpl name) {
+        Node eachChild = getFirstChild();
+        while (eachChild != null) {
+            if (eachChild instanceof SOAPElement) {
+                SOAPElement eachChildSoap = (SOAPElement) eachChild;
+                if (eachChildSoap.getElementName().equals(name)) {
+                    return eachChildSoap;
+                }
+            }
+            eachChild = eachChild.getNextSibling();
+        }
+        return null;
+    }
+    
     public SOAPElement addTextNode(String text) throws SOAPException {
         if (text.startsWith(CDATAImpl.cdataUC)
             || text.startsWith(CDATAImpl.cdataLC))

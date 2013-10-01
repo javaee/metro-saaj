@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -94,16 +94,16 @@ public class FaultTest extends TestCase {
         + "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">"
         +     "<soap:Body>"
         +         "<soap:Fault>"
-        +             "<faultcode>"
+        +             "<soap:faultcode>"
         +                 "code&gt;code"
-        +             "</faultcode>"
-        +             "<faultstring>"
+        +             "</soap:faultcode>"
+        +             "<soap:faultstring>"
         +                 "string&gt;string"
-        +             "</faultstring>"
-        +             "<faultactor>"
+        +             "</soap:faultstring>"
+        +             "<soap:faultactor>"
         +                 "actor&gt;actor"
-        +             "</faultactor>"
-        +             "<detail />"
+        +             "</soap:faultactor>"
+        +             "<soap:detail />"
         +         "</soap:Fault>"
         +     "</soap:Body>"
         + "</soap:Envelope>";

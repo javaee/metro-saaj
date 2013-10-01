@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -50,6 +50,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.soap.*;
+import javax.xml.stream.XMLStreamReader;
 
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
 import com.sun.xml.messaging.saaj.packaging.mime.internet.ContentType;
@@ -85,6 +86,11 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
         super(headers,ct,stat,in);
     }
 
+    public Message1_1Impl(MimeHeaders headers, ContentType ct, int stat, XMLStreamReader reader)
+            throws SOAPExceptionImpl {
+            super(headers,ct,stat,reader);
+    }
+    
     public SOAPPart getSOAPPart() {
         if (soapPartImpl == null) {
             soapPartImpl = new SOAPPart1_1Impl(this);

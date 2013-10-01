@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -44,6 +44,7 @@ import java.io.*;
 import java.util.logging.Logger;
 
 import javax.xml.soap.*;
+import javax.xml.stream.XMLStreamReader;
 
 import com.sun.xml.messaging.saaj.packaging.mime.internet.ContentType;
 import com.sun.xml.messaging.saaj.packaging.mime.internet.ParseException;
@@ -80,6 +81,13 @@ public class MessageFactoryImpl extends MessageFactory {
     public SOAPMessage createMessage() throws SOAPException {
         throw new UnsupportedOperationException();
     }
+    
+    public SOAPMessage createMessage(String protocol) throws SOAPException {
+    	if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol))
+    		return new com.sun.xml.messaging.saaj.soap.ver1_1.Message1_1Impl();
+    	else
+    		return new com.sun.xml.messaging.saaj.soap.ver1_2.Message1_2Impl();
+    }
 
     public SOAPMessage createMessage(boolean isFastInfoset, 
         boolean acceptFastInfoset) throws SOAPException 
@@ -87,6 +95,31 @@ public class MessageFactoryImpl extends MessageFactory {
         throw new UnsupportedOperationException();
     }
     
+    public SOAPMessage createMessage(MimeHeaders headers, XMLStreamReader reader) throws SOAPException, IOException {
+        String contentTypeString = MessageImpl.getContentType(headers);
+
+        if (listener != null) {
+            throw new SOAPException("Listener OutputStream is not supported with XMLStreamReader");
+        }
+
+        try {
+            ContentType contentType = new ContentType(contentTypeString);
+            int stat = MessageImpl.identifyContentType(contentType);
+
+            if (MessageImpl.isSoap1_1Content(stat)) {
+                return new Message1_1Impl(headers,contentType,stat,reader);
+            } else if (MessageImpl.isSoap1_2Content(stat)) {
+                return new Message1_2Impl(headers,contentType,stat,reader);
+            } else {
+                log.severe("SAAJ0530.soap.unknown.Content-Type");
+                throw new SOAPExceptionImpl("Unrecognized Content-Type");
+            }
+        } catch (ParseException e) {            
+            log.severe("SAAJ0531.soap.cannot.parse.Content-Type");
+            throw new SOAPExceptionImpl(
+                "Unable to parse content type: " + e.getMessage());
+        }
+    }
     public SOAPMessage createMessage(MimeHeaders headers, InputStream in)
         throws SOAPException, IOException {
         String contentTypeString = MessageImpl.getContentType(headers);

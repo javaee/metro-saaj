@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,36 +40,54 @@
 
 package com.sun.xml.messaging.saaj.soap;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.xml.soap.SOAPEnvelope;
+import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
-import javax.xml.transform.Source;
+import javax.xml.stream.XMLStreamReader;
+
+import org.jvnet.staxex.util.XMLStreamReaderToXMLStreamWriter;
 
 /**
- * Different implementations for SOAP Envelope must all implement this
- * interface.
+ * StaxBridge builds Envelope using a XMLStreamReaderToXMLStreamWriter 
  *
- * @author Anil Vijendran (akv@eng.sun.com)
+ * @author shih-chang.chen@oracle.com
  */
-public interface Envelope extends SOAPEnvelope {
-    /**
-     * Get the content as a JAXP Source.
-     */
-    Source getContent();
+public class StaxReaderBridge extends StaxBridge {
+	private XMLStreamReader in;
 
-    /**
-     * Output the content.
-     */
-    void output(OutputStream out) throws IOException;
+	public StaxReaderBridge(XMLStreamReader reader, SOAPPartImpl soapPart) throws SOAPException {
+		super(soapPart);
+		in = reader;
+		final String soapEnvNS = soapPart.getSOAPNamespace();
+		breakpoint =  new XMLStreamReaderToXMLStreamWriter.Breakpoint(reader, saajWriter) {
+	        	boolean seenBody = false;
+	        	boolean stopedAtBody = false;
+	            public boolean proceedBeforeStartElement()  { 
+	            	if (stopedAtBody) return true;
+	            	if (seenBody) {
+	            		stopedAtBody = true;
+	            		return false;
+	            	}
+	        	    if ("Body".equals(reader.getLocalName()) && soapEnvNS.equals(reader.getNamespaceURI()) ){
+	        	    	seenBody = true;
+	        	    } 
+	        	    return true; 
+	            }
+	        };
+	}
+
+    public XMLStreamReader getPayloadReader() {
+        return in;
+    }
+
+    public QName getPayloadQName() {
+        return (in.getEventType() == in.START_ELEMENT) ? in.getName() : null;
+    }
     
-    /**
-     * Output the content.
-     */
-    void output(OutputStream out, boolean isFastInfoset) throws IOException;
-    
-    void setStaxBridge(StaxBridge bridge) throws SOAPException;
-    
-    StaxBridge getStaxBridge() throws SOAPException;
+    public String getPayloadAttributeValue(String attName) {
+        return (in.getEventType() == in.START_ELEMENT) ? in.getAttributeValue(null, attName) : null;
+    }
+
+    public String getPayloadAttributeValue(QName attName) {
+        return (in.getEventType() == in.START_ELEMENT) ? in.getAttributeValue(attName.getNamespaceURI(), attName.getLocalPart()) : null;
+    }
 }
