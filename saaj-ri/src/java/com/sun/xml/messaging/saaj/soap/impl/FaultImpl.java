@@ -85,17 +85,17 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
 
     protected void findFaultCodeElement() {
         this.faultCodeElement =
-            (SOAPFaultElement) findChild(getFaultCodeName());
+            (SOAPFaultElement) findAndConvertChildElement(getFaultCodeName());
     }
 
     protected void findFaultActorElement() {
         this.faultActorElement =
-            (SOAPFaultElement) findChild(getFaultActorName());
+            (SOAPFaultElement) findAndConvertChildElement(getFaultActorName());
     }
 
     protected void findFaultStringElement() {
         this.faultStringElement =
-            (SOAPFaultElement) findChild(getFaultStringName());
+            (SOAPFaultElement) findAndConvertChildElement(getFaultStringName());
     }
 
     public void setFaultCode(String faultCode) throws SOAPException {
@@ -177,7 +177,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
 
     protected void initializeDetail() {
         NameImpl detailName = getDetailName();
-        detail = (Detail) findChild(detailName);
+        detail = (Detail) findAndConvertChildElement(detailName);
     }
 
     public Detail getDetail() {

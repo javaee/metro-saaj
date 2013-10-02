@@ -299,7 +299,7 @@ public class Fault1_2Impl extends FaultImpl {
     }
 
     public String getFaultNode() {
-        SOAPElement faultNode = findChild(getFaultNodeName());
+        SOAPElement faultNode = findAndConvertChildElement(getFaultNodeName());
         if (faultNode == null) {
             return null;
         }
@@ -307,7 +307,7 @@ public class Fault1_2Impl extends FaultImpl {
     }
 
     public void setFaultNode(String uri) throws SOAPException {
-        SOAPElement faultNode = findChild(getFaultNodeName());
+        SOAPElement faultNode = findAndConvertChildElement(getFaultNodeName());
         if (faultNode != null) {
             faultNode.detachNode();
         }

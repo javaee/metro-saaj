@@ -463,6 +463,18 @@ public class ElementImpl
         }
         return null;
     }
+
+    protected SOAPElement findAndConvertChildElement(NameImpl name) {
+        Iterator eachChild = getChildElementNodes();
+        while (eachChild.hasNext()) {
+            SOAPElement child = (SOAPElement) eachChild.next();
+            if (child.getElementName().equals(name)) {
+                return child;
+            }
+        }
+
+        return null;
+    }
     
     public SOAPElement addTextNode(String text) throws SOAPException {
         if (text.startsWith(CDATAImpl.cdataUC)
