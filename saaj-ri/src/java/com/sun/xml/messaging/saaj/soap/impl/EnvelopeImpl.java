@@ -419,8 +419,8 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
     	} else {
 	        LazyEnvelopeStaxReader lazyEnvReader = new LazyEnvelopeStaxReader(this);
 	        XMLStreamReaderToXMLStreamWriter writingBridge = new XMLStreamReaderToXMLStreamWriter();
-//	        writingBridge.bridge(lazyEnvReader, writer);
-            writingBridge.bridge(new XMLStreamReaderToXMLStreamWriter.Breakpoint(lazyEnvReader, writer));
+	        writingBridge.bridge(lazyEnvReader, writer);
+//            writingBridge.bridge(new XMLStreamReaderToXMLStreamWriter.Breakpoint(lazyEnvReader, writer));
     	}
         //Assume the staxBridge is exhausted now since we would have read the body reader
         ((BodyImpl) getBody()).setPayloadStreamRead();

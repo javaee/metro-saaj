@@ -43,6 +43,7 @@ package soap;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -101,7 +102,9 @@ public class LazySOAPTest extends TestCase {
         //now write lazy
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         XMLStreamWriter w = XMLOutputFactory.newInstance().createXMLStreamWriter(bos);
-        ((LazyEnvelope) env).writeTo(w);
+//        ((LazyEnvelope) env).writeTo(w);
+        Method method = env.getClass().getMethod("writeTo", new Class[]{XMLStreamWriter.class});
+        method.invoke(env, new Object[]{w});
         w.flush();
         //TODO desagar Body is EMPTY!! Why? Fix it
         String writtenSoap = bos.toString();
@@ -132,11 +135,11 @@ public class LazySOAPTest extends TestCase {
         assertEquals("Envelope", elem.getLocalName());
         Node child;
         child = getElementChild(elem);
-        assertTrue(child instanceof HeaderImpl);
+        assertTrue(child instanceof javax.xml.soap.SOAPHeader);
         assertEquals("Header", child.getLocalName());
         
         child = getElementSibling(child);
-        assertTrue(child instanceof BodyImpl);
+        assertTrue(child instanceof javax.xml.soap.SOAPBody);
         assertEquals("Body", child.getLocalName());
         
         child = getElementChild(child);
