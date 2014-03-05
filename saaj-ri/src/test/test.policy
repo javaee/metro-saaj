@@ -47,4 +47,5 @@ grant {
   permission java.lang.RuntimePermission  "setFactory";
   permission java.lang.RuntimePermission  "accessClassInPackage.com.sun.org.apache.xalan.internal.xsltc.trax";
   permission java.lang.RuntimePermission  "accessClassInPackage.com.sun.org.apache.xerces.internal.jaxp";
+  permission java.lang.RuntimePermission  "accessClassInPackage.com.sun.xml.internal.messaging.saaj.soap.ver1_1";
 };
