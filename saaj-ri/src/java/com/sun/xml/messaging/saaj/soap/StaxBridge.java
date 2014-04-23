@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,11 +40,12 @@
 
 package com.sun.xml.messaging.saaj.soap;
 
+import com.sun.xml.messaging.saaj.util.stax.SaajStaxWriter;
+
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import org.jvnet.staxex.util.SaajStaxWriter;
 import org.jvnet.staxex.util.XMLStreamReaderToXMLStreamWriter;
 
 
