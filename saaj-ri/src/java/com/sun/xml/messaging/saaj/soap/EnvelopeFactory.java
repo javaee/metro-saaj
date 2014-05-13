@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2014 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +40,15 @@
 
 package com.sun.xml.messaging.saaj.soap;
 
-import java.util.logging.Logger;
+import com.sun.xml.messaging.saaj.LazyEnvelopeSource;
+import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
+import com.sun.xml.messaging.saaj.util.JAXMStreamSource;
+import com.sun.xml.messaging.saaj.util.LogDomainConstants;
+import com.sun.xml.messaging.saaj.util.ParserPool;
+import com.sun.xml.messaging.saaj.util.RejectDoctypeSaxFilter;
+import com.sun.xml.messaging.saaj.util.transform.EfficientStreamingTransformer;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.soap.SOAPException;
@@ -53,14 +61,7 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamSource;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
-import com.sun.xml.messaging.saaj.LazyEnvelopeSource;
-import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
-import com.sun.xml.messaging.saaj.util.*;
-import com.sun.xml.messaging.saaj.util.transform.EfficientStreamingTransformer;
+import java.util.logging.Logger;
 
 /**
  * EnvelopeFactory creates SOAP Envelope objects using different
@@ -72,21 +73,27 @@ public class EnvelopeFactory {
         log = Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
         "com.sun.xml.messaging.saaj.soap.LocalStrings");
     
-    private static ParserPool parserPool = new ParserPool(5);
+    private static ContextClassloaderLocal<ParserPool> parserPool =
+            new ContextClassloaderLocal<ParserPool>() {
+                @Override
+                protected ParserPool initialValue() throws Exception {
+                    return new ParserPool(5);
+                }
+            };
 
     public static Envelope createEnvelope(Source src, SOAPPartImpl soapPart)
         throws SOAPException 
     {
-        if (src instanceof JAXMStreamSource) {
-            try {
-                if (!SOAPPartImpl.lazyContentLength) {
-                    ((JAXMStreamSource) src).reset();
+            if (src instanceof JAXMStreamSource) {
+                try {
+                    if (!SOAPPartImpl.lazyContentLength) {
+                        ((JAXMStreamSource) src).reset();
+                    }
+                } catch (java.io.IOException ioe) {
+                    log.severe("SAAJ0515.source.reset.exception");
+                    throw new SOAPExceptionImpl(ioe);
                 }
-            } catch (java.io.IOException ioe) {
-                log.severe("SAAJ0515.source.reset.exception");
-                throw new SOAPExceptionImpl(ioe);
             }
-        }
         if (src instanceof LazyEnvelopeSource) {  
           return lazy((LazyEnvelopeSource)src, soapPart);
       }
@@ -98,7 +105,7 @@ public class EnvelopeFactory {
     }
     
     private static Envelope lazy(LazyEnvelopeSource src, SOAPPartImpl soapPart) throws SOAPException {
-        try {
+            try {
         	StaxBridge staxBridge = new StaxLazySourceBridge(src, soapPart);
         	staxBridge.bridgeEnvelopeAndHeaders();            
             Envelope env = (Envelope) soapPart.getEnvelope();
@@ -145,7 +152,7 @@ public class EnvelopeFactory {
         SAXParser saxParser = null;
         if (src instanceof StreamSource) {
             try {
-                saxParser = parserPool.get();
+                saxParser = parserPool.get().get();
             } catch (Exception e) {
                 log.severe("SAAJ0601.util.newSAXParser.exception");
                 throw new SOAPExceptionImpl(
@@ -186,7 +193,7 @@ public class EnvelopeFactory {
                 ex);
         } finally {
             if (saxParser != null) {
-                parserPool.returnParser(saxParser);
+                parserPool.get().returnParser(saxParser);
             }
         }
     }
