@@ -597,7 +597,7 @@ public class AttachmentPartImpl extends AttachmentPart {
                     mailMap.addMailcap("text/xml;;x-java-content-handler=com.sun.xml.internal.messaging.saaj.soap.XmlDataContentHandler");
                     mailMap.addMailcap("application/xml;;x-java-content-handler=com.sun.xml.internal.messaging.saaj.soap.XmlDataContentHandler");
                     mailMap.addMailcap("application/fastinfoset;;x-java-content-handler=com.sun.xml.internal.messaging.saaj.soap.FastInfosetDataContentHandler");
-                    mailMap.addMailcap("multipart/*;;x-java-content-handler=com.sun.xml.internal.messaging.saaj.soap.MultipartDataContentHandler");
+                    //mailMap.addMailcap("multipart/*;;x-java-content-handler=com.sun.xml.internal.messaging.saaj.soap.MultipartDataContentHandler");
                     mailMap.addMailcap("image/*;;x-java-content-handler=com.sun.xml.internal.messaging.saaj.soap.ImageDataContentHandler");
                     mailMap.addMailcap("text/plain;;x-java-content-handler=com.sun.xml.internal.messaging.saaj.soap.StringDataContentHandler");
                 }
