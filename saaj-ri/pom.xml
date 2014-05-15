@@ -58,7 +58,7 @@
         <connection>scm:git:git@orahub.oraclecorp.com:fmw-infra-metro/saaj-ri.git</connection>
         <developerConnection>scm:git:git@orahub.oraclecorp.com:fmw-infra-metro/saaj-ri.git</developerConnection>
         <url>http://java.net/projects/saaj/sources/git/show</url>
-      <tag>saaj-impl-1.3.25</tag>
+      <tag>HEAD</tag>
   </scm>
     <build>	
         <sourceDirectory>src/java</sourceDirectory>
