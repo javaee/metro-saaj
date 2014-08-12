@@ -63,6 +63,8 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamSource;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.logging.Logger;
 
 /**
@@ -81,9 +83,19 @@ public class EnvelopeFactory {
             new ContextClassloaderLocal<ParserPool>() {
                 @Override
                 protected ParserPool initialValue() throws Exception {
-                    return new ParserPool(Integer.getInteger(
-                    		SAX_PARSER_POOL_SIZE_PROP_NAME, 
-                    		DEFAULT_SAX_PARSER_POOL_SIZE));
+                    return AccessController.doPrivileged(new PrivilegedAction<ParserPool>() {
+
+						@Override
+						public ParserPool run() {
+							try {
+								return new ParserPool(Integer.getInteger(
+										SAX_PARSER_POOL_SIZE_PROP_NAME, 
+										DEFAULT_SAX_PARSER_POOL_SIZE));
+							} catch (SecurityException se) {
+								return new ParserPool(DEFAULT_SAX_PARSER_POOL_SIZE);
+							}
+						}
+					});
                 }
             };
 
