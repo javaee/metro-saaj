@@ -47,6 +47,7 @@ import com.sun.xml.messaging.saaj.util.LogDomainConstants;
 import com.sun.xml.messaging.saaj.util.ParserPool;
 import com.sun.xml.messaging.saaj.util.RejectDoctypeSaxFilter;
 import com.sun.xml.messaging.saaj.util.transform.EfficientStreamingTransformer;
+
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -61,6 +62,9 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamSource;
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.logging.Logger;
 
 /**
@@ -68,18 +72,33 @@ import java.util.logging.Logger;
  * underlying implementations.
  */
 public class EnvelopeFactory {
+    private static final String SAX_PARSER_POOL_SIZE_PROP_NAME = "com.sun.xml.messaging.saaj.soap.saxParserPoolSize";
+    private static final int DEFAULT_SAX_PARSER_POOL_SIZE = 5;
     
     protected static final Logger
         log = Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
         "com.sun.xml.messaging.saaj.soap.LocalStrings");
-    
+
     private static ContextClassloaderLocal<ParserPool> parserPool =
             new ContextClassloaderLocal<ParserPool>() {
                 @Override
                 protected ParserPool initialValue() throws Exception {
-                    return new ParserPool(5);
+                	Integer poolSize = AccessController.doPrivileged(
+                			new PrivilegedAction<Integer>() {
+                				@Override
+                				public Integer run() {
+                					try {
+                						return Integer.getInteger(
+                								SAX_PARSER_POOL_SIZE_PROP_NAME, 
+                								DEFAULT_SAX_PARSER_POOL_SIZE);
+                					} catch (SecurityException se) {
+                						return DEFAULT_SAX_PARSER_POOL_SIZE;
+                					}
+                				}
+                			});
+                    return new ParserPool(poolSize);
                 }
-            };
+    };
 
     public static Envelope createEnvelope(Source src, SOAPPartImpl soapPart)
         throws SOAPException 
