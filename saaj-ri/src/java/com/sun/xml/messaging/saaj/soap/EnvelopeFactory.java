@@ -83,21 +83,22 @@ public class EnvelopeFactory {
             new ContextClassloaderLocal<ParserPool>() {
                 @Override
                 protected ParserPool initialValue() throws Exception {
-                    return AccessController.doPrivileged(new PrivilegedAction<ParserPool>() {
-
-						@Override
-						public ParserPool run() {
-							try {
-								return new ParserPool(Integer.getInteger(
-										SAX_PARSER_POOL_SIZE_PROP_NAME, 
-										DEFAULT_SAX_PARSER_POOL_SIZE));
-							} catch (SecurityException se) {
-								return new ParserPool(DEFAULT_SAX_PARSER_POOL_SIZE);
-							}
-						}
-					});
+                	Integer poolSize = AccessController.doPrivileged(
+                			new PrivilegedAction<Integer>() {
+                				@Override
+                				public Integer run() {
+                					try {
+                						return Integer.getInteger(
+                								SAX_PARSER_POOL_SIZE_PROP_NAME, 
+                								DEFAULT_SAX_PARSER_POOL_SIZE);
+                					} catch (SecurityException se) {
+                						return DEFAULT_SAX_PARSER_POOL_SIZE;
+                					}
+                				}
+                			});
+                    return new ParserPool(poolSize);
                 }
-            };
+    };
 
     public static Envelope createEnvelope(Source src, SOAPPartImpl soapPart)
         throws SOAPException 
