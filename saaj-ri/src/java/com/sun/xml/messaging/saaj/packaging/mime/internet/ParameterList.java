@@ -205,7 +205,7 @@ public final class ParameterList {
      * @return          String
      */  
     public String toString(int used) {
-        StringBuffer sb = new StringBuffer();
+    	StringBuilder sb = new StringBuilder();
         Iterator itr = list.entrySet().iterator();
 
         while (itr.hasNext()) {

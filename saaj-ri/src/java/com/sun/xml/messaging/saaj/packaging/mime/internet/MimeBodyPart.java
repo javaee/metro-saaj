@@ -569,7 +569,7 @@ public final class MimeBodyPart {
      * @param languages 	array of language tags
      */
     public void setContentLanguage(String[] languages) {
-        StringBuffer sb = new StringBuffer(languages[0]);
+        StringBuilder sb = new StringBuilder(languages[0]);
         for (int i = 1; i < languages.length; i++)
             sb.append(',').append(languages[i]);
         setHeader("Content-Language", sb.toString());

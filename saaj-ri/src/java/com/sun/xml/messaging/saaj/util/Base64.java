@@ -259,7 +259,7 @@ public final class Base64 {
 
     public static String base64Decode( String orig ) {
 	char chars[]=orig.toCharArray();
-	StringBuffer sb=new StringBuffer();
+	StringBuilder sb=new StringBuilder();
 	int i=0;
 
 	int shift = 0;   // # of excess bits stored in accum

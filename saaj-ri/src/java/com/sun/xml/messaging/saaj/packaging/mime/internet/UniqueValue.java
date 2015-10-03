@@ -75,7 +75,7 @@ class UniqueValue {
      * and the current time (in milliseconds).
      */
     public static String getUniqueBoundaryValue() {
-	StringBuffer s = new StringBuffer();
+	StringBuilder s = new StringBuilder();
 
 	// Unique string is ----=_Part_<part>_<hashcode>.<currentTime>
 	s.append("----=_Part_").append(part++).append("_").

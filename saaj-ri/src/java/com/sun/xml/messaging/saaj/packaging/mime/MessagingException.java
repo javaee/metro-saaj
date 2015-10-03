@@ -136,7 +136,7 @@ public class MessagingException extends Exception {
 	    return super.getMessage();
 	Exception n = next;
 	String s = super.getMessage();
-	StringBuffer sb = new StringBuffer(s == null ? "" : s);
+	StringBuilder sb = new StringBuilder(s == null ? "" : s);
 	while (n != null) {
 	    sb.append(";\n  nested exception is:\n\t");
 	    if (n instanceof MessagingException) {

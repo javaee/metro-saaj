@@ -1081,7 +1081,7 @@ public abstract class MessageImpl
     }
 
     private String convertToSingleLine(String contentType) {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         for (int i = 0; i < contentType.length(); i ++) {
             char c = contentType.charAt(i);
             if (c != '\r' && c != '\n' && c != '\t')
