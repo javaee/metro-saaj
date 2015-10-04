@@ -51,10 +51,8 @@ import java.util.logging.Level;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPFaultElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPConstants;
-import javax.xml.soap.Name;
 import javax.xml.soap.Name;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocument;

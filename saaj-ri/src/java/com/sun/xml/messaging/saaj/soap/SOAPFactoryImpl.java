@@ -47,7 +47,6 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 
 import com.sun.xml.messaging.saaj.soap.impl.ElementFactory;
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.*;
 

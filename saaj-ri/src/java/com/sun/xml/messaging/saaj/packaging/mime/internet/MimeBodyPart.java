@@ -52,8 +52,6 @@ import com.sun.xml.messaging.saaj.packaging.mime.util.OutputUtil;
 import com.sun.xml.messaging.saaj.util.ByteOutputStream;
 import com.sun.xml.messaging.saaj.util.FinalArrayList;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;

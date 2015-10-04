@@ -144,8 +144,6 @@ import java.io.Serializable;
   /** If specified, stores the fragment for this URI; otherwise null */
   private String m_fragment = null;
 
-  private static boolean DEBUG = false;
-
   /**
   * Construct a new and uninitialized URI.
   */

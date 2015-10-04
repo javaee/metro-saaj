@@ -45,7 +45,6 @@
 package com.sun.xml.messaging.saaj.soap.ver1_2;
 
 import java.util.logging.Logger;
-import java.util.Locale;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
