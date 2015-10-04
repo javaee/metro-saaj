@@ -59,7 +59,7 @@ import com.sun.xml.messaging.saaj.util.transform.EfficientStreamingTransformer;
  */
 public class XmlDataContentHandler implements DataContentHandler {
     public static final String STR_SRC = "javax.xml.transform.stream.StreamSource";
-    private static Class streamSourceClass = null;
+    private static Class<?> streamSourceClass = null;
 
     public XmlDataContentHandler() throws ClassNotFoundException {
         if (streamSourceClass == null) {

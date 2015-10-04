@@ -108,7 +108,7 @@ public  class MimeMultipart {
     /**
      * Vector of MimeBodyPart objects.
      */
-    protected FinalArrayList parts = new FinalArrayList(); // Holds BodyParts
+    protected FinalArrayList<MimeBodyPart> parts = new FinalArrayList<MimeBodyPart>(); // Holds BodyParts
 
     /**
      * This field specifies the content-type of this multipart
@@ -227,7 +227,7 @@ public  class MimeMultipart {
         if (parts == null)
             throw new IndexOutOfBoundsException("No such BodyPart");
 
-        return (MimeBodyPart)parts.get(index);
+        return parts.get(index);
     }
 
     /**
@@ -274,7 +274,7 @@ public  class MimeMultipart {
      */
     protected void updateHeaders() throws MessagingException {
 	for (int i = 0; i < parts.size(); i++)
-	    ((MimeBodyPart)parts.get(i)).updateHeaders();
+	    parts.get(i).updateHeaders();
     }
 
     /**
@@ -611,7 +611,7 @@ public  class MimeMultipart {
 	if (parts == null)
 	    throw new IndexOutOfBoundsException("No such BodyPart");
 
-	MimeBodyPart part = (MimeBodyPart)parts.get(index);
+	MimeBodyPart part = parts.get(index);
 	parts.remove(index);
 	part.setParent(null);
     }
@@ -624,7 +624,7 @@ public  class MimeMultipart {
      */
     public synchronized void addBodyPart(MimeBodyPart part) {
 	if (parts == null)
-	    parts = new FinalArrayList();
+	    parts = new FinalArrayList<MimeBodyPart>();
 
 	parts.add(part);
 	part.setParent(this);
@@ -642,7 +642,7 @@ public  class MimeMultipart {
      */
     public synchronized void addBodyPart(MimeBodyPart part, int index) {
 	if (parts == null)
-	    parts = new FinalArrayList();
+	    parts = new FinalArrayList<MimeBodyPart>();
 
 	parts.add(index,part);
 	part.setParent(this);

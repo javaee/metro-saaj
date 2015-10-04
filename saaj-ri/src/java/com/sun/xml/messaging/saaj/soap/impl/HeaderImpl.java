@@ -131,7 +131,7 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
         return getHeaderElementsForActor(actor, true, false);
     }
 
-    protected Iterator getHeaderElementsForActor(
+    protected Iterator<SOAPHeaderElement> getHeaderElementsForActor(
         String actor,
         boolean detach,
         boolean mustUnderstand) {
@@ -142,15 +142,15 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
         return getHeaderElements(actor, detach, mustUnderstand);
     }
 
-    protected Iterator getHeaderElements(
+    protected Iterator<SOAPHeaderElement> getHeaderElements(
         String actor,
         boolean detach,
         boolean mustUnderstand) {
-        List elementList = new ArrayList();
+        List<SOAPHeaderElement> elementList = new ArrayList<SOAPHeaderElement>();
 
-        Iterator eachChild = getChildElements();
+        Iterator<Node> eachChild = getChildElements();
 
-        Object currentChild = iterate(eachChild);
+        Node currentChild = iterate(eachChild);
         while (currentChild != null) {
             if (!(currentChild instanceof SOAPHeaderElement)) {
                 currentChild = iterate(eachChild);
@@ -188,7 +188,7 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
         return elementList.listIterator();
     }
 
-    private Object iterate(Iterator each) {
+    private <T> T iterate(Iterator<T> each) {
         return each.hasNext() ? each.next() : null;
     }
 

@@ -541,7 +541,7 @@ public final class MimeBodyPart {
 
         // Tokenize the header to obtain the Language-tags (skip comments)
         HeaderTokenizer h = new HeaderTokenizer(s, HeaderTokenizer.MIME);
-        FinalArrayList v = new FinalArrayList();
+        FinalArrayList<String> v = new FinalArrayList<String>();
 
         HeaderTokenizer.Token tk;
         int tkType;
@@ -559,7 +559,7 @@ public final class MimeBodyPart {
         if (v.size() == 0)
             return null;
 
-        return (String[])v.toArray(new String[v.size()]);
+        return v.toArray(new String[v.size()]);
     }
 
     /**
@@ -958,10 +958,10 @@ public final class MimeBodyPart {
 				throws IOException, MessagingException {
 
         // First, write out the header
-        List hdrLines = headers.getAllHeaderLines();
+        List<String> hdrLines = headers.getAllHeaderLines();
         int sz = hdrLines.size();
         for( int i=0; i<sz; i++ )
-            OutputUtil.writeln((String)hdrLines.get(i),os);
+            OutputUtil.writeln(hdrLines.get(i),os);
 
         // The CRLF separator between header and content
         OutputUtil.writeln(os);
@@ -1058,7 +1058,7 @@ public final class MimeBodyPart {
      * Return all the headers from this Message as an Enumeration of
      * Header objects.
      */
-    public FinalArrayList getAllHeaders() {
+    public FinalArrayList<hdr> getAllHeaders() {
         return headers.getAllHeaders();
     }
 

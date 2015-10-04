@@ -110,7 +110,7 @@ class HttpSOAPConnection extends SOAPConnection {
             throw new SOAPExceptionImpl("Connection is closed");
         }
 
-        Class urlEndpointClass = null;
+        Class<?> urlEndpointClass = null;
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
             if (loader != null) {
@@ -213,7 +213,7 @@ class HttpSOAPConnection extends SOAPConnection {
 
             MimeHeaders headers = message.getMimeHeaders();
 
-            Iterator it = headers.getAllHeaders();
+            Iterator<?> it = headers.getAllHeaders();
             boolean hasAuth = false; // true if we find explicit Auth header
             while (it.hasNext()) {
                 MimeHeader header = (MimeHeader) it.next();
@@ -370,7 +370,7 @@ class HttpSOAPConnection extends SOAPConnection {
             log.severe("SAAJ0011.p2p.get.already.closed.conn");
             throw new SOAPExceptionImpl("Connection is closed");
         }
-        Class urlEndpointClass = null;
+        Class<?> urlEndpointClass = null;
 
         try {
             urlEndpointClass = Class.forName("javax.xml.messaging.URLEndpoint");
@@ -606,7 +606,7 @@ class HttpSOAPConnection extends SOAPConnection {
                 log.log(Level.FINE, "SAAJ0054.p2p.set.providers",
                         new String[] { pkgs });
             try {
-                Class c = Class.forName(SSL_PROVIDER);
+                Class<?> c = Class.forName(SSL_PROVIDER);
                 Provider p = (Provider) c.newInstance();
                 Security.addProvider(p);
                 if (log.isLoggable(Level.FINE))
