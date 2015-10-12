@@ -91,10 +91,8 @@ public class XMLDeclarationParser {
      {
         int c = 0;
         int index = 0;
-        char[] aChar = new char[65535];
-        StringBuffer xmlDeclStr = new StringBuffer();
+        StringBuilder xmlDeclStr = new StringBuilder();
         while ((c = m_pushbackReader.read()) != -1) {
-            aChar[index] = (char)c;
             xmlDeclStr.append((char)c);
             index++;
             if (c == '>') {
@@ -119,7 +117,7 @@ public class XMLDeclarationParser {
 
         // no XML decl
         if (!utf16 && !utf8) {
-            m_pushbackReader.unread(aChar, 0, len);
+            m_pushbackReader.unread(decl.toCharArray(), 0, len);
             return;
         }
         m_hasHeader = true;
