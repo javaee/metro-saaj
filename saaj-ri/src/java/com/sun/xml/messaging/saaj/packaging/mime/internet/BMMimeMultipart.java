@@ -720,7 +720,7 @@ public  class BMMimeMultipart extends MimeMultipart {
         String bnd = "--" + contentType.getParameter("boundary");
         for (int i = 0; i < parts.size(); i++) {
             OutputUtil.writeln(bnd, os); // put out boundary
-            ((MimeBodyPart)parts.get(i)).writeTo(os);
+            parts.get(i).writeTo(os);
             OutputUtil.writeln(os); // put out empty line
         }
                                                                                 

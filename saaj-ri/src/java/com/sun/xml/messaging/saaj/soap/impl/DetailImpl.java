@@ -92,8 +92,8 @@ public abstract class DetailImpl extends FaultElementImpl implements Detail {
     }
 
     public Iterator getDetailEntries() {
-        return new Iterator() {
-            Iterator eachNode = getChildElementNodes();
+        return new Iterator<SOAPElement>() {
+            Iterator<org.w3c.dom.Node> eachNode = getChildElementNodes();
             SOAPElement next = null;
             SOAPElement last = null;
 
@@ -110,7 +110,7 @@ public abstract class DetailImpl extends FaultElementImpl implements Detail {
                 return next != null;
             }
 
-            public Object next() {
+            public SOAPElement next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }

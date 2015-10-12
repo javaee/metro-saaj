@@ -146,7 +146,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
     }
 
     protected SOAPElement findFault() {
-        Iterator eachChild = getChildElementNodes();
+        Iterator<Node> eachChild = getChildElementNodes();
         while (eachChild.hasNext()) {
             SOAPElement child = (SOAPElement) eachChild.next();
             if (isFault(child)) {
@@ -262,7 +262,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
             org.w3c.dom.Node replacingNode = ownerDoc.importNode(docFrag, true);
             // Adding replacingNode at the last of the children list of body
             addNode(replacingNode);
-            Iterator i =
+            Iterator<Node> i =
                 getChildElements(NameImpl.copyElementName(rootElement));
             // Return the child element with the required name which is at the
             // end of the list
@@ -299,7 +299,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
 
     public Document extractContentAsDocument() throws SOAPException {
 
-        Iterator eachChild = getChildElements();
+        Iterator<Node> eachChild = getChildElements();
         javax.xml.soap.Node firstBodyElement = null;
 
         while (eachChild.hasNext() &&

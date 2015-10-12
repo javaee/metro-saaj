@@ -47,7 +47,7 @@ import java.util.Collection;
  * {@link ArrayList} with a final marker to help JIT.
  * @author Kohsuke Kawaguchi
  */
-public final class FinalArrayList extends ArrayList {
+public final class FinalArrayList<E> extends ArrayList<E> {
     public FinalArrayList(int initialCapacity) {
         super(initialCapacity);
     }
@@ -55,7 +55,7 @@ public final class FinalArrayList extends ArrayList {
     public FinalArrayList() {
     }
 
-    public FinalArrayList(Collection collection) {
+    public FinalArrayList(Collection<? extends E> collection) {
         super(collection);
     }
 

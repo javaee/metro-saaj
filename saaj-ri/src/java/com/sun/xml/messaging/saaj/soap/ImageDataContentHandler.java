@@ -146,9 +146,9 @@ public class ImageDataContentHandler extends Component
                     + obj.getClass().toString());
             }
             ImageWriter writer = null;
-            Iterator i = ImageIO.getImageWritersByMIMEType(type);
+            Iterator<ImageWriter> i = ImageIO.getImageWritersByMIMEType(type);
             if (i.hasNext()) {
-                writer = (ImageWriter)i.next();
+                writer = i.next();
             }
             if (writer != null) {
                 ImageOutputStream stream = null;

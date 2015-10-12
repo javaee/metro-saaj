@@ -59,7 +59,7 @@ public class FastInfosetReflection {
     /**
      * FI DOMDocumentParser constructor using reflection.
      */
-    static Constructor fiDOMDocumentParser_new;
+    static Constructor<?> fiDOMDocumentParser_new;
     
     /**
      * FI <code>DOMDocumentParser.parse()</code> method via reflection.
@@ -69,7 +69,7 @@ public class FastInfosetReflection {
     /**
      * FI DOMDocumentSerializer constructor using reflection.
      */
-    static Constructor fiDOMDocumentSerializer_new;
+    static Constructor<?> fiDOMDocumentSerializer_new;
     
     /**
      * FI <code>FastInfosetSource.serialize(Document)</code> method via reflection.
@@ -84,12 +84,12 @@ public class FastInfosetReflection {
     /**
      * FI FastInfosetSource constructor using reflection.
      */
-    static Class fiFastInfosetSource_class;
+    static Class<?> fiFastInfosetSource_class;
     
     /**
      * FI FastInfosetSource constructor using reflection.
      */
-    static Constructor fiFastInfosetSource_new;
+    static Constructor<?> fiFastInfosetSource_new;
     
     /**
      * FI <code>FastInfosetSource.getInputStream()</code> method via reflection.
@@ -104,7 +104,7 @@ public class FastInfosetReflection {
     /**
      * FI FastInfosetResult constructor using reflection.
      */
-    static Constructor fiFastInfosetResult_new;
+    static Constructor<?> fiFastInfosetResult_new;
     
     /**
      * FI <code>FastInfosetResult.getOutputSTream()</code> method via reflection.
@@ -113,7 +113,7 @@ public class FastInfosetReflection {
     
     static {
         try {
-            Class clazz = Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentParser");
+            Class<?> clazz = Class.forName("com.sun.xml.fastinfoset.dom.DOMDocumentParser");
             fiDOMDocumentParser_new = clazz.getConstructor((Class[]) null);
             fiDOMDocumentParser_parse = clazz.getMethod("parse",
                 new Class[] { org.w3c.dom.Document.class, java.io.InputStream.class });
@@ -194,7 +194,7 @@ public class FastInfosetReflection {
             "org.jvnet.fastinfoset.FastInfosetSource");
     }
 
-    public static Class getFastInfosetSource_class() {
+    public static Class<?> getFastInfosetSource_class() {
         if (fiFastInfosetSource_class == null) {
             throw new RuntimeException("Unable to locate Fast Infoset implementation");
         }
