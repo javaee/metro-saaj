@@ -42,6 +42,7 @@ package com.sun.xml.messaging.saaj.soap;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPException;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 
 import org.jvnet.staxex.util.XMLStreamReaderToXMLStreamWriter;
@@ -80,14 +81,14 @@ public class StaxReaderBridge extends StaxBridge {
     }
 
     public QName getPayloadQName() {
-        return (in.getEventType() == in.START_ELEMENT) ? in.getName() : null;
+        return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getName() : null;
     }
     
     public String getPayloadAttributeValue(String attName) {
-        return (in.getEventType() == in.START_ELEMENT) ? in.getAttributeValue(null, attName) : null;
+        return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getAttributeValue(null, attName) : null;
     }
 
     public String getPayloadAttributeValue(QName attName) {
-        return (in.getEventType() == in.START_ELEMENT) ? in.getAttributeValue(attName.getNamespaceURI(), attName.getLocalPart()) : null;
+        return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getAttributeValue(attName.getNamespaceURI(), attName.getLocalPart()) : null;
     }
 }
