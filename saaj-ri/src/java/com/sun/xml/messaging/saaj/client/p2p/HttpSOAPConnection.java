@@ -456,7 +456,7 @@ class HttpSOAPConnection extends SOAPConnection {
             httpConnection.setDoOutput(true);
             httpConnection.setDoInput(true);
             httpConnection.setUseCaches(false);
-            httpConnection.setFollowRedirects(true);
+            httpConnection.setInstanceFollowRedirects(true);
 
             httpConnection.connect();
 
