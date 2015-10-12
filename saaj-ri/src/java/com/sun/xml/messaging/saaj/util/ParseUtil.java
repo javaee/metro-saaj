@@ -57,7 +57,7 @@ public class ParseUtil {
      * represent.
      */
     public static String decode(String s) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         int i=0;
         while (i<s.length()) {

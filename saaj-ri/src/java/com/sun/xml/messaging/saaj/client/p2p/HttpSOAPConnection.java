@@ -224,7 +224,7 @@ class HttpSOAPConnection extends SOAPConnection {
                         header.getName(),
                         header.getValue());
                 else {
-                    StringBuffer concat = new StringBuffer();
+                    StringBuilder concat = new StringBuilder();
                     int i = 0;
                     while (i < values.length) {
                         if (i != 0)

@@ -219,7 +219,7 @@ public final class ContentType {
 	if (primaryType == null || subType == null) // need both
 	    return null;
 
-	StringBuffer sb = new StringBuffer();
+	StringBuilder sb = new StringBuilder();
 	sb.append(primaryType).append('/').append(subType);
 	if (list != null)
         // Http Binding section of the "SOAP with attachments" specification says,

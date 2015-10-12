@@ -361,7 +361,7 @@ public class HeaderTokenizer {
      * quoted string.
      */
     private static String filterToken(String s, int start, int end) {
-	StringBuffer sb = new StringBuffer();
+	StringBuilder sb = new StringBuilder();
 	char c;
 	boolean gotEscape = false;
 	boolean gotCR = false;
