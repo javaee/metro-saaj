@@ -147,9 +147,9 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
         boolean mustUnderstand) {
         List<SOAPHeaderElement> elementList = new ArrayList<SOAPHeaderElement>();
 
-        Iterator<Node> eachChild = getChildElements();
+        Iterator<org.w3c.dom.Node> eachChild = getChildElements();
 
-        Node currentChild = iterate(eachChild);
+        org.w3c.dom.Node currentChild = iterate(eachChild);
         while (currentChild != null) {
             if (!(currentChild instanceof SOAPHeaderElement)) {
                 currentChild = iterate(eachChild);
