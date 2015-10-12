@@ -46,8 +46,6 @@
 
 package com.sun.xml.messaging.saaj.packaging.mime.util;
 
-import com.sun.xml.messaging.saaj.util.ByteOutputStream;
-
 import java.io.OutputStream;
 import java.io.IOException;
 

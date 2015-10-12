@@ -177,8 +177,8 @@ public class ElementImpl
                    !(currentAncestor instanceof Document)) {
 
                 if (currentAncestor instanceof ElementImpl) {
-                    QName name = ((ElementImpl) currentAncestor).getElementQName();
                     /*
+                    QName name = ((ElementImpl) currentAncestor).getElementQName();
                     if (prefix.equals(name.getPrefix())) {
                         String uri = name.getNamespaceURI();
                         if ("".equals(uri)) {

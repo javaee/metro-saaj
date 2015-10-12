@@ -44,8 +44,6 @@
 */
 package com.sun.xml.messaging.saaj.soap.ver1_2;
 
-import java.util.List;
-import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -55,7 +53,6 @@ import javax.xml.soap.*;
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
 import com.sun.xml.messaging.saaj.soap.SOAPDocument;
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
-import com.sun.xml.messaging.saaj.soap.impl.HeaderElementImpl;
 import com.sun.xml.messaging.saaj.soap.impl.HeaderImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;

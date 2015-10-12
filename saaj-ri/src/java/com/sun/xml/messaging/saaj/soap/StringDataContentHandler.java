@@ -45,7 +45,6 @@ import java.io.*;
 
 import javax.activation.*;
 import com.sun.xml.messaging.saaj.packaging.mime.internet.MimeUtility;
-import com.sun.xml.messaging.saaj.packaging.mime.util.ASCIIUtility;
 import com.sun.xml.messaging.saaj.packaging.mime.internet.ContentType;
 
 /**

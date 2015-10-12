@@ -44,7 +44,6 @@
 */
 package com.sun.xml.messaging.saaj.soap.ver1_1;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.xml.soap.SOAPConstants;

@@ -44,8 +44,6 @@
 */
 package com.sun.xml.messaging.saaj.soap.ver1_2;
 
-import java.util.logging.Logger;
-
 import javax.xml.namespace.QName;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPElement;
@@ -57,10 +55,6 @@ import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 
 public class HeaderElement1_2Impl extends HeaderElementImpl {
 
-    private static final Logger log =
-        Logger.getLogger(HeaderElement1_2Impl.class.getName(),
-                         "com.sun.xml.messaging.saaj.soap.ver1_2.LocalStrings");
-       
     public HeaderElement1_2Impl(SOAPDocumentImpl ownerDoc, Name qname) {
         super(ownerDoc, qname);
     }

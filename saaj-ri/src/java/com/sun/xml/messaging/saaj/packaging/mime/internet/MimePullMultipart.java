@@ -46,7 +46,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import javax.activation.DataSource;
-import javax.xml.soap.AttachmentPart;
 import org.jvnet.mimepull.MIMEConfig;
 import org.jvnet.mimepull.MIMEMessage;
 import org.jvnet.mimepull.MIMEPart;

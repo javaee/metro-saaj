@@ -65,9 +65,7 @@ import com.sun.xml.messaging.saaj.util.*;
 class HttpSOAPConnection extends SOAPConnection {
 
     public static final String vmVendor = SAAJUtil.getSystemProperty("java.vendor.url");
-    private static final String sunVmVendor = "http://java.sun.com/";
     private static final String ibmVmVendor = "http://www.ibm.com/";
-    private static final boolean isSunVM = sunVmVendor.equals(vmVendor) ? true: false;
     private static final boolean isIBMVM = ibmVmVendor.equals(vmVendor) ? true : false;
     private static final String JAXM_URLENDPOINT="javax.xml.messaging.URLEndpoint";
     

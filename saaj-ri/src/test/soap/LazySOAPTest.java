@@ -49,7 +49,6 @@ import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.stream.XMLOutputFactory;
@@ -58,10 +57,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.sun.xml.messaging.saaj.soap.LazyEnvelope;
 import com.sun.xml.messaging.saaj.soap.MessageImpl;
-import com.sun.xml.messaging.saaj.soap.impl.BodyImpl;
-import com.sun.xml.messaging.saaj.soap.impl.HeaderImpl;
 
 import junit.framework.TestCase;
 
