@@ -191,6 +191,10 @@
                             <argLine>-Djdk.build=true</argLine>
                             <!-- some random non-existing directory to make sure the built classes are not found, instead the ones from jdk are used -->
                             <classesDirectory>jerreAbfAFgfreu</classesDirectory>
+                            <excludes>
+                                <!-- tests using RI specific API -->
+                                <exclude>**/MimeUtilityTest.java</exclude>
+                            </excludes>
                             <classpathDependencyScopeExcludes>compile</classpathDependencyScopeExcludes>
                             <classpathDependencyExcludes>
                                 <classpathDependencyExcludes>javax.xml.soap:javax.xml.soap-api</classpathDependencyExcludes>
@@ -219,6 +223,10 @@
                             <argLine>-Djdk.build=true -Djava.security.manager -Djava.security.policy=./src/test/test.policy</argLine>
                             <!-- some random non-existing directory to make sure the built classes are not found, instead the ones from jdk are used -->
                             <classesDirectory>jerreAbfAFgfreu</classesDirectory>
+                            <excludes>
+                                <!-- tests using RI specific API -->
+                                <exclude>**/MimeUtilityTest.java</exclude>
+                            </excludes>
                             <classpathDependencyScopeExcludes>compile</classpathDependencyScopeExcludes>
                             <classpathDependencyExcludes>
                                 <classpathDependencyExcludes>javax.xml.soap:javax.xml.soap-api</classpathDependencyExcludes>
