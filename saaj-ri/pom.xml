@@ -188,7 +188,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>2.16</version>
                         <configuration>
-                            <argLine>-Djdk.build=true</argLine>
+                            <argLine>${proxyOpts} -Djdk.build=true</argLine>
                             <!-- some random non-existing directory to make sure the built classes are not found, instead the ones from jdk are used -->
                             <classesDirectory>jerreAbfAFgfreu</classesDirectory>
                             <excludes>
@@ -220,7 +220,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <version>2.16</version>
                         <configuration>
-                            <argLine>-Djdk.build=true -Djava.security.manager -Djava.security.policy=./src/test/test.policy</argLine>
+                            <argLine>${proxyOpts} -Djdk.build=true -Djava.security.manager -Djava.security.policy=./src/test/test.policy</argLine>
                             <!-- some random non-existing directory to make sure the built classes are not found, instead the ones from jdk are used -->
                             <classesDirectory>jerreAbfAFgfreu</classesDirectory>
                             <excludes>
@@ -278,12 +278,12 @@
             <dependency>
                 <groupId>org.jvnet.mimepull</groupId>
                 <artifactId>mimepull</artifactId>
-                <version>1.9</version>
+                <version>1.9.7</version>
             </dependency>
 			<dependency>
 				<groupId>org.jvnet.staxex</groupId>
 				<artifactId>stax-ex</artifactId>
-				<version>1.7.7</version>
+				<version>1.7.8</version>
 			</dependency>
             <dependency>
                 <groupId>junit</groupId>
