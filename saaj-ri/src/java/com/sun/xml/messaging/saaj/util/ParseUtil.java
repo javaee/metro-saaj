@@ -55,6 +55,10 @@ public class ParseUtil {
      * Returns a new String constructed from the specified String by replacing
      * the URL escape sequences and UTF8 encoding with the characters they 
      * represent.
+     *
+     * @param s string
+     *
+     * @return decoded string
      */
     public static String decode(String s) {
         StringBuilder sb = new StringBuilder();

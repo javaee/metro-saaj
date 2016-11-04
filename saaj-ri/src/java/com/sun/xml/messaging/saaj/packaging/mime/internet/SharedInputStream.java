@@ -88,6 +88,9 @@ public interface SharedInputStream {
 
     /**
      * Writes the specified region to another {@link OutputStream}.
+     * @param	start	the starting position
+     * @param	end	the ending position + 1
+     * @param	out output stream
      */
     public void writeTo(long start,long end, OutputStream out);
 }

@@ -80,11 +80,11 @@ import com.sun.xml.messaging.saaj.util.SAAJUtil;
  * <p>
  * Note that to get the actual bytes of a mail-safe String (say,
  * for sending over SMTP), one must do 
- * <p><blockquote><pre>
+ * <blockquote><pre>
  *
  *	byte[] bytes = string.getBytes("iso-8859-1");	
  *
- * </pre></blockquote><p>
+ * </pre></blockquote>
  * 
  * The <code>setHeader</code> and <code>addHeader</code> methods
  * on MimeMessage and MimeBodyPart assume that the given header values
@@ -237,6 +237,10 @@ public class MimeUtility {
      * <code>DataHandler</code> uses a thread, a pair of pipe streams,
      * and the <code>writeTo</code> method to produce the data. <p>
      *
+     * @param dh data handler
+     *
+     * @return encoding
+     *
      * @since	JavaMail 1.2
      */
     public static String getEncoding(DataHandler dh) {
@@ -309,6 +313,7 @@ public class MimeUtility {
      * @param	is		input stream
      * @param	encoding	the encoding of the stream.
      * @return			decoded input stream.
+     * @exception MessagingException in case of error
      */
     public static InputStream decode(InputStream is, String encoding)
 		throws MessagingException {
@@ -338,6 +343,7 @@ public class MimeUtility {
      * @param	encoding	the encoding of the stream. 
      * @return			output stream that applies the
      *				specified encoding.
+     * @exception MessagingException in case of error
      */
     public static OutputStream encode(OutputStream os, String encoding)
 		throws MessagingException {
@@ -373,6 +379,7 @@ public class MimeUtility {
      *                          with uuencode)
      * @return                  output stream that applies the
      *                          specified encoding.
+     * @exception MessagingException in case of error
      * @since                   JavaMail 1.2
      */
     public static OutputStream encode(OutputStream os, String encoding,
@@ -412,7 +419,7 @@ public class MimeUtility {
      * "unstructured" RFC 822 headers. <p>
      *
      * Example of usage:
-     * <p><blockquote><pre>
+     * <blockquote><pre>
      *
      *  MimeBodyPart part = ...
      *  String rawvalue = "FooBar Mailer, Japanese version 1.1"
@@ -426,7 +433,7 @@ public class MimeUtility {
      *   // setHeader() failure
      *  }
      *
-     * </pre></blockquote><p>
+     * </pre></blockquote>
      * 
      * @param	text	unicode string
      * @return	Unicode string containing only US-ASCII characters
@@ -461,6 +468,7 @@ public class MimeUtility {
      *		encoded are in the ASCII charset, otherwise "B" encoding
      *		is used.
      * @return	Unicode string containing only US-ASCII characters
+     * @exception UnsupportedEncodingException in case of unsupported encoding
      */
     public static String encodeText(String text, String charset,
 				    String encoding)
@@ -479,7 +487,7 @@ public class MimeUtility {
      * returned as-is <p>
      *
      * Example of usage:
-     * <p><blockquote><pre>
+     * <blockquote><pre>
      *
      *  MimeBodyPart part = ...
      *  String rawvalue = null;
@@ -494,9 +502,10 @@ public class MimeUtility {
      *
      *  return value;
      *
-     * </pre></blockquote><p>
+     * </pre></blockquote>
      *
      * @param	etext	the possibly encoded value
+     * @return decoded text
      * @exception       UnsupportedEncodingException if the charset
      *			conversion failed.
      */
@@ -583,7 +592,7 @@ public class MimeUtility {
      * The InternetAddress class, for example, uses this to encode
      * it's 'phrase' component.
      *
-     * @param	text	unicode string
+     * @param	word	unicode string
      * @return	Array of Unicode strings containing only US-ASCII 
      *		characters.
      * @exception UnsupportedEncodingException if the encoding fails
@@ -605,7 +614,7 @@ public class MimeUtility {
      * The resulting bytes are then returned as a Unicode string 
      * containing only ASCII characters. <p>
      * 
-     * @param	text	unicode string
+     * @param	word	unicode string
      * @param	charset	the MIME charset
      * @param	encoding the encoding to be used. Currently supported
      *		values are "B" and "Q". If this parameter is null, then
@@ -735,6 +744,7 @@ public class MimeUtility {
      * fails, an UnsupportedEncodingException is thrown.<p>
      *
      * @param	eword	the possibly encoded value
+     * @return deocoded word
      * @exception       ParseException if the string is not an
      *			encoded-word as per RFC 2047.
      * @exception       UnsupportedEncodingException if the charset
@@ -862,8 +872,8 @@ public class MimeUtility {
      * @param	word	word to be quoted
      * @param	specials the set of special characters
      * @return		the possibly quoted word
-     * @see	javax.mail.internet.HeaderTokenizer#MIME
-     * @see	javax.mail.internet.HeaderTokenizer#RFC822
+     * @see	com.sun.xml.messaging.saaj.packaging.mime.internet.HeaderTokenizer#MIME
+     * @see	com.sun.xml.messaging.saaj.packaging.mime.internet.HeaderTokenizer#RFC822
      */
     public static String quote(String word, String specials) {
 	int len = word.length();
@@ -1126,7 +1136,8 @@ public class MimeUtility {
 	    } catch (SecurityException sex) {
 		
 		class NullInputStream extends InputStream {
-		    public int read() {
+		    @Override
+                   public int read() {
 			return 0;
 		    }
 		}
@@ -1292,7 +1303,7 @@ public class MimeUtility {
 	int l = s.length();
 
 	for (int i = 0; i < l; i++) {
-	    if (nonascii((int)s.charAt(i))) // non-ascii
+	    if (nonascii(s.charAt(i))) // non-ascii
 		non_ascii++;
 	    else
 		ascii++;
@@ -1459,14 +1470,17 @@ class AsciiOutputStream extends OutputStream {
 	checkEOL = encodeEolStrict && breakOnNonAscii;
     }
 
+    @Override
     public void write(int b) throws IOException {
 	check(b);
     }
 
+    @Override
     public void write(byte b[]) throws IOException {
 	write(b, 0, b.length);
     }
 
+    @Override
     public void write(byte b[], int off, int len) throws IOException {
 	len += off;
 	for (int i = off; i < len ; i++)

@@ -63,13 +63,12 @@ import java.util.NoSuchElementException;
  * until the blank line that indicates end of header. The input stream
  * is positioned at the start of the body. The lines are stored
  * within the object and can be extracted as either Strings or
- * {@link Header} objects. <p>
- * <p/>
+ * {@link Header} objects.
+ * <p>
  * This class is mostly intended for service providers. MimeMessage
- * and MimeBody use this class for holding their headers. <p>
- * <p/>
- * <hr> <strong>A note on RFC822 and MIME headers</strong><p>
- * <p/>
+ * and MimeBody use this class for holding their headers.
+ * <hr> <strong>A note on RFC822 and MIME headers</strong>
+ * <p>
  * RFC822 and MIME header fields <strong>must</strong> contain only
  * US-ASCII characters. If a header contains non US-ASCII characters,
  * it must be encoded as per the rules in RFC 2047. The MimeUtility
@@ -80,7 +79,7 @@ import java.util.NoSuchElementException;
  * header fields must be folded (wrapped) before being sent if they
  * exceed the line length limitation for the transport (1000 bytes for
  * SMTP).  Received headers may have been folded.  The application is
- * responsible for folding and unfolding headers as appropriate. <p>
+ * responsible for folding and unfolding headers as appropriate.
  *
  * @author John Mani
  * @author Bill Shannon
@@ -105,12 +104,13 @@ public final class InternetHeaders {
      * Read and parse the given RFC822 message stream till the
      * blank line separating the header from the body. The input
      * stream is left positioned at the start of the body. The
-     * header lines are stored internally. <p>
-     * <p/>
+     * header lines are stored internally.
+     * <p>
      * For efficiency, wrap a BufferedInputStream around the actual
      * input stream and pass it as the parameter.
      *
      * @param	is RFC822 input stream
+     * @exception MessagingException in case of error
      */
     public InternetHeaders(InputStream is) throws MessagingException {
         load(is);
@@ -119,13 +119,14 @@ public final class InternetHeaders {
     /**
      * Read and parse the given RFC822 message stream till the
      * blank line separating the header from the body. Store the
-     * header lines inside this InternetHeaders object. <p>
-     * <p/>
+     * header lines inside this InternetHeaders object.
+     * <p>
      * Note that the header lines are added into this InternetHeaders
      * object, so any existing headers in this object will not be
      * affected.
      *
      * @param	is RFC822 input stream
+     * @exception MessagingException in case of error
      */
     public void load(InputStream is) throws MessagingException {
         // Read header lines until a blank line. It is valid
@@ -223,9 +224,9 @@ public final class InternetHeaders {
     /**
      * Change the first header line that matches name
      * to have value, adding a new header if no existing header
-     * matches. Remove all matching headers but the first. <p>
-     * <p/>
-     * Note that RFC822 headers can only contain US-ASCII characters
+     * matches. Remove all matching headers but the first.
+     * <p>
+     * Note that RFC822 headers can only contain US-ASCII characters.
      *
      * @param	name	header name
      * @param	value	header value
@@ -257,8 +258,7 @@ public final class InternetHeaders {
     }
 
     /**
-     * Add a header with the specified name and value to the header list. <p>
-     * <p/>
+     * Add a header with the specified name and value to the header list.
      * Note that RFC822 headers can only contain US-ASCII characters.
      *
      * @param	name	header name
@@ -307,8 +307,8 @@ public final class InternetHeaders {
     /**
      * Add an RFC822 header line to the header store.
      * If the line starts with a space or tab (a continuation line),
-     * add it to the last header line in the list. <p>
-     * <p/>
+     * add it to the last header line in the list.
+     * <p>
      * Note that RFC822 headers can only contain US-ASCII characters
      *
      * @param	line	raw RFC822 header line
@@ -331,15 +331,19 @@ public final class InternetHeaders {
 
     /**
      * Return all the header lines as a collection
+     *
+     * @return list of header lines.
      */
     public List<String> getAllHeaderLines() {
         if(headerValueView==null)
             headerValueView = new AbstractList<String>() {
-                public String get(int index) {
+                @Override
+				public String get(int index) {
                     return headers.get(index).line;
                 }
 
-                public int size() {
+                @Override
+				public int size() {
                     return headers.size();
                 }
             };
@@ -383,6 +387,7 @@ class hdr implements Header {
     /*
      * Return the "name" part of the header line.
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -390,6 +395,7 @@ class hdr implements Header {
     /*
      * Return the "value" part of the header line.
      */
+    @Override
     public String getValue() {
         int i = line.indexOf(':');
         if (i < 0)

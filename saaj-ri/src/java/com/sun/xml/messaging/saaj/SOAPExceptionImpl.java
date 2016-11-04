@@ -101,6 +101,7 @@ public class SOAPExceptionImpl extends SOAPException {
     /**
      * Constructs a <code>SOAPExceptionImpl</code> object initialized
      * with the given <code>Throwable</code> object.
+     * @param cause cause
      */
     public SOAPExceptionImpl(Throwable cause) {
 	super (cause.toString());
@@ -121,6 +122,7 @@ public class SOAPExceptionImpl extends SOAPException {
      *         message of the embedded <code>Throwable</code> object,
      *         if there is one
      */
+    @Override
     public String getMessage() {
    	String message = super.getMessage ();
 	if (message == null && cause != null) {
@@ -139,6 +141,7 @@ public class SOAPExceptionImpl extends SOAPException {
      *         if there is none
      */
 
+    @Override
     public Throwable getCause() {
 	return cause;
     }
@@ -172,7 +175,8 @@ public class SOAPExceptionImpl extends SOAPException {
      *         method has already been called on this <code>SOAPExceptionImpl</code>
      *         object
      */
-    public synchronized Throwable initCause(Throwable cause) 
+    @Override
+    public synchronized Throwable initCause(Throwable cause)
     {
    	if(this.cause != null) {
 	    throw new IllegalStateException("Can't override cause");
@@ -185,6 +189,7 @@ public class SOAPExceptionImpl extends SOAPException {
 	return this;
     }
     
+    @Override
     public void printStackTrace() {
         super.printStackTrace();
         if (cause != null) {
@@ -193,6 +198,7 @@ public class SOAPExceptionImpl extends SOAPException {
         }
     }
 
+    @Override
     public void printStackTrace(PrintStream s) {
         super.printStackTrace(s);
         if (cause != null) {
@@ -201,6 +207,7 @@ public class SOAPExceptionImpl extends SOAPException {
         }
     }
 
+    @Override
     public void printStackTrace(PrintWriter s) {
         super.printStackTrace(s);
         if (cause != null) {

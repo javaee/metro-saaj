@@ -79,6 +79,10 @@ public final class LineInputStream extends FilterInputStream {
      *
      * This class is similar to the deprecated 
      * <code>DataInputStream.readLine()</code>
+     *
+     * @return line.
+     *
+     * @throws IOException if an I/O error occurs.
      */
     public String readLine() throws IOException {
 	InputStream in = this.in;

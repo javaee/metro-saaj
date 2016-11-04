@@ -84,7 +84,7 @@ public interface MultipartDataSource extends DataSource {
      * @return          the MimeBodyPart
      * @exception       IndexOutOfBoundsException if the given index
      *			is out of range.
-     * @exception       MessagingException
+     * @exception       MessagingException thrown in case of error
      */
     public MimeBodyPart getBodyPart(int index) throws MessagingException;
 

@@ -69,6 +69,11 @@ public abstract class OutputUtil {
 
     /**
      * Writes a string as ASCII string.
+     *
+     * @param s string.
+     * @param out output stream.
+     *
+     * @throws IOException if an I/O error occurs.
      */
     public static void writeAsAscii(String s,OutputStream out) throws IOException {
         int len = s.length();

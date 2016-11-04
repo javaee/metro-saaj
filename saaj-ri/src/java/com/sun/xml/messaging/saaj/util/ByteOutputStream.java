@@ -57,6 +57,7 @@ import java.io.ByteArrayInputStream;
  * <li>doesn't do synchronization
  * <li>allows access to the raw buffer
  * <li>almost no parameter check
+ * </ol>
  */
 public final class ByteOutputStream extends OutputStream {
     /**
@@ -79,6 +80,9 @@ public final class ByteOutputStream extends OutputStream {
 
     /**
      * Copies all the bytes from this input into this buffer.
+     *
+     * @param in input stream.
+     * @exception IOException in case of an I/O error.
      */
     public void write(InputStream in) throws IOException {
         if (in instanceof ByteArrayInputStream) {
@@ -99,6 +103,7 @@ public final class ByteOutputStream extends OutputStream {
         }
     }
 
+    @Override
     public void write(int b) {
         ensureCapacity(1);
         buf[count] = (byte) b;
@@ -117,18 +122,22 @@ public final class ByteOutputStream extends OutputStream {
         }
     }
 
+    @Override
     public void write(byte[] b, int off, int len) {
         ensureCapacity(len);
         System.arraycopy(b, off, buf, count, len);
         count += len;
     }
 
+    @Override
     public void write(byte[] b) {
     	write(b, 0, b.length);
     }
 
     /**
      * Writes a string as ASCII string.
+     *
+     * @param s string to write.
      */
     public void writeAsAscii(String s) {
         int len = s.length();
@@ -153,9 +162,12 @@ public final class ByteOutputStream extends OutputStream {
      * Evil buffer reallocation method. 
      * Don't use it unless you absolutely have to.
      *
+     * @return byte array
+     *
      * @deprecated
      *      because this is evil!
      */
+    @Deprecated
     public byte toByteArray()[] {
         byte[] newbuf = new byte[count];
         System.arraycopy(buf, 0, newbuf, 0, count);
@@ -177,10 +189,12 @@ public final class ByteOutputStream extends OutputStream {
      * @return String translated from the buffer's contents.
      * @since JDK1.1
      */
+    @Override
     public String toString() {
         return new String(buf, 0, count);
     }
 
+    @Override
     public void close() {
     }
 

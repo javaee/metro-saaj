@@ -78,6 +78,9 @@ public class SOAPVersionMismatchException extends SOAPExceptionImpl {
     /**
      * Constructs a <code>SOAPExceptionImpl</code> object initialized
      * with the given <code>Throwable</code> object.
+     *
+     * @param cause a <code>Throwable</code> object that is to
+     *        be embedded in this <code>SOAPExceptionImpl</code> object
      */
     public SOAPVersionMismatchException(Throwable cause) {
         super(cause);

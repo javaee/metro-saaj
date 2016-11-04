@@ -65,6 +65,8 @@ public final class MimePartDataSource implements DataSource {
 
     /**
      * Constructor, that constructs a DataSource from a MimeBodyPart.
+     *
+     * @param part body part
      */
     public MimePartDataSource(MimeBodyPart part) {
 	this.part = part;
@@ -83,6 +85,7 @@ public final class MimePartDataSource implements DataSource {
      *
      * @return 	decoded input stream
      */
+    @Override
     public InputStream getInputStream() throws IOException {
 
 	try {
@@ -103,7 +106,8 @@ public final class MimePartDataSource implements DataSource {
      *
      * This implementation throws the UnknownServiceException.
      */
-    public OutputStream getOutputStream() throws IOException {
+    @Override
+	public OutputStream getOutputStream() throws IOException {
 	throw new UnknownServiceException();
     }
 
@@ -113,6 +117,7 @@ public final class MimePartDataSource implements DataSource {
      * This implementation just invokes the <code>getContentType</code>
      * method on the MimeBodyPart.
      */
+    @Override
     public String getContentType() {
         return part.getContentType();
     }
@@ -122,7 +127,8 @@ public final class MimePartDataSource implements DataSource {
      *
      * This implementation just returns an empty string.
      */
-    public String getName() {
+    @Override
+	public String getName() {
 	try {
 		return part.getFileName();
 	} catch (MessagingException mex) {

@@ -84,6 +84,7 @@ public class QEncoderStream extends QPEncoderStream {
      * @param      c   the <code>byte</code>.
      * @exception  IOException  if an I/O error occurs.
      */
+    @Override
     public void write(int c) throws IOException {
 	c = c & 0xff; // Turn off the MSB.
 	if (c == ' ')
@@ -97,6 +98,11 @@ public class QEncoderStream extends QPEncoderStream {
 
     /**
      * Returns the length of the encoded version of this byte array.
+     *
+     * @param b byte array.
+     * @param encodingWord whether use word or text specials.
+     *
+     * @return length.
      */
     public static int encodedLength(byte[] b, boolean encodingWord) {
 	int len = 0;
