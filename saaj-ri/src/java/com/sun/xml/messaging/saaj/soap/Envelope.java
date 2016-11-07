@@ -56,16 +56,25 @@ import javax.xml.transform.Source;
 public interface Envelope extends SOAPEnvelope {
     /**
      * Get the content as a JAXP Source.
+     *
+     * @return source
      */
     Source getContent();
 
     /**
      * Output the content.
+     *
+     * @param out output stream.
+     * @exception IOException in case of an I/O error.
      */
     void output(OutputStream out) throws IOException;
     
     /**
      * Output the content.
+     *
+     * @param out output stream
+     * @param isFastInfoset true if it is fast infoset.
+     * @exception IOException in case of an I/O error.
      */
     void output(OutputStream out, boolean isFastInfoset) throws IOException;
     

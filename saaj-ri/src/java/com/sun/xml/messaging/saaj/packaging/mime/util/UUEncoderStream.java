@@ -98,23 +98,29 @@ public class UUEncoderStream extends FilterOutputStream {
     /**
      * Set up the buffer name and permission mode.
      * This method has any effect only if it is invoked before
-     * you start writing into the output stream
+     * you start writing into the output stream.
+     *
+     * @param name name to set for the buffer.
+     * @param mode permission mode.
      */
     public void setNameMode(String name, int mode) {
 	this.name = name;
 	this.mode = mode;
     }
 
+    @Override
     public void write(byte[] b, int off, int len) throws IOException {
 	for (int i = 0; i < len; i++)
 	    write(b[off + i]);
     }
 
+    @Override
     public void write(byte[] data) throws IOException {
 	write(data, 0, data.length);
     }
 
-    public void write(int c) throws IOException {
+    @Override
+	public void write(int c) throws IOException {
 	/* buffer up characters till we get a line's worth, then encode
 	 * and write them out. Max number of characters allowed per 
 	 * line is 45.
@@ -127,6 +133,7 @@ public class UUEncoderStream extends FilterOutputStream {
 	}
     }
 
+    @Override
     public void flush() throws IOException {
 	if (bufsize > 0) { // If there's unencoded characters in the buffer
 	    writePrefix();
@@ -136,6 +143,7 @@ public class UUEncoderStream extends FilterOutputStream {
 	out.flush();
     }
 
+    @Override
     public void close() throws IOException {
 	flush();
 	out.close();

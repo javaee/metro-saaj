@@ -62,9 +62,10 @@ public class FastInfosetDataContentHandler implements DataContentHandler {
     }
 
     /**
-     * return the DataFlavors for this <code>DataContentHandler</code>
+     * Return the DataFlavors for this <code>DataContentHandler</code>
      * @return The DataFlavors.
      */
+    @Override
     public DataFlavor[] getTransferDataFlavors() { // throws Exception;
         DataFlavor flavors[] = new DataFlavor[1];
         flavors[0] = new ActivationDataFlavor(
@@ -74,11 +75,13 @@ public class FastInfosetDataContentHandler implements DataContentHandler {
     }
 
     /**
-     * return the Transfer Data of type DataFlavor from InputStream
-     * @param df The DataFlavor.
-     * @param ins The InputStream corresponding to the data.
+     * Return the Transfer Data of type DataFlavor from InputStream
+     * @param flavor The DataFlavor.
+     * @param dataSource DataSource.
      * @return The constructed Object.
+     * @exception IOException in case of an I/O error
      */
+    @Override
     public Object getTransferData(DataFlavor flavor, DataSource dataSource)
         throws IOException 
     {
@@ -96,6 +99,7 @@ public class FastInfosetDataContentHandler implements DataContentHandler {
         return null;
     }
 
+    @Override
     public Object getContent(DataSource dataSource) throws IOException {
         try {
             return FastInfosetReflection.FastInfosetSource_new(
@@ -107,10 +111,11 @@ public class FastInfosetDataContentHandler implements DataContentHandler {
     }
 
     /**
-     * construct an object from a byte stream
+     * Construct an object from a byte stream
      * (similar semantically to previous method, we are deciding
      *  which one to support)
      */
+    @Override
     public void writeTo(Object obj, String mimeType, OutputStream os)
         throws IOException 
     {

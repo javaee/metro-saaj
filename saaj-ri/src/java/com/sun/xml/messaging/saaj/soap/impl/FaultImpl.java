@@ -98,6 +98,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
             (SOAPFaultElement) findAndConvertChildElement(getFaultStringName());
     }
 
+    @Override
     public void setFaultCode(String faultCode) throws SOAPException {
         setFaultCode(
             NameImpl.getLocalNameFromTagName(faultCode),
@@ -146,6 +147,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         }
     }
 
+    @Override
     public void setFaultCode(Name faultCodeQName) throws SOAPException {
         setFaultCode(
             faultCodeQName.getLocalName(),
@@ -153,6 +155,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
             faultCodeQName.getURI());
     }
 
+    @Override
     public void setFaultCode(QName faultCodeQName) throws SOAPException {
         setFaultCode(
             faultCodeQName.getLocalPart(),
@@ -180,6 +183,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         detail = (Detail) findAndConvertChildElement(detailName);
     }
 
+    @Override
     public Detail getDetail() {
         if (detail == null)
             initializeDetail();
@@ -190,6 +194,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         return detail;
     }
 
+    @Override
     public Detail addDetail() throws SOAPException {
         if (detail == null)
             initializeDetail();
@@ -203,12 +208,15 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         }
     }
 
+    @Override
     public boolean hasDetail() {
         return (getDetail() != null);
     }
 
+    @Override
     public abstract void setFaultActor(String faultActor) throws SOAPException;
 
+    @Override
     public String getFaultActor() {
         if (this.faultActorElement == null)
             findFaultActorElement();
@@ -218,6 +226,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         return null;
     }
 
+    @Override
     public SOAPElement setElementQName(QName newName) throws SOAPException {
         
         log.log(
@@ -228,6 +237,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
             "Cannot change name for " + elementQName.getLocalPart() + " to " + newName.getLocalPart());
     }
 
+    @Override
     protected SOAPElement convertToSoapElement(Element element) {
         if (element instanceof SOAPFaultElement) { 
             return (SOAPElement) element;
@@ -248,12 +258,12 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
             Name elementName = NameImpl.copyElementName(element);
             ElementImpl newElement;
             if (getDetailName().equals(elementName)) {
-                newElement = (ElementImpl) createDetail();
+                newElement = createDetail();
             } else {
                 String localName = elementName.getLocalName();
                 if (isStandardFaultElement(localName))
                     newElement =
-                        (ElementImpl) createSOAPFaultElement(elementName);
+                        createSOAPFaultElement(elementName);
                 else
                     newElement = (ElementImpl) createElement(elementName);
             }
@@ -299,6 +309,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         }
     }
 
+    @Override
     protected SOAPElement addElement(Name name) throws SOAPException {
         if (getDetailName().equals(name)) {
             return addDetail();
@@ -312,6 +323,7 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         return super.addElement(name);
     }
 
+    @Override
     protected SOAPElement addElement(QName name) throws SOAPException {
         return addElement(NameImpl.convertToName(name));
     }
@@ -326,6 +338,8 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
 
     /**
      * Convert an xml:lang attribute value into a Locale object
+     * @param xmlLang xml:lang attribute value
+     * @return Locale
      */
     protected static Locale xmlLangToLocale(String xmlLang) {
         if (xmlLang == null) {

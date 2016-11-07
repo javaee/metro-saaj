@@ -54,8 +54,8 @@ import java.io.Serializable;
 * string and fragment) that may constitute a URI.
 * <p>
 * Parsing of a URI specification is done according to the URI
-* syntax described in RFC 2396
-* <http://www.ietf.org/rfc/rfc2396.txt?number=2396>. Every URI consists
+* syntax described in <a href="http://www.ietf.org/rfc/rfc2396.txt?number=2396">
+* RFC 2396</a>. Every URI consists
 * of a scheme, followed by a colon (':'), followed by a scheme-specific
 * part. For URIs that follow the "generic URI" syntax, the scheme-
 * specific part begins with two slashes ("//") and may be followed
@@ -75,8 +75,6 @@ import java.io.Serializable;
 * scheme-specific functionality (for example, it does not know a
 * default port for a specific scheme). Rather, it only knows the
 * grammar and basic set of operations that can be applied to a URI.
-*
-* @version  
 *
 **********************************************************************/
  public class JaxmURI implements Serializable {
@@ -1122,6 +1120,7 @@ import java.io.Serializable;
   * @return true if p_test is a URI with all values equal to this
   *         URI, false otherwise
   */
+  @Override
   public boolean equals(Object p_test) {
     if (p_test instanceof JaxmURI) {
       JaxmURI testURI = (JaxmURI) p_test;
@@ -1150,6 +1149,7 @@ import java.io.Serializable;
     return false;
   }
   
+  @Override
   public int hashCode() {
 	  // No members safe to use, just default to a constant.
 	  return 153214;
@@ -1160,6 +1160,7 @@ import java.io.Serializable;
   *
   * @return the URI string specification
   */
+  @Override
   public String toString() {
     StringBuilder uriSpecString = new StringBuilder();
 
@@ -1188,6 +1189,8 @@ import java.io.Serializable;
   * Determine whether a scheme conforms to the rules for a scheme name.
   * A scheme is conformant if it starts with an alphanumeric, and
   * contains only alphanumerics, '+','-' and '.'.
+  *
+  * @param p_scheme scheme name
   *
   * @return true if the scheme is conformant, false otherwise
   */
@@ -1218,7 +1221,9 @@ import java.io.Serializable;
   * IPv4 address consists of four decimal digit groups separated by a
   * '.'. A hostname consists of domain labels (each of which must
   * begin and end with an alphanumeric but may contain '-') separated
-  & by a '.'. See RFC 2396 Section 3.2.2.
+  * by a '.'. See RFC 2396 Section 3.2.2.
+  *
+  * @param p_address address
   *
   * @return true if the string is a syntactically valid IPv4 address
   *              or hostname

@@ -54,8 +54,7 @@ import javax.xml.stream.XMLStreamWriter;
 public interface LazyEnvelopeSource extends javax.xml.transform.Source {    
     /**
      * Retrieve payload qname without materializing its contents
-     * @return
-     * @throws SOAPException
+     * @return payload QName
      */
     public QName getPayloadQName();   
     public XMLStreamReader readToBodyStarTag() throws XMLStreamException;

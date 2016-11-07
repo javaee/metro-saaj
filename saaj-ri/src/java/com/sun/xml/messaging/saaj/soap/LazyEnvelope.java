@@ -13,24 +13,24 @@ public interface LazyEnvelope extends Envelope {
     
     /**
      * Retrieve payload qname without materializing its contents
-     * @return
-     * @throws SOAPException
+     * @return QName
+     * @throws SOAPException in case of an error
      */
     public QName getPayloadQName() throws SOAPException;
     
     /**
      * Retrieve payload attribute value without materializing its contents
-     * @param localName
-     * @return
-     * @throws SOAPException
+     * @param localName local name
+     * @return payload attribute value
+     * @throws SOAPException in case of an error
      */
     public String getPayloadAttributeValue(String localName) throws SOAPException;
     
     /**
      * Retrieve payload attribute value without materializing its contents
-     * @param qName
-     * @return
-     * @throws SOAPException
+     * @param qName QName
+     * @return payload attribute value
+     * @throws SOAPException in case of an error
      */
     public String getPayloadAttributeValue(QName qName) throws SOAPException;
 }

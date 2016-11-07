@@ -115,6 +115,7 @@ public class ContentDisposition {
     /**
      * Return the specified parameter value. Returns <code>null</code>
      * if this parameter is absent.
+     * @param name parameter name.
      * @return	parameter value
      * @since		JavaMail 1.2
      */
@@ -138,7 +139,7 @@ public class ContentDisposition {
 
     /**
      * Set the primary type. Overrides existing primary type.
-     * @param	primaryType	primary type
+     * @param	disposition disposition value
      * @since		JavaMail 1.2
      */
     public void setDisposition(String disposition) {
@@ -177,6 +178,7 @@ public class ContentDisposition {
      * @return	RFC2045 style string
      * @since		JavaMail 1.2
      */
+    @Override
     public String toString() {
 	if (disposition == null)
 	    return null;

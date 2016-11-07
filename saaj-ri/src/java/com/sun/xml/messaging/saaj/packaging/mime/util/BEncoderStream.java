@@ -70,6 +70,10 @@ public class BEncoderStream extends BASE64EncoderStream {
 
     /**
      * Returns the length of the encoded version of this byte array.
+     *
+     * @param b byte array.
+     *
+     * @return length of the byte array.
      */
     public static int encodedLength(byte[] b) {
         return ((b.length + 2)/3) * 4;

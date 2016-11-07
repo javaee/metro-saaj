@@ -82,8 +82,9 @@ public class ImageDataContentHandler extends Component
      *
      * @return The DataFlavors.
      */
-    public DataFlavor[] getTransferDataFlavors() { 
-        return (DataFlavor[]) Arrays.copyOf(flavor, flavor.length);
+    @Override
+    public DataFlavor[] getTransferDataFlavors() {
+        return Arrays.copyOf(flavor, flavor.length);
     }
 
     /**
@@ -95,6 +96,7 @@ public class ImageDataContentHandler extends Component
      * @param ds The DataSource representing the data to be converted.
      * @return The constructed Object.
      */
+    @Override
     public Object getTransferData(DataFlavor df, DataSource ds)
         throws IOException {
         for (int i=0; i < flavor.length; i++) {
@@ -113,6 +115,7 @@ public class ImageDataContentHandler extends Component
      * @param ds The DataSource representing the data to be converted.
      * @return The constructed Object.
      */
+    @Override
     public Object getContent(DataSource ds) throws IOException {
         return ImageIO.read(new BufferedInputStream(ds.getInputStream()));
     }
@@ -122,11 +125,11 @@ public class ImageDataContentHandler extends Component
      * and write it to the output stream.
      *
      * @param obj   The object to be converted.
-     * @param mimeType  The requested MIME type of the resulting byte stream.
+     * @param type  The requested MIME type of the resulting byte stream.
      * @param os    The output stream into which to write the converted
      *          byte stream.
      */
-
+    @Override
     public void writeTo(Object obj, String type, OutputStream os)
         throws IOException {
 

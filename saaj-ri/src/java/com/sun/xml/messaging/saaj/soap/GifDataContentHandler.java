@@ -67,6 +67,7 @@ public class GifDataContentHandler extends Component implements DataContentHandl
      *
      * @return The DataFlavors
      */
+    @Override
     public DataFlavor[] getTransferDataFlavors() { // throws Exception;
         return new DataFlavor[] { getDF()};
     }
@@ -75,9 +76,11 @@ public class GifDataContentHandler extends Component implements DataContentHandl
      * Return the Transfer Data of type DataFlavor from InputStream.
      *
      * @param df The DataFlavor
-     * @param ins The InputStream corresponding to the data
+     * @param ds The DataSource
      * @return String object
+     * @exception IOException in case of an I/O error
      */
+    @Override
     public Object getTransferData(DataFlavor df, DataSource ds)
         throws IOException {
         // use myDF.equals to be sure to get ActivationDataFlavor.equals,
@@ -88,6 +91,7 @@ public class GifDataContentHandler extends Component implements DataContentHandl
             return null;
     }
 
+    @Override
     public Object getContent(DataSource ds) throws IOException {
 	InputStream is = ds.getInputStream();
 	int pos = 0;
@@ -113,7 +117,11 @@ public class GifDataContentHandler extends Component implements DataContentHandl
 
     /**
      * Write the object to the output stream, using the specified MIME type.
+     * @param obj object to write
+     * @param type requested MIME type of the resulting byte stream
+     * @param os OutputStream
      */
+    @Override
     public void writeTo(Object obj, String type, OutputStream os)
 			throws IOException {
 	if (obj != null && !(obj instanceof Image))

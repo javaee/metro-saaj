@@ -52,7 +52,6 @@ package com.sun.xml.messaging.saaj.util;
  * This class is used by XML Schema binary format validation
  *
  * @author Jeffrey Rodriguez
- * @version  
  */
 public final class Base64 {
 
@@ -188,7 +187,7 @@ public final class Base64 {
     /**
      * Decodes Base64 data into octects
      *
-     * @param binaryData Byte array containing Base64 data
+     * @param base64Data Byte array containing Base64 data
      * @return Array containind decoded data.
      */
     public byte[] decode( byte[] base64Data ) {
