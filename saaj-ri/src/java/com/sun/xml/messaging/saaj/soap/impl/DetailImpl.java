@@ -62,13 +62,13 @@ public abstract class DetailImpl extends FaultElementImpl implements Detail {
     public DetailEntry addDetailEntry(Name name) throws SOAPException {
         DetailEntry entry = createDetailEntry(name);
         addNode(entry);
-        return (DetailEntry) circumventBug5034339(entry);
+        return entry;
     }
 
     public DetailEntry addDetailEntry(QName qname) throws SOAPException {
         DetailEntry entry = createDetailEntry(qname);
         addNode(entry);
-        return (DetailEntry) circumventBug5034339(entry);
+        return entry;
     }
 
     protected SOAPElement addElement(Name name) throws SOAPException {
@@ -134,7 +134,7 @@ public abstract class DetailImpl extends FaultElementImpl implements Detail {
        return true;
    }
 
-    //overriding this method since the only two uses of this method 
+    //overriding this method since the only two uses of this method
     // are in ElementImpl and DetailImpl
     //whereas the original base impl does the correct job for calls to it inside ElementImpl
     // But it would not work for DetailImpl.
@@ -157,5 +157,5 @@ public abstract class DetailImpl extends FaultElementImpl implements Detail {
         }
         return element;
     }
-   
+
 }
