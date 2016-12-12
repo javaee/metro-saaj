@@ -71,7 +71,6 @@ import org.w3c.dom.Node;
  * </p>
  *
  * @author shih-chang.chen@oracle.com
- * @author ondrej.cerny@oracle.com
  */
 public class SaajStaxWriter implements XMLStreamWriter {
 
@@ -399,11 +398,15 @@ public class SaajStaxWriter implements XMLStreamWriter {
      * declaration and the namespace was not set to non-{@code null} value previously.
      * </p>
      *
-     * <p>The state of this object can be {@link #flushTo(SOAPElement) flushed} to SOAPElement - new SOAPElement will
-     * be added a child element; the new element will have exactly the shape as represented by the state of this object.
-     * Note that the {@link #flushTo(SOAPElement)} method does nothing (and returns the argument immediately) if the
-     * state of this object is not initialized (i.e. local name is null).
+     * <p>
+     * The state of this object can be {@link #flushTo(SOAPElement) flushed} to SOAPElement - new SOAPElement will
+     * be added a child element; the new element will have exactly the shape as represented by the state of this
+     * object. Note that the {@link #flushTo(SOAPElement)} method does nothing
+     * (and returns the argument immediately) if the state of this object is not initialized
+     * (i.e. local name is null).
      * </p>
+     *
+     * @author ondrej.cerny@oracle.com
      */
     static class DeferredElement {
         private String prefix;
