@@ -42,6 +42,7 @@ package namespace;
 
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.transform.stream.StreamSource;
 
@@ -360,11 +361,7 @@ public class NamespaceTest extends TestCase {
      * Adding element with explicitly empty namespace URI shall put the element in global namespace.
      */
     public void testAddChildElementToGlobalNamespace() throws Exception {
-        String xml = "<SOAP-ENV:Envelope xmlns=\"abc\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Body/></SOAP-ENV:Envelope>";
-        MessageFactory mFactory = MessageFactory.newInstance();
-        SOAPMessage msg = mFactory.createMessage();
-        msg.getSOAPPart().setContent(new StreamSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
-
+        SOAPMessage msg = createSoapMessageWithBody();
         SOAPBody body = msg.getSOAPPart().getEnvelope().getBody();
 
         String namespace = "http://example.org/test";
@@ -385,11 +382,7 @@ public class NamespaceTest extends TestCase {
      * Adding element with explicitly null namespace URI shall put the element in global namespace.
      */
     public void testAddChildElementToNullNamespace() throws Exception {
-        String xml = "<SOAP-ENV:Envelope xmlns=\"abc\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Body/></SOAP-ENV:Envelope>";
-        MessageFactory mFactory = MessageFactory.newInstance();
-        SOAPMessage msg = mFactory.createMessage();
-        msg.getSOAPPart().setContent(new StreamSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
-
+        SOAPMessage msg = createSoapMessageWithBody();
         SOAPBody body = msg.getSOAPPart().getEnvelope().getBody();
 
         String namespace = "http://example.org/test";
@@ -408,14 +401,52 @@ public class NamespaceTest extends TestCase {
     /*
      * Test of bug related to JDK-8159058.
      * Adding element with explicitly empty namespace URI shall put the element in global namespace.
+     */
+    public void testAddChildElementToGlobalNamespaceQName() throws Exception {
+        SOAPMessage msg = createSoapMessageWithBody();
+        SOAPBody body = msg.getSOAPPart().getEnvelope().getBody();
+
+        String namespace = "http://example.org/test";
+        SOAPElement parentInExplicitDefaultNamespace = body.addChildElement("content", "", namespace);
+        parentInExplicitDefaultNamespace.addNamespaceDeclaration("", namespace);
+        SOAPElement childInGlobalNamespace = parentInExplicitDefaultNamespace.addChildElement(new QName("", "global-child"));
+        childInGlobalNamespace.addNamespaceDeclaration("", "");
+        SOAPElement grandChildInGlobalNamespace = childInGlobalNamespace.addChildElement("global-grand-child");
+        SOAPElement childInDefaultNamespace = parentInExplicitDefaultNamespace.addChildElement("default-child");
+
+        assertNull(childInGlobalNamespace.getNamespaceURI());
+        assertNull(grandChildInGlobalNamespace.getNamespaceURI());
+        assertEquals(namespace, childInDefaultNamespace.getNamespaceURI());
+    }
+
+    /*
+     * Test of bug related to JDK-8159058.
+     * Adding element with explicitly empty namespace URI shall put the element in global namespace.
+     */
+    public void testAddChildElementToNullNamespaceQName() throws Exception {
+        SOAPMessage msg = createSoapMessageWithBody();
+        SOAPBody body = msg.getSOAPPart().getEnvelope().getBody();
+
+        String namespace = "http://example.org/test";
+        SOAPElement parentInExplicitDefaultNamespace = body.addChildElement("content", "", namespace);
+        parentInExplicitDefaultNamespace.addNamespaceDeclaration("", namespace);
+        SOAPElement childInGlobalNamespace = parentInExplicitDefaultNamespace.addChildElement(new QName(null, "global-child"));
+        childInGlobalNamespace.addNamespaceDeclaration("", "");
+        SOAPElement grandChildInGlobalNamespace = childInGlobalNamespace.addChildElement("global-grand-child");
+        SOAPElement childInDefaultNamespace = parentInExplicitDefaultNamespace.addChildElement("default-child");
+
+        assertNull(childInGlobalNamespace.getNamespaceURI());
+        assertNull(grandChildInGlobalNamespace.getNamespaceURI());
+        assertEquals(namespace, childInDefaultNamespace.getNamespaceURI());
+    }
+
+    /*
+     * Test of bug related to JDK-8159058.
+     * Adding element with explicitly empty namespace URI shall put the element in global namespace.
      * This version of test does not explicitly add namespace declarations.
      */
     public void testAddChildElementToGlobalNamespaceNoDeclarations() throws Exception {
-        String xml = "<SOAP-ENV:Envelope xmlns=\"abc\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Body/></SOAP-ENV:Envelope>";
-        MessageFactory mFactory = MessageFactory.newInstance();
-        SOAPMessage msg = mFactory.createMessage();
-        msg.getSOAPPart().setContent(new StreamSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
-
+        SOAPMessage msg = createSoapMessageWithBody();
         SOAPBody body = msg.getSOAPPart().getEnvelope().getBody();
 
         String namespace = "http://example.org/test";
@@ -433,11 +464,7 @@ public class NamespaceTest extends TestCase {
      * This version of test does not explicitly add namespace declarations.
      */
     public void testAddChildElementToNullNamespaceNoDeclarations() throws Exception {
-        String xml = "<SOAP-ENV:Envelope xmlns=\"abc\" xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Body/></SOAP-ENV:Envelope>";
-        MessageFactory mFactory = MessageFactory.newInstance();
-        SOAPMessage msg = mFactory.createMessage();
-        msg.getSOAPPart().setContent(new StreamSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
-
+        SOAPMessage msg = createSoapMessageWithBody();
         SOAPBody body = msg.getSOAPPart().getEnvelope().getBody();
 
         String namespace = "http://example.org/test";
@@ -449,11 +476,18 @@ public class NamespaceTest extends TestCase {
         assertEquals(namespace, childInDefaultNamespace.getNamespaceURI());
     }
 
-
     public static void main(String argv[]) {
 
         junit.textui.TestRunner.run(NamespaceTest.class);
 
+    }
+
+    private static SOAPMessage createSoapMessageWithBody() throws SOAPException {
+        String xml = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"><SOAP-ENV:Body/></SOAP-ENV:Envelope>";
+        MessageFactory mFactory = MessageFactory.newInstance();
+        SOAPMessage msg = mFactory.createMessage();
+        msg.getSOAPPart().setContent(new StreamSource(new ByteArrayInputStream(xml.getBytes("utf-8"))));
+        return msg;
     }
 
     private static Name createFromTagName(String tagName) {
