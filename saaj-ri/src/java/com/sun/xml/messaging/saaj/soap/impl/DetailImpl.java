@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -62,13 +62,13 @@ public abstract class DetailImpl extends FaultElementImpl implements Detail {
     public DetailEntry addDetailEntry(Name name) throws SOAPException {
         DetailEntry entry = createDetailEntry(name);
         addNode(entry);
-        return (DetailEntry) circumventBug5034339(entry);
+        return entry;
     }
 
     public DetailEntry addDetailEntry(QName qname) throws SOAPException {
         DetailEntry entry = createDetailEntry(qname);
         addNode(entry);
-        return (DetailEntry) circumventBug5034339(entry);
+        return entry;
     }
 
     protected SOAPElement addElement(Name name) throws SOAPException {
@@ -134,28 +134,4 @@ public abstract class DetailImpl extends FaultElementImpl implements Detail {
        return true;
    }
 
-    //overriding this method since the only two uses of this method 
-    // are in ElementImpl and DetailImpl
-    //whereas the original base impl does the correct job for calls to it inside ElementImpl
-    // But it would not work for DetailImpl.
-    protected SOAPElement circumventBug5034339(SOAPElement element) {
-
-        Name elementName = element.getElementName();
-        if (!isNamespaceQualified(elementName)) {
-            String prefix = elementName.getPrefix();
-            String defaultNamespace = getNamespaceURI(prefix);
-            if (defaultNamespace != null) {
-                Name newElementName =
-                    NameImpl.create(
-                        elementName.getLocalName(),
-                        elementName.getPrefix(),
-                        defaultNamespace);
-                SOAPElement newElement = createDetailEntry(newElementName);
-                replaceChild(newElement, element);
-                return newElement;
-            }
-        }
-        return element;
-    }
-   
 }
