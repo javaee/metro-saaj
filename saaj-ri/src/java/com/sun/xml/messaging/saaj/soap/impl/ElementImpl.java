@@ -143,7 +143,7 @@ public class ElementImpl
 
     public SOAPElement addChildElement(String localName) throws SOAPException {
         String nsUri = getNamespaceURI("");
-        Name name = (nsUri == null || "".equals(nsUri))
+        Name name = (nsUri == null || nsUri.isEmpty())
                 ?  NameImpl.createFromUnqualifiedName(localName)
                 :  NameImpl.createFromQualifiedName(localName, nsUri);
         return addChildElement(name);
