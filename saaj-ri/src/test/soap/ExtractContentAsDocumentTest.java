@@ -143,8 +143,7 @@ public class ExtractContentAsDocumentTest extends TestCase {
     
 	public String nodeToString(org.w3c.dom.Node node) throws Exception {
         	// Use a Transformer for output
-        	TransformerFactory tFactory =
-                    new com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl();
+        	TransformerFactory tFactory = TransformerFactory.newInstance();
         	Transformer transformer = tFactory.newTransformer();
         	StringWriter stringWriter = new StringWriter();
 

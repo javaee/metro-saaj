@@ -45,11 +45,23 @@
 
 package element;
 
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.parsers.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
+import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import junit.framework.TestCase;
 
 import org.w3c.dom.NodeList;
@@ -376,6 +388,7 @@ public class ElementTest extends TestCase {
 
         Element soapElement = SOAPFactory.newInstance().createElement(element);
         assertTrue(soapElement instanceof SOAPElement);
+        SOAPDocumentImpl soapDocument = ((ElementImpl)soapElement).getSoapDocument();
 
         Element soapElementCopy = soapFactory.createElement(soapElement);
         // now copy and soapElement should be the same reference
@@ -384,7 +397,8 @@ public class ElementTest extends TestCase {
         NodeList nl = soapElementCopy.getChildNodes();
         assertTrue(nl.getLength() == 1);
         Element testChild = (Element)nl.item(0);
-        assertTrue(testChild instanceof SOAPElement);
+        final javax.xml.soap.Node foundSoapElement = soapDocument.find(testChild);
+        assertTrue(foundSoapElement instanceof SOAPElement);
         assertTrue(soapElementCopy.getAttribute("junk").equals("true"));
     }
 

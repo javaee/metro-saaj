@@ -55,6 +55,7 @@ import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.HeaderImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
+import org.w3c.dom.Element;
 
 public class Header1_1Impl extends HeaderImpl {
     
@@ -64,6 +65,10 @@ public class Header1_1Impl extends HeaderImpl {
         
     public Header1_1Impl(SOAPDocumentImpl ownerDocument, String prefix) {
             super(ownerDocument, NameImpl.createHeader1_1Name(prefix));
+    }
+
+    public Header1_1Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     protected NameImpl getNotUnderstoodName() {

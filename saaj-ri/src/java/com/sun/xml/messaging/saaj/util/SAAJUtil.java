@@ -40,7 +40,17 @@
 
 package com.sun.xml.messaging.saaj.util;
 
+import com.sun.xml.messaging.saaj.soap.impl.CDATAImpl;
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import com.sun.xml.messaging.saaj.soap.impl.SOAPCommentImpl;
+import com.sun.xml.messaging.saaj.soap.impl.SOAPTextImpl;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.soap.SOAPElement;
 import java.security.AccessControlException;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *

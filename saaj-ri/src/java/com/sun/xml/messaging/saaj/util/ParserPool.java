@@ -60,8 +60,7 @@ public class ParserPool {
 
     public ParserPool(int capacity) {
         queue = new ArrayBlockingQueue<SAXParser>(capacity);
-        //factory = SAXParserFactory.newInstance();
-        factory = new com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl();
+        factory = SAXParserFactory.newInstance();
         factory.setNamespaceAware(true);
         for (int i = 0; i < capacity; i++) {
            try {
@@ -94,7 +93,8 @@ public class ParserPool {
     
     public void returnParser(SAXParser saxParser) {
         saxParser.reset();
-        resetSaxParser(saxParser);
+        //TODO!! Ask about jaxp issue (https://jaxp.dev.java.net/issues/show_bug.cgi?id=59) multirelease if needed
+//        resetSaxParser(saxParser);
         put(saxParser);
     }
 
@@ -107,7 +107,7 @@ public class ParserPool {
      * is fixed.
      * @param parser the parser from the pool whose Symbol Table needs to be reset.
      */
-     private void resetSaxParser(SAXParser parser) {
+     /*private void resetSaxParser(SAXParser parser) {
         try {
             //Object obj = parser.getProperty("http://apache.org/xml/properties/internal/symbol-table");
             com.sun.org.apache.xerces.internal.util.SymbolTable table = new com.sun.org.apache.xerces.internal.util.SymbolTable();
@@ -118,6 +118,6 @@ public class ParserPool {
         } catch (SAXNotSupportedException ex) {
             //nothing to do
         }
-    }
+    }*/
 
 }

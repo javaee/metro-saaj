@@ -61,6 +61,7 @@ import com.sun.xml.messaging.saaj.soap.impl.*;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
+import org.w3c.dom.Element;
 
 
 public class Fault1_1Impl extends FaultImpl {
@@ -72,6 +73,10 @@ public class Fault1_1Impl extends FaultImpl {
 
     public Fault1_1Impl(SOAPDocumentImpl ownerDocument, String prefix) {
        super(ownerDocument, NameImpl.createFault1_1Name(prefix));
+    }
+
+    public Fault1_1Impl(Element domElement, SOAPDocumentImpl ownerDoc) {
+        super(ownerDoc, domElement);
     }
 
     protected NameImpl getDetailName() {

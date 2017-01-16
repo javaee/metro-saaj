@@ -49,6 +49,7 @@ import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
@@ -65,6 +66,10 @@ public class Body1_2Impl extends BodyImpl {
     
     public Body1_2Impl(SOAPDocumentImpl ownerDocument, String prefix) {
             super(ownerDocument, NameImpl.createBody1_2Name(prefix));
+    }
+
+    public Body1_2Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     protected NameImpl getFaultName(String name) {

@@ -51,6 +51,7 @@ import javax.xml.stream.XMLStreamReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import org.w3c.dom.*;
 import org.w3c.dom.Node;
 
@@ -73,6 +74,10 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
     
     protected BodyImpl(SOAPDocumentImpl ownerDoc, NameImpl bodyName) {
         super(ownerDoc, bodyName);
+    }
+
+    public BodyImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     protected abstract NameImpl getFaultName(String name);
@@ -170,7 +175,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         if (hasFault()) {
             if (fault == null) {
                 //initialize fault member
-                fault = (SOAPFault) getFirstChildElement();
+                fault = (SOAPFault) getSoapDocument().find(getFirstChildElement());
             }
             return fault;
         }
@@ -274,11 +279,12 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
     }
 
     protected SOAPElement convertToSoapElement(Element element) {
-        if ((element instanceof SOAPBodyElement) &&
+        final Node soapNode = getSoapDocument().findIfPresent(element);
+        if ((soapNode instanceof SOAPBodyElement) &&
             //this check is required because ElementImpl currently 
             // implements SOAPBodyElement
-            !(element.getClass().equals(ElementImpl.class))) {
-            return (SOAPElement) element;
+            !(soapNode.getClass().equals(ElementImpl.class))) {
+            return (SOAPElement) soapNode;
         } else {
             return replaceElementWithSOAPElement(
                 element,
@@ -329,8 +335,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
 
         Document document = null;
         try {
-            DocumentBuilderFactory factory = 
-                new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             document = builder.newDocument();
@@ -456,7 +461,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
             //not lazy -Just get first child element and return its attribute
             Element elem = getFirstChildElement();
             if (elem != null) {
-                return elem.getAttribute(localName);
+                return elem.getAttribute(getLocalName());
             }
         }
         return null;

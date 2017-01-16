@@ -49,6 +49,7 @@ import javax.xml.soap.SOAPFaultElement;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+import org.w3c.dom.Element;
 
 public abstract class FaultElementImpl
     extends ElementImpl 
@@ -60,6 +61,10 @@ public abstract class FaultElementImpl
 
     protected FaultElementImpl(SOAPDocumentImpl ownerDoc, QName qname) { 
         super(ownerDoc, qname);
+    }
+
+    public FaultElementImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     protected abstract boolean isStandardFaultElement();

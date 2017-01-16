@@ -54,6 +54,7 @@ import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.EnvelopeImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+import org.w3c.dom.Element;
 
 public class Envelope1_2Impl extends EnvelopeImpl {
 
@@ -63,6 +64,10 @@ public class Envelope1_2Impl extends EnvelopeImpl {
     
     public Envelope1_2Impl(SOAPDocumentImpl ownerDoc, String prefix) {
         super(ownerDoc, NameImpl.createEnvelope1_2Name(prefix));
+    }
+
+    public Envelope1_2Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     public Envelope1_2Impl(

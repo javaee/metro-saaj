@@ -130,8 +130,7 @@ public class TestHelper {
         }
         SOAPPart sp = msg.getSOAPPart();
         Source source = sp.getContent();
-        TransformerFactory tf =
-            new com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl();
+        TransformerFactory tf = TransformerFactory.newInstance();
         Transformer xform = tf.newTransformer();
         println("==== TestHelper.dumpEnvelope(...) Start ====");
         xform.transform(source, new StreamResult(pw));

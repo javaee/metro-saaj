@@ -40,6 +40,8 @@
 
 package stax;
 
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import com.sun.xml.messaging.saaj.util.stax.SaajStaxWriter;
 import junit.framework.TestCase;
 
@@ -255,7 +257,8 @@ public class SaajStaxWriterNamespaceTest extends TestCase {
         closeLayout();
         closeWriter();
 
-        SOAPElement container = (SOAPElement)getWrapper().getFirstChild();
+        ElementImpl element = (ElementImpl) getWrapper();
+        SOAPElement container = (SOAPElement)element.getSoapDocument().find(element.getFirstChild());
         assertEquals(EXAMPLE_URI_1, container.getNamespaceURI());
         SOAPElement content = (SOAPElement) container.getFirstChild();
         assertEquals(EXAMPLE_URI_1, content.getNamespaceURI());

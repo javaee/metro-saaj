@@ -156,7 +156,7 @@ public class SendingServlet extends HttpServlet {
             String reqBase=urlSB.toString();
 
             DocumentBuilderFactory dbf =
-                new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+                DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
             DocumentBuilder docBuilder = dbf.newDocumentBuilder();
             Document bookInfo = docBuilder.parse(reqBase + "/bookinfo.xml");

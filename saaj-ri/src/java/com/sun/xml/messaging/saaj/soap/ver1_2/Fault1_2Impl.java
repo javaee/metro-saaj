@@ -57,6 +57,7 @@ import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.*;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
+import org.w3c.dom.Element;
 
 
 public class Fault1_2Impl extends FaultImpl {
@@ -81,6 +82,10 @@ public class Fault1_2Impl extends FaultImpl {
 
     public Fault1_2Impl(SOAPDocumentImpl ownerDocument, String prefix) {
         super(ownerDocument, NameImpl.createFault1_2Name(null, prefix));
+    }
+
+    public Fault1_2Impl(Element domElement, SOAPDocumentImpl ownerDoc) {
+        super(ownerDoc, domElement);
     }
 
     protected NameImpl getDetailName() {
@@ -536,7 +541,7 @@ public class Fault1_2Impl extends FaultImpl {
             }
         }
         if (element instanceof Detail1_2Impl) {
-            ElementImpl importedElement = (ElementImpl) importElement(element);
+            Element importedElement = importElement(element);
             addNode(importedElement);
             return convertToSoapElement(importedElement);
         } else

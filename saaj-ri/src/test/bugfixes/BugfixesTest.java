@@ -51,22 +51,27 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.*;
+import javax.xml.soap.Node;
+import javax.xml.soap.Text;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMResult;
 
+import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
+import com.sun.xml.messaging.saaj.soap.impl.BodyImpl;
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import javax.xml.transform.stream.StreamSource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+
+import org.w3c.dom.*;
 
 import util.TestHelper;
 
 import javax.activation.DataHandler;
 import javax.activation.FileDataSource;
 import javax.xml.transform.dom.DOMSource;
-import org.w3c.dom.NodeList;
 
 /*
  * A class that contains test cases that verify some of the bug fixes made.
@@ -294,8 +299,7 @@ public class BugfixesTest extends TestCase {
 
         // part.setContent(streamSource);
 
-        TransformerFactory transformerFactory =
-            new com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMResult result = new DOMResult(part);
         transformer.transform(streamSource, result);
@@ -337,8 +341,7 @@ public class BugfixesTest extends TestCase {
      */
     public void testSetContentDOMSrc() throws Exception {
 
-        DocumentBuilderFactory factory =
-            new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -695,8 +698,7 @@ public class BugfixesTest extends TestCase {
     // Bug 4824922
     public void testEvelopeNamespacePropogation() throws Exception {
 
-        DocumentBuilderFactory factory =
-            new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -857,8 +859,7 @@ public class BugfixesTest extends TestCase {
      */
     public void testSOAPBodyAddDocument() throws Exception {
 
-        DocumentBuilderFactory factory =
-            new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
 
@@ -955,8 +956,7 @@ public class BugfixesTest extends TestCase {
     public void testAddDocument() throws Exception {
 
         Document document = null;
-        DocumentBuilderFactory factory =
-            new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
 
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -1015,8 +1015,7 @@ public class BugfixesTest extends TestCase {
 
         try {
             Document document = null;
-            DocumentBuilderFactory factory =
-                new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
   
             DocumentBuilder builder = factory.newDocumentBuilder();
@@ -1451,9 +1450,10 @@ FileInputStream(new File("bigmessage.xml")));
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.newDocument();
-        doc.adoptNode(elt);
+        final Element domElement = ((ElementImpl) elt).getDomElement();
+        doc.adoptNode(domElement);
         assertFalse("Unexpected SAAJ owner document type",
-                (elt.getOwnerDocument().getClass().getName()
+                (domElement.getClass().getName()
                         .contains("SOAPDocument")));
     }
 
@@ -1488,9 +1488,10 @@ FileInputStream(new File("bigmessage.xml")));
         SOAPMessage msg = fact.createMessage(mh,
                 new FileInputStream(new File("src/test/bugfixes/data/xml.txt")));
         //msg.writeTo(System.out);
-        SOAPElement elem = msg.getSOAPBody();
-        NodeList gf = elem.getElementsByTagName("GrandFather");
-        SOAPElement gfE = (SOAPElement) gf.item(0);
+        BodyImpl bodyImpl = (BodyImpl) msg.getSOAPBody();
+        SOAPDocumentImpl soapDocument = bodyImpl.getSoapDocument();
+        NodeList gf = bodyImpl.getElementsByTagName("GrandFather");
+        SOAPElement gfE = (SOAPElement) soapDocument.find(gf.item(0));
         System.out.println("GrandFather L=" + gfE.getAttributeNode("xmlns:t").getLocalName() + " N="
                 + gfE.getAttributeNode("xmlns:t").getNamespaceURI()
                 + " P=" + gfE.getAttributeNode("xmlns:t").getPrefix());
@@ -1498,12 +1499,12 @@ FileInputStream(new File("bigmessage.xml")));
 
         NodeList fth = gfE.getElementsByTagNameNS("urn:test:001", "Father");
 
-        SOAPElement fthE = (SOAPElement) fth.item(0);
+        SOAPElement fthE = (SOAPElement) soapDocument.find(fth.item(0));
 
 
         NodeList son = fthE.getElementsByTagNameNS("urn:test:001", "Son");
 
-        SOAPElement sonE = (SOAPElement) son.item(0);
+        SOAPElement sonE = (SOAPElement) soapDocument.find(son.item(0));
         assertTrue(fthE.getAttributeNode("xmlns:t").getLocalName() != null);
         assertTrue(fthE.getAttributeNode("xmlns:t").getNamespaceURI() != null);
         assertTrue(fthE.getAttributeNode("xmlns:t").getPrefix() != null);

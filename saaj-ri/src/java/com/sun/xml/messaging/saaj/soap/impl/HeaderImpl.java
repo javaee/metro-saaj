@@ -46,6 +46,7 @@ import java.util.logging.Level;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import org.w3c.dom.Element;
 
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
@@ -58,6 +59,10 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
 
     protected HeaderImpl(SOAPDocumentImpl ownerDoc, NameImpl name) {
         super(ownerDoc, name);
+    }
+
+    public HeaderImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     protected abstract SOAPHeaderElement createHeaderElement(Name name)
@@ -291,8 +296,9 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
     }
 
     protected SOAPElement convertToSoapElement(Element element) {
-        if (element instanceof SOAPHeaderElement) {
-            return (SOAPElement) element;
+        final org.w3c.dom.Node soapNode = getSoapDocument().findIfPresent(element);
+        if (soapNode instanceof SOAPHeaderElement) {
+            return (SOAPElement) soapNode;
         } else {
             SOAPHeaderElement headerElement;
             try {

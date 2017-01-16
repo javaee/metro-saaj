@@ -47,6 +47,9 @@ import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.soap.ver1_1.*;
 import com.sun.xml.messaging.saaj.soap.ver1_2.*;
+import org.w3c.dom.Element;
+
+import java.util.Objects;
 
 
 public class ElementFactory {
@@ -67,6 +70,72 @@ public class ElementFactory {
             name.getLocalPart(),
             name.getPrefix(),
             name.getNamespaceURI());
+    }
+
+    /**
+     * Create element wrapper for existing DOM element.
+     *
+     * @param ownerDocument SOAP document wrapper not null
+     * @param element DOM element not null
+     * @return SOAP wrapper for DOM element
+     */
+    public static SOAPElement createElement(SOAPDocumentImpl ownerDocument, Element element) {
+        Objects.requireNonNull(ownerDocument);
+        Objects.requireNonNull(element);
+
+        String localName = element.getLocalName();
+        String namespaceUri = element.getNamespaceURI();
+        String prefix = element.getPrefix();
+
+        if (localName.equalsIgnoreCase("Envelope")) {
+            if (NameImpl.SOAP11_NAMESPACE.equals(namespaceUri)) {
+                return new Envelope1_1Impl(ownerDocument, element);
+            } else if (NameImpl.SOAP12_NAMESPACE.equals(namespaceUri)) {
+                return new Envelope1_2Impl(ownerDocument, element);
+            }
+        }
+        if (localName.equalsIgnoreCase("Body")) {
+            if (NameImpl.SOAP11_NAMESPACE.equals(namespaceUri)) {
+                return new Body1_1Impl(ownerDocument, element);
+            } else if (NameImpl.SOAP12_NAMESPACE.equals(namespaceUri)) {
+                return new Body1_2Impl(ownerDocument, element);
+            }
+        }
+        if (localName.equalsIgnoreCase("Header")) {
+            if (NameImpl.SOAP11_NAMESPACE.equals(namespaceUri)) {
+                return new Header1_1Impl(ownerDocument, element);
+            } else if (NameImpl.SOAP12_NAMESPACE.equals(namespaceUri)) {
+                return new Header1_2Impl(ownerDocument, element);
+            }
+        }
+        if (localName.equalsIgnoreCase("Fault")) {
+            if (NameImpl.SOAP11_NAMESPACE.equals(namespaceUri)) {
+                return new Fault1_1Impl(element, ownerDocument);
+            } else if (NameImpl.SOAP12_NAMESPACE.equals(namespaceUri)) {
+                return new Fault1_2Impl(element, ownerDocument);
+            }
+
+        }
+        if (localName.equalsIgnoreCase("Detail")) {
+            if (NameImpl.SOAP11_NAMESPACE.equals(namespaceUri)) {
+                return new Detail1_1Impl(ownerDocument, element);
+            } else if (NameImpl.SOAP12_NAMESPACE.equals(namespaceUri)) {
+                return new Detail1_2Impl(ownerDocument, element);
+            }
+        }
+        if (localName.equalsIgnoreCase("faultcode")
+                || localName.equalsIgnoreCase("faultstring")
+                || localName.equalsIgnoreCase("faultactor")) {
+            // SOAP 1.2 does not have fault(code/string/actor)
+            // So there is no else case required
+            if (NameImpl.SOAP11_NAMESPACE.equals(namespaceUri)) {
+                return new FaultElement1_1Impl(ownerDocument,
+                        localName,
+                        prefix);
+            }
+        }
+
+        return new ElementImpl(ownerDocument, element);
     }
 
     public static SOAPElement createElement(

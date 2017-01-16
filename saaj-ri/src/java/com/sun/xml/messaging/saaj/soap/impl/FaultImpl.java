@@ -46,6 +46,7 @@ import java.util.logging.Level;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import org.w3c.dom.Element;
 
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
@@ -68,6 +69,9 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
         super(ownerDoc, name);
     }
 
+    public FaultImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
+    }
 
     protected abstract NameImpl getDetailName();
     protected abstract NameImpl getFaultCodeName();
@@ -239,10 +243,11 @@ public abstract class FaultImpl extends ElementImpl implements SOAPFault {
 
     @Override
     protected SOAPElement convertToSoapElement(Element element) {
-        if (element instanceof SOAPFaultElement) { 
-            return (SOAPElement) element;
-        } else if (element instanceof SOAPElement) {
-            SOAPElement soapElement = (SOAPElement) element;
+        final org.w3c.dom.Node soapNode = getSoapDocument().findIfPresent(element);
+        if (soapNode instanceof SOAPFaultElement) {
+            return (SOAPElement) soapNode;
+        } else if (soapNode instanceof SOAPElement) {
+            SOAPElement soapElement = (SOAPElement) soapNode;
             if (getDetailName().equals(soapElement.getElementName())) {
                 return replaceElementWithSOAPElement(element, createDetail());
             } else {

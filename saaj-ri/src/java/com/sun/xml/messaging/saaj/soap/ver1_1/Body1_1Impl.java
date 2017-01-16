@@ -53,10 +53,15 @@ import com.sun.xml.messaging.saaj.soap.SOAPDocument;
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.BodyImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+import org.w3c.dom.Element;
 
 public class Body1_1Impl extends BodyImpl {
     public Body1_1Impl(SOAPDocumentImpl ownerDocument, String prefix) {
             super(ownerDocument, NameImpl.createBody1_1Name(prefix));
+    }
+
+    public Body1_1Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     public SOAPFault addSOAP12Fault(QName faultCode, String faultReason, Locale locale) {

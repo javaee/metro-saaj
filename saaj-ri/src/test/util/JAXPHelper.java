@@ -58,8 +58,7 @@ public class JAXPHelper {
     private static Transformer transformer;
 
     static {
-        DocumentBuilderFactory factory =
-            new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             builder = factory.newDocumentBuilder();
         } catch (Exception e) {
@@ -68,8 +67,7 @@ public class JAXPHelper {
 
         try {
             // Create an instance of our own transformer factory impl
-            TransformerFactory transFactory =
-                new com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl();
+            TransformerFactory transFactory = TransformerFactory.newInstance();
 
             // create Transformer
             transformer = transFactory.newTransformer();

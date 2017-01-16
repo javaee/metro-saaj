@@ -106,8 +106,7 @@ public class NSDeclTest extends TestCase {
         byte[] testDocBytes2 = testDoc.getBytes("UTF-8");
         ByteArrayInputStream bais2 = new ByteArrayInputStream(testDocBytes2);
         InputSource is = new InputSource(bais2);
-        DocumentBuilderFactory dbf =
-            new com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl();
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         Document doc2 = dbf.newDocumentBuilder().parse(is);
         // Uncomment to enable dumping to see the DOM Node
@@ -154,8 +153,7 @@ public class NSDeclTest extends TestCase {
     static void dumpDomNode(Node node) throws TransformerException {
         System.err.println("==== DebugUtil.dumpDomNode(...) Start ====");
         DOMSource domSource = new DOMSource(node);
-        TransformerFactory tf =
-            new com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl();
+        TransformerFactory tf = TransformerFactory.newInstance();
         Transformer xform = null;
         xform = tf.newTransformer();
         xform.transform(domSource, new StreamResult(System.err));

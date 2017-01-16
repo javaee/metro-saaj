@@ -262,8 +262,7 @@ public class MessageBuilder {
             //With SAAJ1.2 we get DOMSOurce for SOAPPart - 02-14-2003 kmeduri
             DOMSource domSource = (DOMSource) soapPart.getContent();
             
-            TransformerFactory tFactory =
-                new com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl();
+            TransformerFactory tFactory = TransformerFactory.newInstance();
             Transformer transformer = tFactory.newTransformer();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             StreamResult streamResult = new StreamResult(baos);
