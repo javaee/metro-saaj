@@ -49,6 +49,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import junit.framework.TestCase;
 
 import org.w3c.dom.*;
@@ -153,7 +154,7 @@ public class NSDeclTest extends TestCase {
     static void dumpDomNode(Node node) throws TransformerException {
         System.err.println("==== DebugUtil.dumpDomNode(...) Start ====");
         DOMSource domSource = new DOMSource(node);
-        TransformerFactory tf = TransformerFactory.newInstance();
+        TransformerFactory tf = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", SAAJUtil.getSystemClassLoader());
         Transformer xform = null;
         xform = tf.newTransformer();
         xform.transform(domSource, new StreamResult(System.err));

@@ -60,7 +60,7 @@ public class ParserPool {
 
     public ParserPool(int capacity) {
         queue = new ArrayBlockingQueue<SAXParser>(capacity);
-        factory = SAXParserFactory.newInstance();
+        factory = SAXParserFactory.newInstance("com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl", SAAJUtil.getSystemClassLoader());
         factory.setNamespaceAware(true);
         for (int i = 0; i < capacity; i++) {
            try {

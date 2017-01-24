@@ -51,6 +51,7 @@ import com.sun.xml.messaging.saaj.soap.impl.SOAPCommentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.SOAPTextImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.Comment;
@@ -98,7 +99,7 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
     }
 
     private Document createDocument() {
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance("com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl", SAAJUtil.getSystemClassLoader());
         try {
             final DocumentBuilder documentBuilder = docFactory.newDocumentBuilder();
             return documentBuilder.newDocument();

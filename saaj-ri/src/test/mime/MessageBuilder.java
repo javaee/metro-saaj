@@ -57,6 +57,7 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import org.xml.sax.InputSource;
 
 /**
@@ -262,7 +263,7 @@ public class MessageBuilder {
             //With SAAJ1.2 we get DOMSOurce for SOAPPart - 02-14-2003 kmeduri
             DOMSource domSource = (DOMSource) soapPart.getContent();
             
-            TransformerFactory tFactory = TransformerFactory.newInstance();
+            TransformerFactory tFactory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", SAAJUtil.getSystemClassLoader());
             Transformer transformer = tFactory.newTransformer();
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             StreamResult streamResult = new StreamResult(baos);

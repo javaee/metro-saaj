@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -57,6 +57,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import junit.framework.TestCase;
 
 public class QuoteTest extends TestCase {
@@ -143,7 +144,7 @@ public class QuoteTest extends TestCase {
     /** Convert a node tree into a STRING representation */
     public String nodeToString(org.w3c.dom.Node node) throws Exception {
         // Use a Transformer for output
-        TransformerFactory tFactory = TransformerFactory.newInstance();
+        TransformerFactory tFactory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", SAAJUtil.getSystemClassLoader());
         Transformer transformer = tFactory.newTransformer();
         StringWriter stringWriter = new StringWriter();
         

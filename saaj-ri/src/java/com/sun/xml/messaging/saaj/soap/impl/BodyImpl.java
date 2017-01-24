@@ -335,7 +335,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
 
         Document document = null;
         try {
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance("com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl", SAAJUtil.getSystemClassLoader());
             factory.setNamespaceAware(true);
             DocumentBuilder builder = factory.newDocumentBuilder();
             document = builder.newDocument();

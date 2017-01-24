@@ -299,7 +299,7 @@ public class BugfixesTest extends TestCase {
 
         // part.setContent(streamSource);
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", SAAJUtil.getSystemClassLoader());
         Transformer transformer = transformerFactory.newTransformer();
         DOMResult result = new DOMResult(part);
         transformer.transform(streamSource, result);

@@ -52,6 +52,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import junit.framework.TestCase;
 
 import org.w3c.dom.*;
@@ -143,7 +144,7 @@ public class ExtractContentAsDocumentTest extends TestCase {
     
 	public String nodeToString(org.w3c.dom.Node node) throws Exception {
         	// Use a Transformer for output
-        	TransformerFactory tFactory = TransformerFactory.newInstance();
+        	TransformerFactory tFactory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", SAAJUtil.getSystemClassLoader());
         	Transformer transformer = tFactory.newTransformer();
         	StringWriter stringWriter = new StringWriter();
 

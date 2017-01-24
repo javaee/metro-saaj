@@ -50,6 +50,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.*;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXParseException;
 
@@ -67,7 +68,7 @@ public class JAXPHelper {
 
         try {
             // Create an instance of our own transformer factory impl
-            TransformerFactory transFactory = TransformerFactory.newInstance();
+            TransformerFactory transFactory = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", SAAJUtil.getSystemClassLoader());
 
             // create Transformer
             transformer = transFactory.newTransformer();

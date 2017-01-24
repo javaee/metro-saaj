@@ -44,6 +44,8 @@
  */
 package util;
 
+import com.sun.xml.messaging.saaj.util.SAAJUtil;
+
 import java.io.*;
 
 import javax.xml.soap.SOAPMessage;
@@ -130,7 +132,7 @@ public class TestHelper {
         }
         SOAPPart sp = msg.getSOAPPart();
         Source source = sp.getContent();
-        TransformerFactory tf = TransformerFactory.newInstance();
+        TransformerFactory tf = TransformerFactory.newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", SAAJUtil.getSystemClassLoader());
         Transformer xform = tf.newTransformer();
         println("==== TestHelper.dumpEnvelope(...) Start ====");
         xform.transform(source, new StreamResult(pw));

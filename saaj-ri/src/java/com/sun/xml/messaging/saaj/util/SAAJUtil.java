@@ -40,17 +40,9 @@
 
 package com.sun.xml.messaging.saaj.util;
 
-import com.sun.xml.messaging.saaj.soap.impl.CDATAImpl;
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
-import com.sun.xml.messaging.saaj.soap.impl.SOAPCommentImpl;
-import com.sun.xml.messaging.saaj.soap.impl.SOAPTextImpl;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import javax.xml.soap.SOAPElement;
 import java.security.AccessControlException;
-import java.util.concurrent.ConcurrentHashMap;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 /**
  *
@@ -71,6 +63,19 @@ public final class SAAJUtil {
             return System.getProperty(arg);
         } catch (SecurityException ex) {
             return null;
+        }
+    }
+
+    public static ClassLoader getSystemClassLoader() {
+        if (System.getSecurityManager() == null) {
+            return ClassLoader.getSystemClassLoader();
+        } else {
+            return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+                @Override
+                public ClassLoader run() {
+                    return ClassLoader.getSystemClassLoader();
+                }
+            });
         }
     }
 }
