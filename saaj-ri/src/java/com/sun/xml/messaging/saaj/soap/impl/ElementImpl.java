@@ -123,7 +123,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public NodeList getElementsByTagName(String name) {
-        return element.getElementsByTagName(name);
+        return new NodeListImpl(getSoapDocument(), element.getElementsByTagName(name));
     }
 
     @Override
@@ -1498,7 +1498,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public NodeList getElementsByTagNameNS(String namespaceURI, String localName) throws DOMException {
-        return element.getElementsByTagNameNS(namespaceURI, localName);
+        return new NodeListImpl(getSoapDocument(), element.getElementsByTagNameNS(namespaceURI, localName));
     }
 
     @Override
@@ -1558,7 +1558,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public NodeList getChildNodes() {
-        return element.getChildNodes();
+        return new NodeListImpl(getSoapDocument(), element.getChildNodes());
     }
 
     @Override
