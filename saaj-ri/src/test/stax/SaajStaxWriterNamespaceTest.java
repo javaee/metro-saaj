@@ -258,7 +258,7 @@ public class SaajStaxWriterNamespaceTest extends TestCase {
         closeWriter();
 
         ElementImpl element = (ElementImpl) getWrapper();
-        SOAPElement container = (SOAPElement)element.getSoapDocument().find(element.getFirstChild());
+        SOAPElement container = (SOAPElement)element.getFirstChild();
         assertEquals(EXAMPLE_URI_1, container.getNamespaceURI());
         SOAPElement content = (SOAPElement) container.getFirstChild();
         assertEquals(EXAMPLE_URI_1, content.getNamespaceURI());

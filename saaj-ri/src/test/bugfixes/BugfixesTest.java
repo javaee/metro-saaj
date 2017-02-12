@@ -1491,7 +1491,7 @@ FileInputStream(new File("bigmessage.xml")));
         BodyImpl bodyImpl = (BodyImpl) msg.getSOAPBody();
         SOAPDocumentImpl soapDocument = bodyImpl.getSoapDocument();
         NodeList gf = bodyImpl.getElementsByTagName("GrandFather");
-        SOAPElement gfE = (SOAPElement) soapDocument.find(gf.item(0));
+        SOAPElement gfE = (SOAPElement) gf.item(0);
         System.out.println("GrandFather L=" + gfE.getAttributeNode("xmlns:t").getLocalName() + " N="
                 + gfE.getAttributeNode("xmlns:t").getNamespaceURI()
                 + " P=" + gfE.getAttributeNode("xmlns:t").getPrefix());

@@ -396,8 +396,7 @@ public class ElementTest extends TestCase {
 
         NodeList nl = soapElementCopy.getChildNodes();
         assertTrue(nl.getLength() == 1);
-        Element testChild = (Element)nl.item(0);
-        final javax.xml.soap.Node foundSoapElement = soapDocument.find(testChild);
+        final javax.xml.soap.Node foundSoapElement = (javax.xml.soap.Node) nl.item(0);
         assertTrue(foundSoapElement instanceof SOAPElement);
         assertTrue(soapElementCopy.getAttribute("junk").equals("true"));
     }
