@@ -93,31 +93,7 @@ public class ParserPool {
     
     public void returnParser(SAXParser saxParser) {
         saxParser.reset();
-        //TODO!! Ask about jaxp issue (https://jaxp.dev.java.net/issues/show_bug.cgi?id=59) multirelease if needed
-//        resetSaxParser(saxParser);
         put(saxParser);
     }
-
-    
-    /**
-     * SAAJ Issue 46 :https://saaj.dev.java.net/issues/show_bug.cgi?id=46
-     * Xerces does not provide a way to reset the SymbolTable
-     * So we are trying to reset it using the proprietary code below.
-     * Temporary Until the bug : https://jaxp.dev.java.net/issues/show_bug.cgi?id=59
-     * is fixed.
-     * @param parser the parser from the pool whose Symbol Table needs to be reset.
-     */
-     /*private void resetSaxParser(SAXParser parser) {
-        try {
-            //Object obj = parser.getProperty("http://apache.org/xml/properties/internal/symbol-table");
-            com.sun.org.apache.xerces.internal.util.SymbolTable table = new com.sun.org.apache.xerces.internal.util.SymbolTable();
-            parser.setProperty("http://apache.org/xml/properties/internal/symbol-table", table);
-            //obj = parser.getProperty("http://apache.org/xml/properties/internal/symbol-table");
-        } catch (SAXNotRecognizedException ex) {
-            //nothing to do
-        } catch (SAXNotSupportedException ex) {
-            //nothing to do
-        }
-    }*/
 
 }

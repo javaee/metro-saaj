@@ -538,7 +538,7 @@ public  class MimeMultipart {
      *
      * @param	headers		the headers for the body part.
      * @param	content		the content of the body part.
-     * @param   len         the content length.
+     * @param	len			the content length.
      * @return  MimeBodyPart
      * @since			JavaMail 1.2
      */

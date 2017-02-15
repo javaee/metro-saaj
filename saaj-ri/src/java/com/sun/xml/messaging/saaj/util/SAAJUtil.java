@@ -67,15 +67,11 @@ public final class SAAJUtil {
     }
 
     public static ClassLoader getSystemClassLoader() {
-        if (System.getSecurityManager() == null) {
-            return ClassLoader.getSystemClassLoader();
-        } else {
-            return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
-                @Override
-                public ClassLoader run() {
-                    return ClassLoader.getSystemClassLoader();
-                }
-            });
-        }
+        return AccessController.doPrivileged(new PrivilegedAction<ClassLoader>() {
+            @Override
+            public ClassLoader run() {
+                return ClassLoader.getSystemClassLoader();
+            }
+        });
     }
 }

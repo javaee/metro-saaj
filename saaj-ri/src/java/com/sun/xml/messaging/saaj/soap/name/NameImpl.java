@@ -326,6 +326,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.1 Header.
+     *
      * @param prefix prefix
      * @return Header Name
      */
@@ -335,6 +336,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.2 Header.
+     *
      * @param prefix prefix
      * @return Header Name
      */
@@ -344,6 +346,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.1 Body.
+     *
      * @param prefix prefix
      * @return Body Name
      */
@@ -353,6 +356,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.2 Body.
+     *
      * @param prefix prefix
      * @return Body Name
      */
@@ -362,6 +366,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.1 Fault.
+     *
      * @param prefix prefix
      * @return Fault Name
      */
@@ -371,6 +376,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.2 NotUnderstood element.
+     *
      * @param prefix prefix
      * @return NotUnderstood Name
      */
@@ -380,6 +386,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.2 Upgrade element.
+     *
      * @param prefix prefix
      * @return Upgrade Name
      */
@@ -389,6 +396,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.2 SupportedEnvelope Upgrade element.
+     *
      * @param prefix prefix
      * @return Supported Envelope Name
      */
@@ -425,6 +433,7 @@ public class NameImpl implements Name {
 
     /**
      * Create a name object for a SOAP1.1 Fault Detail.
+     *
      * @return Detail Name
      */
     public static NameImpl createDetail1_1Name() {
