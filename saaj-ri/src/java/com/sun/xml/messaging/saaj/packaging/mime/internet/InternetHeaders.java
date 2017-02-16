@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -335,15 +335,15 @@ public final class InternetHeaders {
      * @return list of header lines.
      */
     public List<String> getAllHeaderLines() {
-        if(headerValueView==null)
+        if (headerValueView == null)
             headerValueView = new AbstractList<String>() {
                 @Override
-				public String get(int index) {
+                public String get(int index) {
                     return headers.get(index).line;
                 }
 
                 @Override
-				public int size() {
+                public int size() {
                     return headers.size();
                 }
             };
