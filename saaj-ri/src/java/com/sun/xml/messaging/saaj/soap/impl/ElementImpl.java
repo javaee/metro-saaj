@@ -123,7 +123,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public NodeList getElementsByTagName(String name) {
-        return new NodeListImpl(getSoapDocument(), element.getElementsByTagName(name));
+        return new NodeListImpl(soapDocument, element.getElementsByTagName(name));
     }
 
     @Override
@@ -154,21 +154,21 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         this.soapDocument = ownerDoc;
         this.element = ownerDoc.getDomDocument().createElementNS(name.getURI(), name.getQualifiedName());
         elementQName = NameImpl.convertToQName(name);
-        getSoapDocument().register(this);
+        soapDocument.register(this);
     }
 
     public ElementImpl(SOAPDocumentImpl ownerDoc, QName name) {
         this.soapDocument = ownerDoc;
         this.element = ownerDoc.getDomDocument().createElementNS(name.getNamespaceURI(), getQualifiedName(name));
         elementQName = name;
-        getSoapDocument().register(this);
+        soapDocument.register(this);
     }
 
     public ElementImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
         this.element = domElement;
         this.soapDocument = ownerDoc;
         this.elementQName = new QName(domElement.getNamespaceURI(), domElement.getLocalName());
-        getSoapDocument().register(this);
+        soapDocument.register(this);
     }
 
     public ElementImpl(
@@ -180,7 +180,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         this.element = ownerDoc.getDomDocument().createElementNS(uri, qualifiedName);
         elementQName =
             new QName(uri, getLocalPart(qualifiedName), getPrefix(qualifiedName));
-        getSoapDocument().register(this);
+        soapDocument.register(this);
     }
 
     public void ensureNamespaceIsDeclared(String prefix, String uri) {
@@ -199,22 +199,22 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        return element.insertBefore(getSoapDocument().getDomNode(newChild), getSoapDocument().getDomNode(refChild));
+        return soapDocument.findIfPresent(element.insertBefore(soapDocument.getDomNode(newChild), soapDocument.getDomNode(refChild)));
     }
 
     @Override
     public Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        return element.replaceChild(getSoapDocument().getDomNode(newChild), getSoapDocument().getDomNode(oldChild));
+        return soapDocument.findIfPresent(element.replaceChild(soapDocument.getDomNode(newChild), soapDocument.getDomNode(oldChild)));
     }
 
     @Override
     public Node removeChild(Node oldChild) throws DOMException {
-        return element.removeChild(getSoapDocument().getDomNode(oldChild));
+        return soapDocument.findIfPresent(element.removeChild(soapDocument.getDomNode(oldChild)));
     }
 
     @Override
     public Node appendChild(Node newChild) throws DOMException {
-        return element.appendChild(getSoapDocument().getDomNode(newChild));
+        return soapDocument.findIfPresent(element.appendChild(soapDocument.getDomNode(newChild)));
     }
 
     @Override
@@ -618,7 +618,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
     }
 
     protected void addNode(org.w3c.dom.Node newElement) throws SOAPException {
-        insertBefore(getSoapDocument().getDomNode(newElement), null);
+        insertBefore(soapDocument.getDomNode(newElement), null);
 
         if (getOwnerDocument() instanceof DocumentFragment)
             return;
@@ -638,7 +638,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         Node child = getFirstChild();
         while (child != null) {
             if (child instanceof Element) {
-                return (Element) getSoapDocument().find(child);
+                return (Element) soapDocument.find(child);
             }
             child = child.getNextSibling();
         }
@@ -649,7 +649,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         Node eachChild = getFirstChild();
         while (eachChild != null) {
             if (eachChild instanceof Element) {
-                SOAPElement eachChildSoap = (SOAPElement) getSoapDocument().find(eachChild);
+                SOAPElement eachChildSoap = (SOAPElement) soapDocument.find(eachChild);
                 if (eachChildSoap != null) {
                     if (eachChildSoap.getElementName().equals(name)) {
                         return eachChildSoap;
@@ -893,7 +893,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
     }
 
     protected SOAPElement convertToSoapElement(Element element) {
-        final Node soapNode = getSoapDocument().findIfPresent(element);
+        final Node soapNode = soapDocument.findIfPresent(element);
         if (soapNode instanceof SOAPElement) {
             return (SOAPElement) soapNode;
         } else {
@@ -919,7 +919,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
             copy.insertBefore(nextChild, null);
         }
 
-        Node parent = getSoapDocument().find(element.getParentNode());
+        Node parent = soapDocument.find(element.getParentNode());
         if (parent != null) {
             parent.replaceChild(copy, element);
         } // XXX else throw an exception?
@@ -938,7 +938,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
                     while (eachNode.hasNext()) {
                         Node node = eachNode.next();
                         if (node instanceof Element) {
-                            next = getSoapDocument().findIfPresent(node);
+                            next = soapDocument.findIfPresent(node);
                             break;
                         }
                     }
@@ -1116,7 +1116,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
                 normalize();
                 // Should remove the normalization step when this gets fixed in
                 // DOM/Xerces.                
-                return getSoapDocument().find(n);
+                return soapDocument.find(n);
             }
         }
         return null;
@@ -1158,7 +1158,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         if (parentNode instanceof SOAPDocument) {
             return null;
         }
-        return (SOAPElement) getSoapDocument().find(parentNode);
+        return (SOAPElement) soapDocument.find(parentNode);
     }
 
     protected String getSOAPNamespace() {
@@ -1351,7 +1351,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
             Node next = element.getFirstChild();
             Node nextNext = null;
             Node last = null;
-            Node soapElement = getSoapDocument().findIfPresent(element);
+            Node soapElement = soapDocument.findIfPresent(element);
 
             public boolean hasNext() {
                 if (next != null) {
@@ -1377,7 +1377,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
                     }
 
                     nextNext = last.getNextSibling();
-                    return getSoapDocument().findIfPresent(last);
+                    return soapDocument.findIfPresent(last);
                 }
                 throw new NoSuchElementException();
             }
@@ -1498,7 +1498,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public NodeList getElementsByTagNameNS(String namespaceURI, String localName) throws DOMException {
-        return new NodeListImpl(getSoapDocument(), element.getElementsByTagNameNS(namespaceURI, localName));
+        return new NodeListImpl(soapDocument, element.getElementsByTagNameNS(namespaceURI, localName));
     }
 
     @Override
@@ -1553,37 +1553,37 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public Node getParentNode() {
-        return getSoapDocument().find(element.getParentNode());
+        return soapDocument.find(element.getParentNode());
     }
 
     @Override
     public NodeList getChildNodes() {
-        return new NodeListImpl(getSoapDocument(), element.getChildNodes());
+        return new NodeListImpl(soapDocument, element.getChildNodes());
     }
 
     @Override
     public Node getFirstChild() {
-        return getSoapDocument().findIfPresent(element.getFirstChild());
+        return soapDocument.findIfPresent(element.getFirstChild());
     }
 
     @Override
     public Node getLastChild() {
-        return getSoapDocument().findIfPresent(element.getLastChild());
+        return soapDocument.findIfPresent(element.getLastChild());
     }
 
     @Override
     public Node getPreviousSibling() {
-        return getSoapDocument().findIfPresent(element.getPreviousSibling());
+        return soapDocument.findIfPresent(element.getPreviousSibling());
     }
 
     @Override
     public Node getNextSibling() {
-        return getSoapDocument().findIfPresent(element.getNextSibling());
+        return soapDocument.findIfPresent(element.getNextSibling());
     }
 
     @Override
     public NamedNodeMap getAttributes() {
-        return element.getAttributes();
+        return new NamedNodeMapImpl(element.getAttributes(), soapDocument);
     }
 
     public Element getDomElement() {
