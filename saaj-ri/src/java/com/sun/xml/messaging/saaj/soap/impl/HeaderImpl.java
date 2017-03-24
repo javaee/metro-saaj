@@ -251,7 +251,7 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
     }
 
     @Override
-    public SOAPHeaderElement addUpgradeHeaderElement(Iterator<String> supportedSoapUris)
+    public SOAPHeaderElement addUpgradeHeaderElement(Iterator supportedSoapUris)
         throws SOAPException {
         if (supportedSoapUris == null) {
             log.severe("SAAJ0411.ver1_2.no.null.supportedURIs");
@@ -274,7 +274,7 @@ public abstract class HeaderImpl extends ElementImpl implements SOAPHeader {
                 NameImpl.createFromUnqualifiedName("qname"),
                 ns + ":Envelope");
             subElement.addNamespaceDeclaration(
-                ns, supportedSoapUris.next());
+                ns, (String) supportedSoapUris.next());
             i ++;
         }
         return upgradeHeaderElement;

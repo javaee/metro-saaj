@@ -119,6 +119,25 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>prepare-endorsed</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${maven.endorsed.skip}</skip>
+                            <outputDirectory>${endorsed.dir}</outputDirectory>
+                            <silent>false</silent>
+                            <includeArtifactIds>javax.xml.soap-api</includeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.7</source>
@@ -203,29 +222,10 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>prepare-endorsed</id>
-                                <phase>validate</phase>
-                                <goals>
-                                    <goal>copy-dependencies</goal>
-                                </goals>
-                                <configuration>
-                                    <skip>${maven.endorsed.skip}</skip>
-                                    <outputDirectory>${endorsed.dir}</outputDirectory>
-                                    <silent>false</silent>
-                                    <includeArtifactIds>javax.xml.soap-api</includeArtifactIds>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
                             <compilerArgs>
-                                <arg>-Djava.endorsed.dirs=${endorsed.dir}</arg>
+                                <compilerArg>-Djava.endorsed.dirs=${endorsed.dir}</compilerArg>
                             </compilerArgs>
                         </configuration>
                     </plugin>
@@ -241,6 +241,41 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <configuration>
                             <additionalJOption>-J-Djava.endorsed.dirs=${endorsed.dir}</additionalJOption>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jdk9-setup</id>
+            <activation>
+                <jdk>9</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <release>7</release>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>--add-modules java.xml.soap --upgrade-module-path ${endorsed.dir}</argLine>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <additionalJOptions>
+                                <additionalJOption>--add-modules</additionalJOption>
+                                <additionalJOption>java.xml.soap,java.xml.bind</additionalJOption>
+                                <additionalJOption>--upgrade-module-path</additionalJOption>
+                                <additionalJOption>${endorsed.dir}</additionalJOption>
+                            </additionalJOptions>
                         </configuration>
                     </plugin>
                 </plugins>
