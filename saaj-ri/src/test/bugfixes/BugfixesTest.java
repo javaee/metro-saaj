@@ -1630,6 +1630,7 @@ private static final class ByteInputStream extends ByteArrayInputStream {
         return count;
     }
 
+    @Override
     public void close() throws IOException {
         reset();
     }

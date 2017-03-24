@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -102,7 +102,7 @@ public abstract class MessageImpl
     protected boolean saved = false;
     protected byte[] messageBytes;
     protected int messageByteCount;
-    protected HashMap properties = new HashMap();
+    protected Map<String, Object> properties = new HashMap<>();
 
     // used for lazy attachment initialization
     protected MimeMultipart multiPart = null;
@@ -898,17 +898,17 @@ public abstract class MessageImpl
             throw new RuntimeException(e);
         }
         if (attachments == null)
-            attachments = new FinalArrayList<AttachmentPart>();
+            attachments = new FinalArrayList<>();
 
         attachments.add(attachment);
 
         needsSave();
     }
 
-    static private final Iterator nullIter = Collections.EMPTY_LIST.iterator();
+    static private final Iterator<AttachmentPart> nullIter = Collections.<AttachmentPart>EMPTY_LIST.iterator();
 
     @Override
-    public Iterator getAttachments() {
+    public Iterator<AttachmentPart> getAttachments() {
         try {
             initializeAllAttachments();
         } catch (Exception e) {
@@ -978,7 +978,7 @@ public abstract class MessageImpl
     }
 
     @Override
-    public Iterator getAttachments(MimeHeaders headers) {
+    public Iterator<AttachmentPart> getAttachments(MimeHeaders headers) {
         try {
             initializeAllAttachments();
         } catch (Exception e) {

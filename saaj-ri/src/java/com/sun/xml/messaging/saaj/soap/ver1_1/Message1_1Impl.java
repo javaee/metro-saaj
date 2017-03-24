@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -91,6 +91,7 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
             super(headers,ct,stat,reader);
     }
     
+    @Override
     public SOAPPart getSOAPPart() {
         if (soapPartImpl == null) {
             soapPartImpl = new SOAPPart1_1Impl(this);
@@ -98,10 +99,12 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
         return soapPartImpl;
     }
 
+    @Override
     protected boolean isCorrectSoapVersion(int contentTypeId) {
         return (contentTypeId & SOAP1_1_FLAG) != 0;
     }
 
+    @Override
     public String getAction() {
         log.log(
             Level.SEVERE,
@@ -110,6 +113,7 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
         throw new UnsupportedOperationException("Operation not supported by SOAP 1.1");
     }
 
+    @Override
     public void setAction(String type) {
         log.log(
             Level.SEVERE,
@@ -118,6 +122,7 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
         throw new UnsupportedOperationException("Operation not supported by SOAP 1.1");
     }
 
+    @Override
     public String getCharset() {
         log.log(
             Level.SEVERE,
@@ -126,6 +131,7 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
         throw new UnsupportedOperationException("Operation not supported by SOAP 1.1");
     }
 
+    @Override
     public void setCharset(String charset) {
         log.log(
             Level.SEVERE,
@@ -134,10 +140,12 @@ public class Message1_1Impl extends MessageImpl implements SOAPConstants {
         throw new UnsupportedOperationException("Operation not supported by SOAP 1.1");
     }
 
+    @Override
     protected String getExpectedContentType() {
         return isFastInfoset ? "application/fastinfoset" : "text/xml";
     }
 
+    @Override
    protected String getExpectedAcceptHeader() {
        String accept = "text/xml, text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2";
        return acceptFastInfoset ? ("application/fastinfoset, " + accept) : accept;

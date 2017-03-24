@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -82,6 +82,7 @@ public class QPDecoderStream extends FilterInputStream {
      *             stream is reached.
      * @exception  IOException  if an I/O error occurs.
      */
+    @Override
     public int read() throws IOException {
 	if (spaces > 0) {
 	    // We have cached space characters, return one
@@ -165,6 +166,7 @@ public class QPDecoderStream extends FilterInputStream {
      *             the stream has been reached.
      * @exception  IOException  if an I/O error occurs.
      */
+    @Override
     public int read(byte[] buf, int off, int len) throws IOException {
 	int i, c;
 	for (i = 0; i < len; i++) {
@@ -182,6 +184,7 @@ public class QPDecoderStream extends FilterInputStream {
      * Tests if this input stream supports marks. Currently this class
      * does not support marks
      */
+    @Override
     public boolean markSupported() {
 	return false;
     }
@@ -193,6 +196,7 @@ public class QPDecoderStream extends FilterInputStream {
      * this method just invokes the <code>available</code> method
      * of the original input stream.
      */
+    @Override
     public int available() throws IOException {
 	// This is bogus ! We don't really know how much
 	// bytes are available *after* decoding

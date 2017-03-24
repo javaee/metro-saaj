@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -57,6 +57,7 @@ public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
         Logger.getLogger(LogDomainConstants.SOAP_DOMAIN,
                          "com.sun.xml.messaging.saaj.soap.LocalStrings");
 
+    @Override
     protected  MessageFactory newMessageFactory(String protocol)
         throws SOAPException {
         if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol)) {
@@ -75,6 +76,7 @@ public class SAAJMetaFactoryImpl extends SAAJMetaFactory {
         }
     }
 
+    @Override
     protected  SOAPFactory newSOAPFactory(String protocol)
         throws SOAPException {
         if (SOAPConstants.SOAP_1_1_PROTOCOL.equals(protocol)) {

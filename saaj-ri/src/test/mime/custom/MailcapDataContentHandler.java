@@ -68,6 +68,7 @@ public class MailcapDataContentHandler implements DataContentHandler {
      *
      * @return The DataFlavors
      */
+    @Override
     public DataFlavor[] getTransferDataFlavors() { // throws Exception;
         return new DataFlavor[] { getDF() };
     }
@@ -79,6 +80,7 @@ public class MailcapDataContentHandler implements DataContentHandler {
      * @param ins The InputStream corresponding to the data
      * @return String object
      */
+    @Override
     public Object getTransferData(DataFlavor df, DataSource ds)
         throws IOException {
         // use myDF.equals to be sure to get ActivationDataFlavor.equals,
@@ -89,6 +91,7 @@ public class MailcapDataContentHandler implements DataContentHandler {
             return null;
     }
 
+    @Override
     public Object getContent(DataSource ds) throws IOException {
         return new CustomType();
     }
@@ -96,6 +99,7 @@ public class MailcapDataContentHandler implements DataContentHandler {
     /**
      * Write the object to the output stream, using the specified MIME type.
      */
+    @Override
     public void writeTo(Object obj, String type, OutputStream os)
         throws IOException {
         if (!(obj instanceof CustomType)) {             

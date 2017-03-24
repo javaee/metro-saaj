@@ -52,7 +52,7 @@
     <artifactId>saaj-impl</artifactId>
     <version>1.4.0-b07-SNAPSHOT</version>
     <description>
-        Open source Reference Implementation of JSR-67: SOAP with Attachments API for Java (SAAJ MR :1.3)
+        Open source Reference Implementation of JSR-67: SOAP with Attachments API for Java (SAAJ MR: 1.4)
     </description>
     <scm>
         <connection>scm:git:git@orahub.oraclecorp.com:fmw-infra-metro/saaj-ri.git</connection>
@@ -118,6 +118,17 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <compilerArgs>
+                        <compilerArg>-Xlint:all</compilerArg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <argLine>-Dhttp.proxyHost=www-proxy.us.oracle.com -Dhttp.proxyPort=80 -Dhttps.proxyHost=www-proxy.us.oracle.com -Dhttps.proxyPort=80</argLine>
                 </configuration>
             </plugin>
             <plugin>
@@ -187,6 +198,57 @@
     </build>
     
     <profiles>
+        <profile>
+            <id>endorsed-dirs</id>
+            <activation>
+                <jdk>[1.6,9)</jdk>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare-endorsed</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>${maven.endorsed.skip}</skip>
+                                    <outputDirectory>${endorsed.dir}</outputDirectory>
+                                    <silent>false</silent>
+                                    <includeArtifactIds>javax.xml.soap-api</includeArtifactIds>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <compilerArgs>
+                                <arg>-Djava.endorsed.dirs=${endorsed.dir}</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>-Djava.endorsed.dirs="${endorsed.dir}"</argLine>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <configuration>
+                            <additionalJOption>-J-Djava.endorsed.dirs=${endorsed.dir}</additionalJOption>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <!-- invoke unit tests against JDK like this:
          mvn clean test -DtestInJdk -Djdk.to.test=$jdk/home/path/bin/java
          -->
@@ -329,7 +391,7 @@
             <dependency>
                 <groupId>javax.xml.soap</groupId>
                 <artifactId>javax.xml.soap-api</artifactId>
-                <version>1.4.0-b01</version>
+                <version>1.4.0-b02</version>
             </dependency>
             <dependency>
                 <groupId>org.jvnet.mimepull</groupId>
@@ -382,7 +444,7 @@
     <properties>
         <findbugs.exclude>${project.basedir}/exclude.xml</findbugs.exclude>
         <findbugs.threshold>Low</findbugs.threshold>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     </properties>
     
 </project>
-

@@ -115,6 +115,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
     protected abstract NameImpl getHeaderName(String prefix);
     protected abstract NameImpl getBodyName(String prefix);
 
+    @Override
     public SOAPHeader addHeader() throws SOAPException {
         return addHeader(null);
     }
@@ -155,6 +156,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         header = hdr;
     }
 
+    @Override
     public SOAPHeader getHeader() throws SOAPException {
         lookForHeader();
         return header;
@@ -167,6 +169,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         body = bodyChildElement;
     }
 
+    @Override
     public SOAPBody addBody() throws SOAPException {
         return addBody(null);
     }
@@ -191,6 +194,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         return body;
     }
 
+    @Override
     protected SOAPElement addElement(Name name) throws SOAPException {
         if (getBodyName(null).equals(name)) {
             return addBody(name.getPrefix());
@@ -202,6 +206,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         return super.addElement(name);
     }
 
+    @Override
     protected SOAPElement addElement(QName name) throws SOAPException {
         if (getBodyName(null).equals(NameImpl.convertToName(name))) {
             return addBody(name.getPrefix());
@@ -213,15 +218,18 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         return super.addElement(name);
     }
 
+    @Override
     public SOAPBody getBody() throws SOAPException {
         lookForBody();
         return body;
     }
 
+    @Override
     public Source getContent() {
         return new DOMSource(getOwnerDocument());
     }
 
+    @Override
     public Name createName(String localName, String prefix, String uri)
         throws SOAPException {
 
@@ -256,6 +264,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         return NameImpl.create(localName, prefix, namespace);
     }
 
+    @Override
     public Name createName(String localName) throws SOAPException {
         return NameImpl.createFromUnqualifiedName(localName);
     }
@@ -272,6 +281,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         charset = value;
     }
     
+    @Override
     public void output(OutputStream out) throws IOException {
         try {
 //            materializeBody();
@@ -316,6 +326,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
     /**
      * Serialize to FI if boolean parameter set.
      */
+    @Override
     public void output(OutputStream out, boolean isFastInfoset) 
         throws IOException 
     {
@@ -368,6 +379,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
     //    }
 
 
+    @Override
      public SOAPElement setElementQName(QName newName) throws SOAPException {
         log.log(Level.SEVERE,
                 "SAAJ0146.impl.invalid.name.change.requested",
@@ -404,6 +416,7 @@ public abstract class EnvelopeImpl extends ElementImpl implements LazyEnvelope {
         	final DOMStreamReader reader = new DOMStreamReader(this);
 	        XMLStreamReaderToXMLStreamWriter writingBridge =  new XMLStreamReaderToXMLStreamWriter();	        
 	        writingBridge.bridge( new XMLStreamReaderToXMLStreamWriter.Breakpoint(reader, writer) {
+                        @Override
         		public boolean proceedAfterStartElement()  { 
         			if ("Body".equals(reader.getLocalName()) && soapEnvNS.equals(reader.getNamespaceURI()) ){
         				return false;

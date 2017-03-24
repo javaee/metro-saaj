@@ -83,6 +83,7 @@ public  class ReceivingServlet extends HttpServlet {
      * @param servletConfig the <code>ServletConfig</code> object to be
      *        used in initializing this <code>SAAJServlet</code> object
      */
+    @Override
     public void init(ServletConfig servletConfig)
             throws ServletException {
         super.init(servletConfig);
@@ -182,6 +183,7 @@ public  class ReceivingServlet extends HttpServlet {
      * @throws ServletException if there is a servlet error
      * @throws IOException if there is an input or output error
      */
+    @Override
     public void doPost(HttpServletRequest req,
             HttpServletResponse resp)
             throws ServletException, IOException {
@@ -235,6 +237,7 @@ public  class ReceivingServlet extends HttpServlet {
     }
 
     static int i=1;
+    @Override
     public void doGet(HttpServletRequest req,
             HttpServletResponse resp)
             throws ServletException, IOException {

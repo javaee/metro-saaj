@@ -60,6 +60,7 @@ public class SetElementNameTest extends TestCase {
 	        super(name);
     	}
 
+        @Override
 	public void setUp() throws Exception {
 		createMessageOne();
 		createMessageTwo();

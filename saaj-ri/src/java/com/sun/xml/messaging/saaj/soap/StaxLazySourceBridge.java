@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -65,6 +65,7 @@ public class StaxLazySourceBridge extends StaxBridge {
 		final String soapEnvNS = soapPart.getSOAPNamespace();
 		try {
 			breakpoint = new XMLStreamReaderToXMLStreamWriter.Breakpoint(src.readToBodyStarTag(), saajWriter) {
+                                            @Override
 			    		public boolean proceedAfterStartElement()  { 
 			    			if ("Body".equals(reader.getLocalName()) && soapEnvNS.equals(reader.getNamespaceURI()) ){
 			    				return false;
@@ -110,6 +111,7 @@ public class StaxLazySourceBridge extends StaxBridge {
         return null;
     }
 	
+        @Override
 	public void bridgePayload() throws XMLStreamException {
 		//Assuming out is at Body
 		writePayloadTo(saajWriter);

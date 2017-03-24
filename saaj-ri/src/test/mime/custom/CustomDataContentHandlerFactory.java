@@ -54,6 +54,7 @@ public class CustomDataContentHandlerFactory
     /**
      * Data handler for "custom/factory" MIME type
      */
+    @Override
     public DataContentHandler createDataContentHandler(String mimeType) {
 		if (mimeType.equals("custom/factory")) {
 			return new FactoryDataContentHandler();

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -68,6 +68,7 @@ public class FaultElement1_2Impl extends FaultElementImpl {
         super(ownerDoc, NameImpl.createSOAP12Name(localName));
     }
 
+    @Override
     protected boolean isStandardFaultElement() {
         String localName = elementQName.getLocalPart();
         if (localName.equalsIgnoreCase("code") ||
@@ -79,6 +80,7 @@ public class FaultElement1_2Impl extends FaultElementImpl {
         return false;
     }
 
+    @Override
     public SOAPElement setElementQName(QName newName) throws SOAPException {
         if (!isStandardFaultElement()) {
             FaultElement1_2Impl copy =
@@ -89,11 +91,13 @@ public class FaultElement1_2Impl extends FaultElementImpl {
         }
     }
 
+    @Override
     public void setEncodingStyle(String encodingStyle) throws SOAPException {        
         log.severe("SAAJ0408.ver1_2.no.encodingStyle.in.fault.child");
         throw new SOAPExceptionImpl("encodingStyle attribute cannot appear on a Fault child element");
     }
 
+    @Override
     public SOAPElement addAttribute(Name name, String value)
         throws SOAPException {
         if (name.getLocalName().equals("encodingStyle")
@@ -103,6 +107,7 @@ public class FaultElement1_2Impl extends FaultElementImpl {
         return super.addAttribute(name, value);
     }
 
+    @Override
     public SOAPElement addAttribute(QName name, String value)
         throws SOAPException {
         if (name.getLocalPart().equals("encodingStyle")

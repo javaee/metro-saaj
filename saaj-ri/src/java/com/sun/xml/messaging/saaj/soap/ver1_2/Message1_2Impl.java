@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -84,6 +84,7 @@ public class Message1_2Impl extends MessageImpl implements SOAPConstants{
             super(headers,ct,stat,reader);
     }
     
+    @Override
     public SOAPPart getSOAPPart()  {
         if (soapPartImpl == null)
             soapPartImpl = new SOAPPart1_2Impl(this);
@@ -91,14 +92,17 @@ public class Message1_2Impl extends MessageImpl implements SOAPConstants{
         return soapPartImpl;
     }
 
+    @Override
     protected boolean isCorrectSoapVersion(int contentTypeId) {
         return (contentTypeId & SOAP1_2_FLAG) != 0;
     }
 
+    @Override
     protected String getExpectedContentType() {
         return isFastInfoset ? "application/soap+fastinfoset" : "application/soap+xml";
     }
 
+    @Override
    protected String getExpectedAcceptHeader() {
        String accept = "application/soap+xml, text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2";
        return acceptFastInfoset ? ("application/soap+fastinfoset, " + accept) : accept;

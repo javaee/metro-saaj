@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -69,10 +69,12 @@ public class SOAPPart1_1Impl extends SOAPPartImpl implements SOAPConstants {
         super(message);
     }
 
+    @Override
     protected String getContentType() {
         return isFastInfoset() ? "application/fastinfoset" : "text/xml";
     }
 
+    @Override
     protected Envelope createEnvelopeFromSource() throws SOAPException {
         // Record the presence of xml declaration before the envelope gets
         // created.
@@ -95,11 +97,13 @@ public class SOAPPart1_1Impl extends SOAPPartImpl implements SOAPConstants {
         return envelope;
     }
 
+    @Override
     protected Envelope createEmptyEnvelope(String prefix)
         throws SOAPException {
         return new Envelope1_1Impl(getDocument(), prefix, true, true);
     }
 
+    @Override
     protected SOAPPartImpl duplicateType() {
         return new SOAPPart1_1Impl();
     }

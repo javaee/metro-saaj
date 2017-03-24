@@ -76,12 +76,14 @@ public class SaajStaxWriterNamespaceTest extends TestCase {
     private SOAPMessage message;
     private SaajStaxWriter writer;
 
+    @Override
     protected void setUp() throws Exception {
         super.setUp();
         message = MessageFactory.newInstance().createMessage();
         writer = new SaajStaxWriter(message, ENV_URI);
     }
 
+    @Override
     protected  void tearDown() throws Exception {
         super.tearDown();
         this.message = null;

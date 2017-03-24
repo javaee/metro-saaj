@@ -45,21 +45,30 @@ import java.util.Locale;
 import java.util.logging.Level;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.*;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import com.sun.xml.messaging.saaj.util.SAAJUtil;
-import org.w3c.dom.*;
-import org.w3c.dom.Node;
 
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
 import com.sun.xml.messaging.saaj.soap.SOAPDocument;
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.StaxBridge;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+import javax.xml.soap.Name;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPBodyElement;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPFault;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * The implementation of SOAP-ENV:BODY or the SOAPBody abstraction.
@@ -87,6 +96,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
     protected abstract SOAPFault createFaultElement();
     protected abstract QName getDefaultFaultCode();
 
+    @Override
     public SOAPFault addFault() throws SOAPException {
         if (hasFault()) {
             log.severe("SAAJ0110.impl.fault.already.exists");
@@ -103,6 +113,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return fault;
     }
 
+    @Override
     public SOAPFault addFault(
         Name faultCode,
         String faultString,
@@ -115,6 +126,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return fault;
     }
 
+    @Override
    public SOAPFault addFault(
         QName faultCode,
         String faultString,
@@ -127,6 +139,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return fault;
     }
 
+    @Override
     public SOAPFault addFault(Name faultCode, String faultString)
         throws SOAPException {
 
@@ -136,6 +149,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return fault;
     }
 
+    @Override
     public SOAPFault addFault(QName faultCode, String faultString)
         throws SOAPException {
 
@@ -162,6 +176,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return null;
     }
 
+    @Override
     public boolean hasFault() {
         QName payloadQName = getPayloadQName();
         return getFaultQName().equals(payloadQName);
@@ -171,6 +186,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return new QName(getNamespaceURI(), "Fault");
     }
 
+    @Override
     public SOAPFault getFault() {
         if (hasFault()) {
             if (fault == null) {
@@ -182,6 +198,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return null;
     }
 
+    @Override
     public SOAPBodyElement addBodyElement(Name name) throws SOAPException {
         SOAPBodyElement newBodyElement =
             (SOAPBodyElement) ElementFactory.createNamedElement(
@@ -196,6 +213,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return newBodyElement;
     }
 
+    @Override
     public SOAPBodyElement addBodyElement(QName qname) throws SOAPException {
         SOAPBodyElement newBodyElement =
             (SOAPBodyElement) ElementFactory.createNamedElement(
@@ -210,6 +228,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         return newBodyElement;
     }
 
+    @Override
     public void setParentElement(SOAPElement element) throws SOAPException {
 
         if (!(element instanceof SOAPEnvelope)) {
@@ -219,10 +238,12 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         super.setParentElement(element);
     }
 
+    @Override
     protected SOAPElement addElement(Name name) throws SOAPException {
         return addBodyElement(name);
     }
 
+    @Override
     protected SOAPElement addElement(QName name) throws SOAPException {
         return addBodyElement(name);
     }
@@ -241,6 +262,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
     //        return super.replaceChild(newElement, ref);
     //    }
 
+    @Override
     public SOAPBodyElement addDocument(Document document)
         throws SOAPException {
         /*
@@ -267,7 +289,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
             org.w3c.dom.Node replacingNode = ownerDoc.importNode(docFrag, true);
             // Adding replacingNode at the last of the children list of body
             addNode(replacingNode);
-            Iterator<Node> i =
+            Iterator<javax.xml.soap.Node> i =
                 getChildElements(NameImpl.copyElementName(rootElement));
             // Return the child element with the required name which is at the
             // end of the list
@@ -278,6 +300,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         //*/        
     }
 
+    @Override
     protected SOAPElement convertToSoapElement(Element element) {
         final Node soapNode = getSoapDocument().findIfPresent(element);
         if ((soapNode instanceof SOAPBodyElement) &&
@@ -293,6 +316,7 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
         }
     }
 
+    @Override
     public SOAPElement setElementQName(QName newName) throws SOAPException {
         log.log(Level.SEVERE,
                 "SAAJ0146.impl.invalid.name.change.requested",
@@ -303,9 +327,10 @@ public abstract class BodyImpl extends ElementImpl implements SOAPBody {
                                 + newName.getLocalPart());
     }
 
+    @Override
     public Document extractContentAsDocument() throws SOAPException {
 
-        Iterator<Node> eachChild = getChildElements();
+        Iterator<javax.xml.soap.Node> eachChild = getChildElements();
         javax.xml.soap.Node firstBodyElement = null;
 
         while (eachChild.hasNext() &&

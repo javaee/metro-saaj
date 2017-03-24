@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -91,6 +91,7 @@ class HttpSOAPConnection extends SOAPConnection {
         }
     }
 
+    @Override
     public void close() throws SOAPException {
         if (closed) {
             log.severe("SAAJ0002.p2p.close.already.closed.conn");
@@ -101,6 +102,7 @@ class HttpSOAPConnection extends SOAPConnection {
         closed = true;
     }
 
+    @Override
    public SOAPMessage call(SOAPMessage message, Object endPoint)
         throws SOAPException {
         if (closed) {
@@ -363,6 +365,7 @@ class HttpSOAPConnection extends SOAPConnection {
     // Object identifies where the request should be sent.
     // It is required to support objects of type String and java.net.URL.
 
+    @Override
     public SOAPMessage get(Object endPoint) throws SOAPException {
         if (closed) {
             log.severe("SAAJ0011.p2p.get.already.closed.conn");

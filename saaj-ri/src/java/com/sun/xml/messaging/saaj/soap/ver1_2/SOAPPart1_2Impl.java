@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -68,14 +68,17 @@ public class SOAPPart1_2Impl extends SOAPPartImpl implements SOAPConstants{
         super(message);
     }
     
+    @Override
     protected String getContentType() {
         return "application/soap+xml";
     }
 
+    @Override
     protected Envelope createEmptyEnvelope(String prefix) throws SOAPException {
         return new Envelope1_2Impl(getDocument(), prefix, true, true);
     }
 
+    @Override
     protected Envelope createEnvelopeFromSource() throws SOAPException {
         XMLDeclarationParser parser = lookForXmlDecl();
         Source tmp = source;
@@ -97,6 +100,7 @@ public class SOAPPart1_2Impl extends SOAPPartImpl implements SOAPConstants{
 
     }
 
+    @Override
     protected SOAPPartImpl duplicateType() {
         return new SOAPPart1_2Impl();
     }

@@ -71,6 +71,7 @@ public class Header1_1Impl extends HeaderImpl {
         super(ownerDoc, domElement);
     }
 
+    @Override
     protected NameImpl getNotUnderstoodName() {
         log.log(
             Level.SEVERE,
@@ -79,6 +80,7 @@ public class Header1_1Impl extends HeaderImpl {
         throw new UnsupportedOperationException("Not supported by SOAP 1.1");
     }
 
+    @Override
     protected NameImpl getUpgradeName() {
         return NameImpl.create(
             "Upgrade",
@@ -86,6 +88,7 @@ public class Header1_1Impl extends HeaderImpl {
             SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE);
     }
 
+    @Override
     protected NameImpl getSupportedEnvelopeName() {
         return NameImpl.create(
             "SupportedEnvelope",
@@ -93,6 +96,7 @@ public class Header1_1Impl extends HeaderImpl {
             SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE);
     }
 
+    @Override
     public SOAPHeaderElement addNotUnderstoodHeaderElement(QName name)
         throws SOAPException {            
         log.log(
@@ -102,11 +106,13 @@ public class Header1_1Impl extends HeaderImpl {
         throw new UnsupportedOperationException("Not supported by SOAP 1.1");
     }
 
+    @Override
     protected SOAPHeaderElement createHeaderElement(Name name) {
         return new HeaderElement1_1Impl(
             ((SOAPDocument) getOwnerDocument()).getDocument(),
             name);
     }
+    @Override
     protected SOAPHeaderElement createHeaderElement(QName name) {
         return new HeaderElement1_1Impl(
             ((SOAPDocument) getOwnerDocument()).getDocument(),

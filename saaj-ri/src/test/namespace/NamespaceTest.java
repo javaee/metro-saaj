@@ -69,6 +69,7 @@ public class NamespaceTest extends TestCase {
         super(name);
     }
 
+    @Override
     protected void setUp() {
 
         try {

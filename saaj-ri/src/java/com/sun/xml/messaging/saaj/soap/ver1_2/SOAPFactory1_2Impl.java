@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2012 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -54,14 +54,17 @@ import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.SOAPFactoryImpl;
 
 public class SOAPFactory1_2Impl extends SOAPFactoryImpl {
+    @Override
     protected SOAPDocumentImpl createDocument() {
         return (new SOAPPart1_2Impl()).getDocument();
     }
 
+    @Override
     public Detail createDetail() throws SOAPException {
         return new Detail1_2Impl(createDocument());
     }
 
+    @Override
     public SOAPFault createFault(String reasonText, QName faultCode)
         throws SOAPException {
          if (faultCode == null) {
@@ -76,6 +79,7 @@ public class SOAPFactory1_2Impl extends SOAPFactoryImpl {
         return fault;
     }
                                                                                                            
+    @Override
     public SOAPFault createFault() throws SOAPException {
         Fault1_2Impl fault = new Fault1_2Impl(createDocument(), null);
         fault.setFaultCode(fault.getDefaultFaultCode());

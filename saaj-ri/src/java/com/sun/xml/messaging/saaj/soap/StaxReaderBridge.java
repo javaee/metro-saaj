@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -62,6 +62,7 @@ public class StaxReaderBridge extends StaxBridge {
 		breakpoint =  new XMLStreamReaderToXMLStreamWriter.Breakpoint(reader, saajWriter) {
 	        	boolean seenBody = false;
 	        	boolean stopedAtBody = false;
+                        @Override
 	            public boolean proceedBeforeStartElement()  { 
 	            	if (stopedAtBody) return true;
 	            	if (seenBody) {
@@ -76,18 +77,22 @@ public class StaxReaderBridge extends StaxBridge {
 	        };
 	}
 
+        @Override
     public XMLStreamReader getPayloadReader() {
         return in;
     }
 
+        @Override
     public QName getPayloadQName() {
         return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getName() : null;
     }
     
+        @Override
     public String getPayloadAttributeValue(String attName) {
         return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getAttributeValue(null, attName) : null;
     }
 
+        @Override
     public String getPayloadAttributeValue(QName attName) {
         return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getAttributeValue(attName.getNamespaceURI(), attName.getLocalPart()) : null;
     }
