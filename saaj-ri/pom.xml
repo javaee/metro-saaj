@@ -71,18 +71,6 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-        <resources>
-            <resource>
-                <directory>src/java</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
-            </resource>
-            <resource>
-                <directory>src/conf/META-INF</directory>
-                <targetPath>META-INF</targetPath>
-            </resource>
-        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
