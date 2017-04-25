@@ -61,6 +61,11 @@ public class ParserPool {
     public ParserPool(int capacity) {
         queue = new ArrayBlockingQueue<SAXParser>(capacity);
         factory = SAXParserFactory.newInstance("com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl", SAAJUtil.getSystemClassLoader());
+        try {
+            factory.setFeature("jdk.xml.resetSymbolTable", true);
+        } catch (SAXException e) {
+        } catch (ParserConfigurationException e) {
+        }
         factory.setNamespaceAware(true);
         for (int i = 0; i < capacity; i++) {
            try {
