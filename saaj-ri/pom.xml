@@ -281,6 +281,18 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>jvnet-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <!-- invoke unit tests against JDK like this:
          mvn clean test -DtestInJdk -Djdk.to.test=$jdk/home/path/bin/java
          -->
