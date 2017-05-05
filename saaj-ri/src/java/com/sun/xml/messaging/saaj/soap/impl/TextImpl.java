@@ -61,14 +61,24 @@ import org.w3c.dom.UserDataHandler;
 public abstract class TextImpl<T extends CharacterData> implements Text, CharacterData {
 
     protected static final Logger log
-            = Logger.getLogger(LogDomainConstants.SOAP_IMPL_DOMAIN,
-                    "com.sun.xml.messaging.saaj.soap.impl.LocalStrings");
+        = Logger.getLogger(LogDomainConstants.SOAP_IMPL_DOMAIN,
+        "com.sun.xml.messaging.saaj.soap.impl.LocalStrings");
     private final T domNode;
+    private SOAPDocumentImpl soapDocument;
 
     protected TextImpl(SOAPDocumentImpl ownerDoc, String text) {
+        soapDocument = ownerDoc;
         domNode = createN(ownerDoc, text);
         ownerDoc.register(this);
     }
+
+    protected TextImpl(SOAPDocumentImpl ownerDoc, CharacterData data) {
+        soapDocument = ownerDoc;
+        domNode = createN(ownerDoc, data);
+        ownerDoc.register(this);
+    }
+
+    protected abstract T createN(SOAPDocumentImpl ownerDoc, CharacterData data);
 
     protected abstract T createN(SOAPDocumentImpl ownerDoc, String text);
 
@@ -105,7 +115,7 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
     public void detachNode() {
         org.w3c.dom.Node parent = getParentNode();
         if (parent != null) {
-             parent.removeChild(getDomElement());
+            parent.removeChild(getDomElement());
         }
     }
 
@@ -139,32 +149,32 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
 
     @Override
     public Node getParentNode() {
-        return domNode.getParentNode();
+        return soapDocument.findIfPresent(domNode.getParentNode());
     }
 
     @Override
     public NodeList getChildNodes() {
-        return domNode.getChildNodes();
+        return new NodeListImpl(soapDocument, domNode.getChildNodes());
     }
 
     @Override
     public Node getFirstChild() {
-        return domNode.getFirstChild();
+        return soapDocument.findIfPresent(domNode.getFirstChild());
     }
 
     @Override
     public Node getLastChild() {
-        return domNode.getLastChild();
+        return soapDocument.findIfPresent(domNode.getLastChild());
     }
 
     @Override
     public Node getPreviousSibling() {
-        return domNode.getPreviousSibling();
+        return soapDocument.findIfPresent(domNode.getPreviousSibling());
     }
 
     @Override
     public Node getNextSibling() {
-        return domNode.getNextSibling();
+        return soapDocument.findIfPresent(domNode.getNextSibling());
     }
 
     @Override
@@ -177,24 +187,31 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
         return domNode.getOwnerDocument();
     }
 
+    public Node getDomNode(Node node) {
+        return soapDocument.getDomNode(node);
+    }
+
     @Override
     public Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        return domNode.insertBefore(newChild, refChild);
+        Node node = soapDocument.importNode(newChild, true);
+        return soapDocument.findIfPresent(domNode.insertBefore(getDomNode(node), getDomNode(refChild)));
     }
 
     @Override
     public Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        return domNode.replaceChild(newChild, oldChild);
+        Node node = soapDocument.importNode(newChild, true);
+        return soapDocument.findIfPresent(domNode.replaceChild(getDomNode(node), getDomNode(oldChild)));
     }
 
     @Override
     public Node removeChild(Node oldChild) throws DOMException {
-        return domNode.removeChild(oldChild);
+        return soapDocument.findIfPresent(domNode.removeChild(getDomNode(oldChild)));
     }
 
     @Override
     public Node appendChild(Node newChild) throws DOMException {
-        return domNode.appendChild(newChild);
+        Node node = soapDocument.importNode(newChild, true);
+        return soapDocument.findIfPresent(domNode.appendChild(getDomNode(node)));
     }
 
     @Override
@@ -204,7 +221,9 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
 
     @Override
     public Node cloneNode(boolean deep) {
-        return domNode.cloneNode(deep);
+        Node node = domNode.cloneNode(deep);
+        soapDocument.registerChildNodes(node, deep);
+        return soapDocument.findIfPresent(node);
     }
 
     @Override
@@ -249,7 +268,7 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
 
     @Override
     public short compareDocumentPosition(Node other) throws DOMException {
-        return domNode.compareDocumentPosition(other);
+        return domNode.compareDocumentPosition(getDomNode(other));
     }
 
     @Override
@@ -264,7 +283,7 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
 
     @Override
     public boolean isSameNode(Node other) {
-        return domNode.isSameNode(other);
+        return domNode.isSameNode(getDomNode(other));
     }
 
     @Override
@@ -284,7 +303,7 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
 
     @Override
     public boolean isEqualNode(Node arg) {
-        return domNode.isEqualNode(arg);
+        return domNode.isEqualNode(getDomNode(arg));
     }
 
     @Override
@@ -341,5 +360,4 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
     public void replaceData(int offset, int count, String arg) throws DOMException {
         domNode.replaceData(offset, count, arg);
     }
-
 }
