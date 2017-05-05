@@ -157,7 +157,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
      * whose [prefix] property has no value) have a namespace URI of http://www.w3.org/2000/xmlns/
      */
     public final static String XMLNS_URI = "http://www.w3.org/2000/xmlns/".intern();
-    
+
     /**
      * The XML Namespace ("http://www.w3.org/XML/1998/namespace"). This is
      * the Namespace URI that is automatically mapped to the "xml" prefix.
@@ -165,7 +165,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
     public final static String XML_URI = "http://www.w3.org/XML/1998/namespace".intern();
 
     private final static String XMLNS = "xmlns".intern();
-    
+
     public ElementImpl(SOAPDocumentImpl ownerDoc, Name name) {
         this.soapDocument = ownerDoc;
         this.element = ownerDoc.getDomDocument().createElementNS(name.getURI(), name.getQualifiedName());
@@ -214,24 +214,31 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         return soapDocument;
     }
 
+    public Node getDomNode(Node node) {
+        return soapDocument.getDomNode(node);
+    }
+
     @Override
     public Node insertBefore(Node newChild, Node refChild) throws DOMException {
-        return soapDocument.findIfPresent(element.insertBefore(soapDocument.getDomNode(newChild), soapDocument.getDomNode(refChild)));
+        Node node = soapDocument.importNode(newChild, true);
+        return soapDocument.findIfPresent(element.insertBefore(getDomNode(node), getDomNode(refChild)));
     }
 
     @Override
     public Node replaceChild(Node newChild, Node oldChild) throws DOMException {
-        return soapDocument.findIfPresent(element.replaceChild(soapDocument.getDomNode(newChild), soapDocument.getDomNode(oldChild)));
+        Node node = soapDocument.importNode(newChild, true);
+        return soapDocument.findIfPresent(element.replaceChild(getDomNode(node), getDomNode(oldChild)));
     }
 
     @Override
     public Node removeChild(Node oldChild) throws DOMException {
-        return soapDocument.findIfPresent(element.removeChild(soapDocument.getDomNode(oldChild)));
+        return soapDocument.findIfPresent(element.removeChild(getDomNode(oldChild)));
     }
 
     @Override
     public Node appendChild(Node newChild) throws DOMException {
-        return soapDocument.findIfPresent(element.appendChild(soapDocument.getDomNode(newChild)));
+        Node node = soapDocument.importNode(newChild, true);
+        return soapDocument.findIfPresent(element.appendChild(getDomNode(node)));
     }
 
     @Override
@@ -241,7 +248,9 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public Node cloneNode(boolean deep) {
-        return element.cloneNode(deep);
+        Node elementNSNode = element.cloneNode(deep);
+        soapDocument.registerChildNodes(elementNSNode, deep);
+        return soapDocument.findIfPresent(getDomNode(elementNSNode));
     }
 
     @Override
@@ -286,7 +295,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public short compareDocumentPosition(Node other) throws DOMException {
-        return element.compareDocumentPosition(other);
+        return element.compareDocumentPosition(getDomNode(other));
     }
 
     @Override
@@ -301,7 +310,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public boolean isSameNode(Node other) {
-        return element.isSameNode(other);
+        return element.isSameNode(getDomNode(other));
     }
 
     @Override
@@ -321,7 +330,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public boolean isEqualNode(Node arg) {
-        return element.isEqualNode(arg);
+        return element.isEqualNode(getDomNode(arg));
     }
 
     @Override
@@ -363,7 +372,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         throws SOAPException {
         String uri = getNamespaceURI(prefix);
         if (uri == null) {
-            log.log( 
+            log.log(
                 Level.SEVERE,
                 "SAAJ0101.impl.parent.of.body.elem.mustbe.body",
                 new String[] { prefix });
@@ -379,7 +388,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         if ("xmlns".equals(prefix)) {
             return XMLNS_URI;
         }
-        
+
         if("xml".equals(prefix)) {
             return XML_URI;
         }
@@ -421,12 +430,12 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         } else if (prefix != null) {
             // Find if there's an ancester whose name contains this prefix
             org.w3c.dom.Node currentAncestor = this;
-            
+
 //            String uri = currentAncestor.lookupNamespaceURI(prefix);
 //            return uri;
             while (currentAncestor != null &&
                    !(currentAncestor instanceof Document)) {
-                
+
                /* if (prefix.equals(currentAncestor.getPrefix())) {
                     String uri = currentAncestor.getNamespaceURI();
                     // this is because the javadoc says getNamespaceURI() is not a computed value
@@ -438,7 +447,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
                 //if (uri != null) {
                 //    return uri;
                 //}
-                
+
                 if (((Element) currentAncestor).hasAttributeNS(
                         XMLNS_URI, prefix)) {
                     return ((Element) currentAncestor).getAttributeNS(
@@ -460,13 +469,13 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
     }
 
     @Override
-    public QName createQName(String localName, String prefix) 
+    public QName createQName(String localName, String prefix)
         throws SOAPException {
         String uri = getNamespaceURI(prefix);
         if (uri == null) {
             log.log(Level.SEVERE, "SAAJ0102.impl.cannot.locate.ns",
                     new Object[] {prefix});
-            throw new SOAPException("Unable to locate namespace for prefix " 
+            throw new SOAPException("Unable to locate namespace for prefix "
                                     + prefix);
         }
         return new QName(uri, localName, prefix);
@@ -530,7 +539,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         String prefix,
         String uri)
         throws SOAPException {
-        
+
         SOAPElement newElement = createElement(NameImpl.create(localName, prefix, uri));
         addNode(newElement);
         return convertToSoapElement(newElement);
@@ -548,7 +557,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
             || (SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE).equals(elementURI)) {
 
 
-            if ("Envelope".equalsIgnoreCase(localName) || 
+            if ("Envelope".equalsIgnoreCase(localName) ||
                 "Header".equalsIgnoreCase(localName) || "Body".equalsIgnoreCase(localName)) {
                 log.severe("SAAJ0103.impl.cannot.add.fragements");
                 throw new SOAPExceptionImpl(
@@ -559,7 +568,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
             if ("Fault".equalsIgnoreCase(localName) && !"Body".equalsIgnoreCase(this.getLocalName())) {
                 log.severe("SAAJ0154.impl.adding.fault.to.nonbody");
                 throw new SOAPExceptionImpl("Cannot add a SOAPFault as a child of " + this.getLocalName());
-            } 
+            }
 
             if ("Detail".equalsIgnoreCase(localName) && !"Fault".equalsIgnoreCase(this.getLocalName())) {
                 log.severe("SAAJ0155.impl.adding.detail.nonfault");
@@ -568,17 +577,17 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
             if ("Fault".equalsIgnoreCase(localName)) {
                // if body is not empty throw an exception
-               if (!elementURI.equals(this.getElementName().getURI())) {
-                   log.severe("SAAJ0158.impl.version.mismatch.fault");
-                   throw new SOAPExceptionImpl("SOAP Version mismatch encountered when trying to add SOAPFault to SOAPBody");
-               }
-               Iterator<javax.xml.soap.Node> it = this.getChildElements();
-               if (it.hasNext()) {
-                   log.severe("SAAJ0156.impl.adding.fault.error");
-                   throw new SOAPExceptionImpl("Cannot add SOAPFault as a child of a non-Empty SOAPBody");
-               }
+                if (!elementURI.equals(this.getElementName().getURI())) {
+                    log.severe("SAAJ0158.impl.version.mismatch.fault");
+                    throw new SOAPExceptionImpl("SOAP Version mismatch encountered when trying to add SOAPFault to SOAPBody");
+                }
+                Iterator<javax.xml.soap.Node> it = this.getChildElements();
+                if (it.hasNext()) {
+                    log.severe("SAAJ0156.impl.adding.fault.error");
+                    throw new SOAPExceptionImpl("Cannot add SOAPFault as a child of a non-Empty SOAPBody");
+                }
             }
-        }    
+        }
 
         // preserve the encodingStyle attr as it may get lost in the import
         String encodingStyle = element.getEncodingStyle();
@@ -596,13 +605,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
     }
 
     protected Element importElement(Element element) {
-        Document document = getOwnerDocument();
-        Document oldDocument = element.getOwnerDocument();
-        if (!oldDocument.equals(document)) {
-            return (Element) document.importNode(element, true);
-        } else {
-            return element;
-        }
+        return (Element) soapDocument.importNode(element, true);
     }
 
     protected SOAPElement addElement(Name name) throws SOAPException {
@@ -622,8 +625,8 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         if (isNamespaceQualified(name)) {
             return (SOAPElement)
                 getOwnerDocument().createElementNS(
-                                       name.getURI(),
-                                       name.getQualifiedName());
+                    name.getURI(),
+                    name.getQualifiedName());
         } else {
             return (SOAPElement)
                 getOwnerDocument().createElement(name.getQualifiedName());
@@ -635,20 +638,24 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         if (isNamespaceQualified(name)) {
             return (SOAPElement)
                 getOwnerDocument().createElementNS(
-                                       name.getNamespaceURI(),
-                                       getQualifiedName(name));
+                    name.getNamespaceURI(),
+                    getQualifiedName(name));
         } else {
             return (SOAPElement)
                 getOwnerDocument().createElement(getQualifiedName(name));
         }
     }
 
+    protected SOAPElement createElement(SOAPDocumentImpl ownerDocument, Element element) {
+        return ElementFactory.createElement(ownerDocument, element);
+    }
+
     protected void addNode(org.w3c.dom.Node newElement) throws SOAPException {
-        insertBefore(soapDocument.getDomNode(newElement), null);
+        insertBefore(getDomNode(newElement), null);
 
         if (getOwnerDocument() instanceof DocumentFragment)
             return;
-                                                                                
+
         if (newElement instanceof ElementImpl) {
             ElementImpl element = (ElementImpl) newElement;
             QName elementName = element.getElementQName();
@@ -664,18 +671,18 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         Node child = getFirstChild();
         while (child != null) {
             if (child instanceof Element) {
-                return (Element) soapDocument.find(child);
+                return (Element) soapDocument.findIfPresent(child);
             }
             child = child.getNextSibling();
         }
         return null;
     }
-    
+
     protected SOAPElement findChild(NameImpl name) {
         Node eachChild = getFirstChild();
         while (eachChild != null) {
             if (eachChild instanceof Element) {
-                SOAPElement eachChildSoap = (SOAPElement) soapDocument.find(eachChild);
+                SOAPElement eachChildSoap = (SOAPElement) soapDocument.findIfPresent(eachChild);
                 if (eachChildSoap != null) {
                     if (eachChildSoap.getElementName().equals(name)) {
                         return eachChildSoap;
@@ -698,7 +705,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
         return null;
     }
-    
+
     @Override
     public SOAPElement addTextNode(String text) throws SOAPException {
         if (text.startsWith(CDATAImpl.cdataUC)
@@ -710,14 +717,14 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     protected SOAPElement addCDATA(String text) throws SOAPException {
         org.w3c.dom.Text cdata =
-                getOwnerDocument().createCDATASection(text);
+            getOwnerDocument().createCDATASection(text);
         addNode(cdata);
         return this;
     }
 
     protected SOAPElement addText(String text) throws SOAPException {
         org.w3c.dom.Text textNode =
-                getOwnerDocument().createTextNode(text);
+            getOwnerDocument().createTextNode(text);
         addNode(textNode);
         return this;
     }
@@ -745,21 +752,21 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
     private void addAttributeBare(Name name, String value) {
         addAttributeBare(
             name.getURI(),
-            name.getPrefix(), 
+            name.getPrefix(),
             name.getQualifiedName(),
             value);
     }
     private void addAttributeBare(QName name, String value) {
         addAttributeBare(
             name.getNamespaceURI(),
-            name.getPrefix(), 
+            name.getPrefix(),
             getQualifiedName(name),
             value);
     }
 
     private void addAttributeBare(
         String uri,
-        String prefix, 
+        String prefix,
         String qualifiedName,
         String value) {
 
@@ -767,7 +774,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         if (qualifiedName.equals("xmlns")) {
             uri = XMLNS_URI;
         }
-        
+
         if (uri == null) {
             setAttribute(qualifiedName, value);
         } else {
@@ -790,17 +797,17 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public String getAttributeValue(Name name) {
-        return getAttributeValueFrom(this, name); 
+        return getAttributeValueFrom(this, name);
     }
 
     @Override
     public String getAttributeValue(QName qname) {
         return getAttributeValueFrom(
-                   this,
-                   qname.getNamespaceURI(),
-                   qname.getLocalPart(),
-                   qname.getPrefix(),
-                   getQualifiedName(qname));
+            this,
+            qname.getNamespaceURI(),
+            qname.getLocalPart(),
+            qname.getPrefix(),
+            getQualifiedName(qname));
     }
 
     @Override
@@ -987,7 +994,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
             Name name = eachAttribute.next();
             copy.addAttributeBare(name, getAttributeValueFrom(element, name));
         }
-        
+
         Iterator<Node> eachChild = getChildElementsFromDOM(element);
         while (eachChild.hasNext()) {
             Node nextChild = eachChild.next();
@@ -1027,13 +1034,13 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
                     next = null;
 
                     if ((soapElement instanceof ElementImpl)
-                            && (last instanceof Element)) {
+                        && (last instanceof Element)) {
                         last =
-                                ((ElementImpl) soapElement).convertToSoapElement(
-                                        (Element) last);
+                            ((ElementImpl) soapElement).convertToSoapElement(
+                                (Element) last);
                     } else if ((soapElement instanceof ElementImpl) && (last instanceof CharacterData)) {
                         last = ((ElementImpl) soapElement).convertToSoapText(
-                                        (CharacterData) last);
+                            (CharacterData) last);
                     }
 
                     nextNext = last.getNextSibling();
@@ -1098,14 +1105,14 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public Iterator<javax.xml.soap.Node> getChildElements(final Name name) {
-       return getChildElements(name.getURI(), name.getLocalName());
+        return getChildElements(name.getURI(), name.getLocalName());
     }
 
     @Override
     public Iterator<javax.xml.soap.Node> getChildElements(final QName qname) {
         return getChildElements(qname.getNamespaceURI(), qname.getLocalPart());
     }
-    
+
     private Iterator<javax.xml.soap.Node> getChildElements(final String nameUri, final String nameLocal) {
         return new Iterator<javax.xml.soap.Node>() {
             Iterator<Node> eachElement = getChildElementNodes();
@@ -1252,11 +1259,11 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
             Node n = i.next();
             if (n.getNodeType() == org.w3c.dom.Node.TEXT_NODE ||
                 n.getNodeType() == org.w3c.dom.Node.CDATA_SECTION_NODE) {
-                // TODO: Hack to fix text node split into multiple lines.                
+                // TODO: Hack to fix text node split into multiple lines.
                 normalize();
                 // Should remove the normalization step when this gets fixed in
-                // DOM/Xerces.                
-                return soapDocument.find(n);
+                // DOM/Xerces.
+                return soapDocument.find(getDomNode(n));
             }
         }
         return null;
@@ -1455,17 +1462,17 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
     }
 
     protected static String getAttributeValueFrom(Element element, Name name) {
-      return getAttributeValueFrom(
-          element,
-          name.getURI(),
-          name.getLocalName(), 
-          name.getPrefix(),
-          name.getQualifiedName());
+        return getAttributeValueFrom(
+            element,
+            name.getURI(),
+            name.getLocalName(),
+            name.getPrefix(),
+            name.getQualifiedName());
     }
 
     private static String getAttributeValueFrom(
         Element element,
-        String uri, 
+        String uri,
         String localName,
         String prefix,
         String qualifiedName) {
@@ -1519,10 +1526,10 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
                     next = null;
 
                     if ((soapElement instanceof ElementImpl)
-                            && (last instanceof Element)) {
+                        && (last instanceof Element)) {
                         last =
-                                ((ElementImpl) soapElement).convertToSoapElement(
-                                        (Element) last);
+                            ((ElementImpl) soapElement).convertToSoapElement(
+                                (Element) last);
                     }
 
                     nextNext = last.getNextSibling();
@@ -1548,12 +1555,12 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         String localName = name.getLocalPart();
         String qualifiedName = null;
 
-            if (prefix != null && prefix.length() > 0) {
-                qualifiedName = prefix + ":" + localName;
-            } else {
-                qualifiedName = localName;
-            }
-         return qualifiedName;
+        if (prefix != null && prefix.length() > 0) {
+            qualifiedName = prefix + ":" + localName;
+        } else {
+            qualifiedName = localName;
+        }
+        return qualifiedName;
     }
 
     public static String getLocalPart(String qualifiedName) {
@@ -1565,7 +1572,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         int index = qualifiedName.indexOf(':');
         if (index < 0)
             return qualifiedName;
-        else 
+        else
             return qualifiedName.substring(index + 1);
     }
 
@@ -1578,7 +1585,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         int index = qualifiedName.indexOf(':');
         if (index < 0)
             return "";
-        else 
+        else
             return qualifiedName.substring(0, index);
     }
 
@@ -1602,7 +1609,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
             localName = qualifiedName;
         else
             localName = qualifiedName.substring(index + 1);
-        
+
         // Workaround for bug 6467808 - This needs to be fixed in JAXP
 
         // Rolling back this fix, this is a wrong fix, infact its causing other regressions in JAXWS tck and
@@ -1612,7 +1619,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 //                (SOAPConstants.URI_NS_SOAP_1_1_ENVELOPE.equals(value) ||
 //                SOAPConstants.URI_NS_SOAP_1_2_ENVELOPE.equals(value)))
 //            return;
-        
+
         element.setAttributeNS(namespaceURI,qualifiedName,value);
         //String tmpLocalName = this.getLocalName();
         String tmpURI = this.getNamespaceURI();
@@ -1629,7 +1636,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
                 setIdAttributeNS(namespaceURI,localName,true);
             }
         }
-                                                                                                                               
+
     }
 
     @Override
@@ -1704,7 +1711,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public Node getParentNode() {
-        return soapDocument.find(element.getParentNode());
+        return soapDocument.findIfPresent(element.getParentNode());
     }
 
     @Override
