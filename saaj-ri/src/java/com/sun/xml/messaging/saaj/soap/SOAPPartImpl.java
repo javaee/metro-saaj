@@ -747,7 +747,7 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
             }
             if (reader != null) {
                 PushbackReader pushbackReader =
-                    new PushbackReader(reader, 4096); //some size to unread <?xml ....?>
+                    new PushbackReader(reader, 12); //some size to unread <?xml ....?>
                 XMLDeclarationParser ev =
                         new XMLDeclarationParser(pushbackReader);
                 try {
