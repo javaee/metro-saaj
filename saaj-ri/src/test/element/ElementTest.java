@@ -62,6 +62,7 @@ import javax.xml.transform.stream.StreamResult;
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import com.sun.xml.messaging.saaj.util.SAAJUtil;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.w3c.dom.NodeList;
@@ -76,6 +77,20 @@ public class ElementTest extends TestCase {
 
     public ElementTest(String name) {
         super(name);
+    }
+
+    public void testSoapResult() throws Exception {
+        MessageFactory msgFac = MessageFactory.newInstance();
+
+        SOAPMessage message = msgFac.createMessage();
+
+        SOAPPart sp = message.getSOAPPart();
+        SOAPEnvelope envelope = sp.getEnvelope();
+        envelope.getHeader();
+        SAAJResult result = new SAAJResult(message);
+        javax.xml.soap.Node res = result.getResult();
+
+        Assert.assertNotNull(res);
     }
 
     public void testGetAnAttribute() throws Exception {
