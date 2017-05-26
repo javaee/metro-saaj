@@ -41,6 +41,7 @@ package com.sun.xml.messaging.saaj.soap.impl;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import org.w3c.dom.CDATASection;
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
@@ -53,10 +54,20 @@ public class CDATAImpl extends TextImpl<CDATASection> implements CDATASection {
         super(ownerDoc, text);
     }
 
+    public CDATAImpl(SOAPDocumentImpl ownerDoc, CharacterData data) {
+        super(ownerDoc, data);
+    }
+
     @Override
     protected CDATASection createN(SOAPDocumentImpl ownerDoc, String text) {
         CDATASection c = ownerDoc.getDomDocument().createCDATASection(text);
 //        ownerDoc.register(this);
+        return c;
+    }
+
+    @Override
+    protected CDATASection createN(SOAPDocumentImpl ownerDoc, CharacterData data) {
+        CDATASection c = (CDATASection) data;
         return c;
     }
 
