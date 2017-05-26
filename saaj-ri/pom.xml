@@ -50,7 +50,7 @@
     </parent>
     <groupId>com.sun.xml.messaging.saaj</groupId>
     <artifactId>saaj-impl</artifactId>
-    <version>1.4.0-b08-SNAPSHOT</version>
+    <version>1.4.0-b10-SNAPSHOT</version>
     <description>
         Open source Reference Implementation of JSR-67: SOAP with Attachments API for Java (SAAJ MR: 1.4)
     </description>
@@ -277,6 +277,18 @@
                                 <additionalJOption>${endorsed.dir}</additionalJOption>
                             </additionalJOptions>
                         </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jvnet-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.10.4</version>
                     </plugin>
                 </plugins>
             </build>
