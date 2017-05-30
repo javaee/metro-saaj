@@ -47,6 +47,7 @@ package com.sun.xml.messaging.saaj.soap;
 import com.sun.xml.messaging.saaj.soap.impl.CDATAImpl;
 import com.sun.xml.messaging.saaj.soap.impl.ElementFactory;
 import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import com.sun.xml.messaging.saaj.soap.impl.NamedNodeMapImpl;
 import com.sun.xml.messaging.saaj.soap.impl.SOAPCommentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.SOAPTextImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
@@ -80,6 +81,8 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Document {
+
+    public static final String SAAJ_NODE = "javax.xml.soap.Node";
 
     private static final String XMLNS = "xmlns".intern();
     protected static final Logger log =
@@ -352,7 +355,7 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
 
     @Override
     public Node getParentNode() {
-        return document.getParentNode();
+        return findIfPresent(document.getParentNode());
     }
 
     @Override
@@ -362,27 +365,27 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
 
     @Override
     public Node getFirstChild() {
-        return document.getFirstChild();
+        return findIfPresent(document.getFirstChild());
     }
 
     @Override
     public Node getLastChild() {
-        return document.getLastChild();
+        return findIfPresent(document.getLastChild());
     }
 
     @Override
     public Node getPreviousSibling() {
-        return document.getPreviousSibling();
+        return findIfPresent(document.getPreviousSibling());
     }
 
     @Override
     public Node getNextSibling() {
-        return document.getNextSibling();
+        return findIfPresent(document.getNextSibling());
     }
 
     @Override
     public NamedNodeMap getAttributes() {
-        return document.getAttributes();
+        return new NamedNodeMapImpl(document.getAttributes(), this);
     }
 
     @Override
@@ -534,6 +537,7 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
             throw new IllegalStateException("Element " + domElement.getNodeName()
                     + " is already registered");
         }
+        domElement.setUserData(SAAJ_NODE, node, null);
         domToSoap.put(domElement, node);
     }
 
