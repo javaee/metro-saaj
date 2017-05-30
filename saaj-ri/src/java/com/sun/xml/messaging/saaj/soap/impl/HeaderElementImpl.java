@@ -45,6 +45,7 @@ import javax.xml.soap.*;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+import org.w3c.dom.Element;
 
 public abstract class HeaderElementImpl
     extends ElementImpl
@@ -60,6 +61,10 @@ public abstract class HeaderElementImpl
     }
     public HeaderElementImpl(SOAPDocumentImpl ownerDoc, QName qname) {
         super(ownerDoc, qname);
+    }
+
+    public HeaderElementImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     protected abstract NameImpl getActorAttributeName();

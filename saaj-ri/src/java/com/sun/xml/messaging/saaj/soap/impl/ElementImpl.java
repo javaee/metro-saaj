@@ -583,8 +583,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
         // preserve the encodingStyle attr as it may get lost in the import
         String encodingStyle = element.getEncodingStyle();
 
-        final Element domElement = ((ElementImpl) element).getDomElement();
-        final Element importedElement = importElement(domElement);
+        final Element importedElement = importElement(element);
         addNode(importedElement);
 
         final SOAPElement converted = convertToSoapElement(importedElement);

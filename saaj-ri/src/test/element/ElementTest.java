@@ -79,6 +79,20 @@ public class ElementTest extends TestCase {
         super(name);
     }
 
+    public void testSoapHeaderParentElement() throws SOAPException {
+        SOAPMessage msg = MessageFactory.newInstance(SOAPConstants.SOAP_1_1_PROTOCOL).createMessage();
+        SOAPPart sp = msg.getSOAPPart();
+        SOAPEnvelope envelope = sp.getEnvelope();
+        SOAPHeader soapHeader = envelope.getHeader();
+        SOAPHeaderElement headerInnerElement = soapHeader.addHeaderElement(envelope.createName("foo", "f", "foo-URI"));
+        headerInnerElement.setActor("actor-URI");
+
+        headerInnerElement.detachNode();
+        headerInnerElement.setParentElement(soapHeader);
+        SOAPElement se = headerInnerElement.getParentElement();
+        Assert.assertTrue(se instanceof SOAPHeader);
+    }
+
     public void testSoapResult() throws Exception {
         MessageFactory msgFac = MessageFactory.newInstance();
 

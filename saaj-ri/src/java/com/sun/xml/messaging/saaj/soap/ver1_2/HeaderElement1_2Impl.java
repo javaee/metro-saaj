@@ -52,6 +52,7 @@ import javax.xml.soap.SOAPException;
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.HeaderElementImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
+import org.w3c.dom.Element;
 
 public class HeaderElement1_2Impl extends HeaderElementImpl {
 
@@ -60,6 +61,10 @@ public class HeaderElement1_2Impl extends HeaderElementImpl {
     }
     public HeaderElement1_2Impl(SOAPDocumentImpl ownerDoc, QName qname) {
         super(ownerDoc, qname);
+    }
+
+    public HeaderElement1_2Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     @Override

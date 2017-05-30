@@ -90,7 +90,11 @@ public class Fault1_2Impl extends FaultImpl {
         super(ownerDocument, NameImpl.createFault1_2Name(null, prefix));
     }
 
-    public Fault1_2Impl(Element domElement, SOAPDocumentImpl ownerDoc) {
+    public Fault1_2Impl(SOAPDocumentImpl ownerDocument) {
+        super(ownerDocument, NameImpl.createFault1_2Name(null, null));
+    }
+
+    public Fault1_2Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
         super(ownerDoc, domElement);
     }
 

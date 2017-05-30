@@ -53,6 +53,10 @@ public class CDATAImpl extends TextImpl<CDATASection> implements CDATASection {
         super(ownerDoc, text);
     }
 
+    public CDATAImpl(CDATASection domNode) {
+        super(domNode);
+    }
+
     @Override
     protected CDATASection createN(SOAPDocumentImpl ownerDoc, String text) {
         CDATASection c = ownerDoc.getDomDocument().createCDATASection(text);

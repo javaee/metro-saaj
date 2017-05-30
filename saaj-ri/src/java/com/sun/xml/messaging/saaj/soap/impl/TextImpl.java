@@ -70,6 +70,10 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
         ownerDoc.register(this);
     }
 
+    protected TextImpl(T domNode) {
+        this.domNode = domNode;
+    }
+
     protected abstract T createN(SOAPDocumentImpl ownerDoc, String text);
 
     public T getDomElement() {

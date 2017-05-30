@@ -56,6 +56,7 @@ import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.HeaderElementImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.util.LogDomainConstants;
+import org.w3c.dom.Element;
 
 public class HeaderElement1_1Impl extends HeaderElementImpl {
     
@@ -68,6 +69,10 @@ public class HeaderElement1_1Impl extends HeaderElementImpl {
     }
     public HeaderElement1_1Impl(SOAPDocumentImpl ownerDoc, QName qname) {
         super(ownerDoc, qname);
+    }
+
+    public HeaderElement1_1Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     @Override

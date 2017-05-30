@@ -51,6 +51,7 @@ import javax.xml.soap.SOAPElement;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.BodyElementImpl;
+import org.w3c.dom.Element;
 
 public class BodyElement1_2Impl extends BodyElementImpl {
 
@@ -60,6 +61,10 @@ public class BodyElement1_2Impl extends BodyElementImpl {
 
     public BodyElement1_2Impl(SOAPDocumentImpl ownerDoc, QName qname) {
         super(ownerDoc, qname);
+    }
+
+    public BodyElement1_2Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     @Override

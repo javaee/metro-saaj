@@ -44,6 +44,7 @@ import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
+import org.w3c.dom.Element;
 
 /**
  * All elements of the SOAP-ENV:BODY.
@@ -60,6 +61,10 @@ public abstract class BodyElementImpl
 
     public BodyElementImpl(SOAPDocumentImpl ownerDoc, QName qname) {
         super(ownerDoc, qname);
+    }
+
+    public BodyElementImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     @Override

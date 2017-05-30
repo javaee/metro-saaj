@@ -51,6 +51,7 @@ import javax.xml.soap.SOAPElement;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.DetailEntryImpl;
+import org.w3c.dom.Element;
 
 public class DetailEntry1_2Impl extends DetailEntryImpl {
 
@@ -60,6 +61,10 @@ public class DetailEntry1_2Impl extends DetailEntryImpl {
 
     public DetailEntry1_2Impl(SOAPDocumentImpl ownerDoc, QName qname) {
         super(ownerDoc, qname);
+    }
+
+    public DetailEntry1_2Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     @Override

@@ -45,6 +45,7 @@ import javax.xml.soap.DetailEntry;
 import javax.xml.soap.Name;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
+import org.w3c.dom.Element;
 
 public abstract class DetailEntryImpl
     extends ElementImpl
@@ -54,5 +55,9 @@ public abstract class DetailEntryImpl
     }
     public DetailEntryImpl(SOAPDocumentImpl ownerDoc, QName qname) {
         super(ownerDoc, qname);
+    }
+
+    public DetailEntryImpl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 }

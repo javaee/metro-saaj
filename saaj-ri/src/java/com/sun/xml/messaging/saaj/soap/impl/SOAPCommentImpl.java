@@ -59,6 +59,10 @@ public class SOAPCommentImpl extends TextImpl<Comment> implements Comment {
         return c;
     }
 
+    public SOAPCommentImpl(Comment domNode) {
+        super(domNode);
+    }
+
     @Override
     public boolean isComment() {
         return true;

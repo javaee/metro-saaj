@@ -73,7 +73,7 @@ public class SOAPFactory1_2Impl extends SOAPFactoryImpl {
         if (reasonText == null) {
             throw new IllegalArgumentException("reasonText argument for createFault was passed NULL");
         }
-        Fault1_2Impl fault = new Fault1_2Impl(createDocument(), null);
+        Fault1_2Impl fault = new Fault1_2Impl(createDocument());
         fault.setFaultCode(faultCode);
         fault.setFaultString(reasonText);
         return fault;
@@ -81,7 +81,7 @@ public class SOAPFactory1_2Impl extends SOAPFactoryImpl {
                                                                                                            
     @Override
     public SOAPFault createFault() throws SOAPException {
-        Fault1_2Impl fault = new Fault1_2Impl(createDocument(), null);
+        Fault1_2Impl fault = new Fault1_2Impl(createDocument());
         fault.setFaultCode(fault.getDefaultFaultCode());
         fault.setFaultString("Fault string, and possibly fault code, not set");
         return fault;

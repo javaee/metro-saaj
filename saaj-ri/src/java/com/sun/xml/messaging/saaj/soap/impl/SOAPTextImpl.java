@@ -56,6 +56,10 @@ public class SOAPTextImpl extends TextImpl<Text> implements Text {
         return t;
     }
 
+    public SOAPTextImpl(Text domNode) {
+        super(domNode);
+    }
+
     @Override
     public Text splitText(int offset) throws DOMException {
         return getDomElement().splitText(offset);

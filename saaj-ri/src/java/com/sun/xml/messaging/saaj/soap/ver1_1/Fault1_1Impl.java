@@ -75,8 +75,12 @@ public class Fault1_1Impl extends FaultImpl {
        super(ownerDocument, NameImpl.createFault1_1Name(prefix));
     }
 
-    public Fault1_1Impl(Element domElement, SOAPDocumentImpl ownerDoc) {
+    public Fault1_1Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
         super(ownerDoc, domElement);
+    }
+
+    public Fault1_1Impl(SOAPDocumentImpl ownerDoc) {
+        super(ownerDoc, NameImpl.createFault1_1Name(null));
     }
 
     @Override

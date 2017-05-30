@@ -53,6 +53,7 @@ import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
 import com.sun.xml.messaging.saaj.soap.impl.FaultElementImpl;
 import com.sun.xml.messaging.saaj.soap.name.NameImpl;
 import com.sun.xml.messaging.saaj.SOAPExceptionImpl;
+import org.w3c.dom.Element;
 
 public class FaultElement1_2Impl extends FaultElementImpl {
 
@@ -66,6 +67,10 @@ public class FaultElement1_2Impl extends FaultElementImpl {
 
     public FaultElement1_2Impl(SOAPDocumentImpl ownerDoc, String localName) {
         super(ownerDoc, NameImpl.createSOAP12Name(localName));
+    }
+
+    public FaultElement1_2Impl(SOAPDocumentImpl ownerDoc, Element domElement) {
+        super(ownerDoc, domElement);
     }
 
     @Override
