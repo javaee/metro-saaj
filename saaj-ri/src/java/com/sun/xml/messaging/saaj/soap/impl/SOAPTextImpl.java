@@ -40,7 +40,6 @@
 package com.sun.xml.messaging.saaj.soap.impl;
 
 import com.sun.xml.messaging.saaj.soap.SOAPDocumentImpl;
-import org.w3c.dom.CharacterData;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
 
@@ -50,20 +49,10 @@ public class SOAPTextImpl extends TextImpl<Text> implements Text {
         super(ownerDoc, text);
     }
 
-    public SOAPTextImpl(SOAPDocumentImpl ownerDoc, CharacterData data) {
-        super(ownerDoc, data);
-    }
-
     @Override
     protected Text createN(SOAPDocumentImpl ownerDoc, String text) {
         Text t = ownerDoc.getDomDocument().createTextNode(text);
 //        ownerDoc.register(this);
-        return t;
-    }
-
-    @Override
-    protected Text createN(SOAPDocumentImpl ownerDoc, CharacterData data) {
-        Text t = (Text) data;
         return t;
     }
 
