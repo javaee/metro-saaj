@@ -241,7 +241,9 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public Node cloneNode(boolean deep) {
-        return element.cloneNode(deep);
+        Node elementNSNode = element.cloneNode(deep);
+        soapDocument.registerChildNodes(elementNSNode, deep);
+        return soapDocument.findIfPresent(soapDocument.getDomNode(elementNSNode));
     }
 
     @Override
@@ -286,7 +288,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public short compareDocumentPosition(Node other) throws DOMException {
-        return element.compareDocumentPosition(other);
+        return element.compareDocumentPosition(soapDocument.getDomNode(other));
     }
 
     @Override
@@ -301,7 +303,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public boolean isSameNode(Node other) {
-        return element.isSameNode(other);
+        return element.isSameNode(soapDocument.getDomNode(other));
     }
 
     @Override
@@ -321,7 +323,7 @@ public class ElementImpl implements SOAPElement, SOAPBodyElement {
 
     @Override
     public boolean isEqualNode(Node arg) {
-        return element.isEqualNode(arg);
+        return element.isEqualNode(soapDocument.getDomNode(arg));
     }
 
     @Override

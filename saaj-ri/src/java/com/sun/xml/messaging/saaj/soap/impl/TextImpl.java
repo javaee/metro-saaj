@@ -65,14 +65,21 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
                     "com.sun.xml.messaging.saaj.soap.impl.LocalStrings");
     private final T domNode;
 
+    private final SOAPDocumentImpl soapDocument;
+
     protected TextImpl(SOAPDocumentImpl ownerDoc, String text) {
+        this.soapDocument = ownerDoc;
         domNode = createN(ownerDoc, text);
         ownerDoc.register(this);
     }
 
-    protected TextImpl(T domNode) {
-        this.domNode = domNode;
+    protected TextImpl(SOAPDocumentImpl ownerDoc, CharacterData data) {
+        this.soapDocument = ownerDoc;
+        domNode = createN(ownerDoc, data);
+        ownerDoc.register(this);
     }
+
+    protected abstract T createN(SOAPDocumentImpl ownerDoc, CharacterData data);
 
     protected abstract T createN(SOAPDocumentImpl ownerDoc, String text);
 

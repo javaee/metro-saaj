@@ -39,6 +39,7 @@
  */
 package com.sun.xml.messaging.saaj.soap.impl;
 
+import org.w3c.dom.CharacterData;
 import org.w3c.dom.Comment;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Text;
@@ -52,6 +53,10 @@ public class SOAPCommentImpl extends TextImpl<Comment> implements Comment {
         super(ownerDoc, text);
     }
 
+    public SOAPCommentImpl(SOAPDocumentImpl ownerDoc, CharacterData data) {
+        super(ownerDoc, data);
+    }
+
     @Override
     protected Comment createN(SOAPDocumentImpl ownerDoc, String text) {
         Comment c = ownerDoc.getDomDocument().createComment(text);
@@ -59,8 +64,10 @@ public class SOAPCommentImpl extends TextImpl<Comment> implements Comment {
         return c;
     }
 
-    public SOAPCommentImpl(Comment domNode) {
-        super(domNode);
+    @Override
+    protected Comment createN(SOAPDocumentImpl ownerDoc, CharacterData data) {
+        Comment c = (Comment) data;
+        return c;
     }
 
     @Override
