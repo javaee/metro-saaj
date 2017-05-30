@@ -53,46 +53,46 @@ import org.jvnet.staxex.util.XMLStreamReaderToXMLStreamWriter;
  * @author shih-chang.chen@oracle.com
  */
 public class StaxReaderBridge extends StaxBridge {
-	private XMLStreamReader in;
+    private XMLStreamReader in;
 
-	public StaxReaderBridge(XMLStreamReader reader, SOAPPartImpl soapPart) throws SOAPException {
-		super(soapPart);
-		in = reader;
-		final String soapEnvNS = soapPart.getSOAPNamespace();
-		breakpoint =  new XMLStreamReaderToXMLStreamWriter.Breakpoint(reader, saajWriter) {
-	        	boolean seenBody = false;
-	        	boolean stopedAtBody = false;
-                        @Override
-	            public boolean proceedBeforeStartElement()  { 
-	            	if (stopedAtBody) return true;
-	            	if (seenBody) {
-	            		stopedAtBody = true;
-	            		return false;
-	            	}
-	        	    if ("Body".equals(reader.getLocalName()) && soapEnvNS.equals(reader.getNamespaceURI()) ){
-	        	    	seenBody = true;
-	        	    } 
-	        	    return true; 
-	            }
-	        };
-	}
+    public StaxReaderBridge(XMLStreamReader reader, SOAPPartImpl soapPart) throws SOAPException {
+        super(soapPart);
+        in = reader;
+        final String soapEnvNS = soapPart.getSOAPNamespace();
+        breakpoint =  new XMLStreamReaderToXMLStreamWriter.Breakpoint(reader, saajWriter) {
+                boolean seenBody = false;
+                boolean stopedAtBody = false;
+                @Override
+                public boolean proceedBeforeStartElement()  {
+                    if (stopedAtBody) return true;
+                    if (seenBody) {
+                        stopedAtBody = true;
+                        return false;
+                    }
+                    if ("Body".equals(reader.getLocalName()) && soapEnvNS.equals(reader.getNamespaceURI()) ){
+                        seenBody = true;
+                    }
+                    return true;
+                }
+            };
+    }
 
-        @Override
+    @Override
     public XMLStreamReader getPayloadReader() {
         return in;
     }
 
-        @Override
+    @Override
     public QName getPayloadQName() {
         return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getName() : null;
     }
-    
-        @Override
+
+    @Override
     public String getPayloadAttributeValue(String attName) {
         return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getAttributeValue(null, attName) : null;
     }
 
-        @Override
+    @Override
     public String getPayloadAttributeValue(QName attName) {
         return (in.getEventType() == XMLStreamConstants.START_ELEMENT) ? in.getAttributeValue(attName.getNamespaceURI(), attName.getLocalPart()) : null;
     }

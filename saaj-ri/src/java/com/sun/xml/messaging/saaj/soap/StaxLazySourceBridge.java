@@ -57,39 +57,39 @@ import org.jvnet.staxex.util.XMLStreamReaderToXMLStreamWriter;
  * @author shih-chang.chen@oracle.com
  */
 public class StaxLazySourceBridge extends StaxBridge {
-	private LazyEnvelopeSource lazySource;
-	
-	public StaxLazySourceBridge(LazyEnvelopeSource src, SOAPPartImpl soapPart) throws SOAPException {
-		super(soapPart);
-		lazySource = src;
-		final String soapEnvNS = soapPart.getSOAPNamespace();
-		try {
-			breakpoint = new XMLStreamReaderToXMLStreamWriter.Breakpoint(src.readToBodyStarTag(), saajWriter) {
-                                            @Override
-			    		public boolean proceedAfterStartElement()  { 
-			    			if ("Body".equals(reader.getLocalName()) && soapEnvNS.equals(reader.getNamespaceURI()) ){
-			    				return false;
-			    			} else
-			    				return true; 
-			    		}
-			        };
-		} catch (XMLStreamException e) {
-			throw new SOAPException(e);
-		}
-	}
+    private LazyEnvelopeSource lazySource;
 
-	@Override
+    public StaxLazySourceBridge(LazyEnvelopeSource src, SOAPPartImpl soapPart) throws SOAPException {
+        super(soapPart);
+        lazySource = src;
+        final String soapEnvNS = soapPart.getSOAPNamespace();
+        try {
+            breakpoint = new XMLStreamReaderToXMLStreamWriter.Breakpoint(src.readToBodyStarTag(), saajWriter) {
+                @Override
+                public boolean proceedAfterStartElement()  {
+                    if ("Body".equals(reader.getLocalName()) && soapEnvNS.equals(reader.getNamespaceURI()) ){
+                        return false;
+                    } else
+                        return true;
+                }
+            };
+        } catch (XMLStreamException e) {
+            throw new SOAPException(e);
+        }
+    }
+
+    @Override
     public XMLStreamReader getPayloadReader() {
         return lazySource.readPayload();
 //		throw new UnsupportedOperationException();
     }
 
-	@Override
+    @Override
     public QName getPayloadQName() {
         return lazySource.getPayloadQName();
     }
 
-	@Override
+    @Override
     public String getPayloadAttributeValue(String attName) {
         if (lazySource.isPayloadStreamReader()) {
             XMLStreamReader reader = lazySource.readPayload();
@@ -100,7 +100,7 @@ public class StaxLazySourceBridge extends StaxBridge {
         return null;
     }
 
-	@Override
+    @Override
     public String getPayloadAttributeValue(QName attName) {
         if (lazySource.isPayloadStreamReader()) {
             XMLStreamReader reader = lazySource.readPayload();
@@ -110,14 +110,14 @@ public class StaxLazySourceBridge extends StaxBridge {
         }
         return null;
     }
-	
-        @Override
-	public void bridgePayload() throws XMLStreamException {
-		//Assuming out is at Body
-		writePayloadTo(saajWriter);
-	}
 
-	public void writePayloadTo(XMLStreamWriter writer) throws XMLStreamException {
+        @Override
+    public void bridgePayload() throws XMLStreamException {
+        //Assuming out is at Body
+        writePayloadTo(saajWriter);
+    }
+
+    public void writePayloadTo(XMLStreamWriter writer) throws XMLStreamException {
         lazySource.writePayloadTo(writer);
     }
 }
