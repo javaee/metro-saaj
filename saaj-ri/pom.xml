@@ -60,7 +60,7 @@
         <url>https://github.com/javaee/metro-saaj</url>
         <tag>HEAD</tag>
     </scm>
-    <build>	
+    <build>
         <sourceDirectory>src/java</sourceDirectory>
         <testSourceDirectory>src/test</testSourceDirectory>
         <testResources>
@@ -196,7 +196,7 @@
                         exclude-common.xml,${findbugs.exclude}
                     </excludeFilterFile>
                     <fork>true</fork>
-                    <jvmArgs>-Xms64m -Xmx256m</jvmArgs>    
+                    <jvmArgs>-Xms64m -Xmx256m</jvmArgs>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -210,9 +210,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
             </plugin>
-        </plugins> 
+        </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>endorsed-dirs</id>
@@ -407,29 +407,26 @@
         <url>http://www.oracle.com/</url>
     </organization>
     <issueManagement>
-        <system>issueZilla</system>
-        <url>http://java.net/jira/browse/SAAJ</url>
+        <system>IssueTracker</system>
+        <url>https://github.com/javaee/metro-saaj/issues</url>
     </issueManagement>
     <mailingLists>
         <mailingList>
-            <name>SAAJ RI Users List</name>
-            <post>users@saaj.java.net</post>
-        </mailingList>
-        <mailingList>
-            <name>SAAJ Implementation Dev List</name>
-            <post>dev@saaj.java.net</post>
+            <name>Metro mailing list</name>
+            <subscribe>metro+subscribe@javaee.groups.io</subscribe>
+            <post>metro@javaee.groups.io</post>
+            <archive>https://javaee.groups.io/g/metro/topics</archive>
         </mailingList>
     </mailingLists>
     <licenses>
-        <license>
-            <name>
-                Dual license consisting of the CDDL v1.1 and GPL v2
-            </name>
-            <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
-            <distribution>repo</distribution>
-        </license>
+      <license>
+        <name>CDDL + GPLv2 with classpath exception</name>
+        <url>https://github.com/javaee/metro-saaj/blob/master/LICENSE</url>
+        <distribution>repo</distribution>
+        <comments>A business-friendly OSS license</comments>
+      </license>
     </licenses>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -461,7 +458,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-  
+
     <dependencies>
         <dependency>
             <groupId>javax.xml.soap</groupId>
@@ -484,11 +481,11 @@
             <artifactId>stax-ex</artifactId>
         </dependency>
     </dependencies>
-    
+
     <properties>
         <findbugs.exclude>${project.basedir}/exclude.xml</findbugs.exclude>
         <findbugs.threshold>Low</findbugs.threshold>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     </properties>
-    
+
 </project>
