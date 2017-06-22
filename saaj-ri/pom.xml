@@ -234,7 +234,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <argLine>-Djava.endorsed.dirs="${endorsed.dir}"</argLine>
+                            <argLine>${proxyOpts} -Djava.endorsed.dirs="${endorsed.dir}"</argLine>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -264,7 +264,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <argLine>--add-modules java.xml.soap --upgrade-module-path ${endorsed.dir}</argLine>
+                            <argLine>${proxyOpts} --add-modules java.xml.soap --upgrade-module-path ${endorsed.dir}</argLine>
                         </configuration>
                     </plugin>
                     <plugin>
@@ -487,6 +487,7 @@
         <findbugs.exclude>${project.basedir}/exclude.xml</findbugs.exclude>
         <findbugs.threshold>Low</findbugs.threshold>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <proxyOpts></proxyOpts>
     </properties>
 
 </project>
