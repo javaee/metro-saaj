@@ -1,19 +1,19 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2013-2016 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013-2017 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
  * and Distribution License("CDDL") (collectively, the "License").  You
  * may not use this file except in compliance with the License.  You can
  * obtain a copy of the License at
- * http://glassfish.java.net/public/CDDL+GPL_1_1.html
- * or packager/legal/LICENSE.txt.  See the License for the specific
+ * https://oss.oracle.com/licenses/CDDL+GPL-1.1
+ * or LICENSE.txt.  See the License for the specific
  * language governing permissions and limitations under the License.
  *
  * When distributing the software, include this License Header Notice in each
- * file and include the License file at packager/legal/LICENSE.txt.
+ * file and include the License file at LICENSE.txt.
  *
  * GPL Classpath Exception:
  * Oracle designates this particular file as subject to the "Classpath"
@@ -41,7 +41,6 @@
 package com.sun.xml.messaging.saaj;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
@@ -51,12 +50,12 @@ import javax.xml.stream.XMLStreamWriter;
  *
  * @author shih-chang.chen@oracle.com
  */
-public interface LazyEnvelopeSource extends javax.xml.transform.Source {    
+public interface LazyEnvelopeSource extends javax.xml.transform.Source {
     /**
      * Retrieve payload qname without materializing its contents
      * @return payload QName
      */
-    public QName getPayloadQName();   
+    public QName getPayloadQName();
     public XMLStreamReader readToBodyStarTag() throws XMLStreamException;
     public XMLStreamReader readPayload();
     public void writePayloadTo(XMLStreamWriter writer)throws XMLStreamException;
