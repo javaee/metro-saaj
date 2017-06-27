@@ -1,0 +1,17 @@
+theme: jekyll-theme-architect
+
+title: [SAAJ]
+description: [SOAP with Attachments]
+
+# sidebar links url
+links:
+  source: https://github.com/javaee/metro-saaj
+  download: http://maven.java.net/content/repositories/releases/com/sun/xml/messaging/saaj/saaj-impl/
+  mailinglist: https://javaee.groups.io/g/metro
+  javadocs: https://javadoc.io/doc/com.sun.xml.messaging.saaj/saaj-impl/1.4.0-b03
+  userguide: doc/user-guide/index.html
+  
+  #faq:
+  #mailinglist:
+  #hide_issuetracker: true #set explicitly to 'true' if you don't want to have the issue tracker link displayed
+

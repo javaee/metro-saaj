@@ -1,19 +1,17 @@
-### Licensing and Governance
+# SAAJ RI
 
-SAAJ is licensed under a dual license - CDDL 1.1 and GPL 2.0 with Class-path Exception. 
-That means you can choose which one of the two suits your needs better and use it under those terms.
+Welcome to the SAAJ Standard Implementation Project. This project is an independently reusable part of the Metro project. SAAJ 1.3 supports both SOAP 1.1 and SOAP 1.2.
+SAAJ RI is a part of [METRO](https://javaee.github.io/metro) project.
 
-We use <a href="http://glassfish.java.net/public/GovernancePolicy.html">GlassFish Governance Policy</a>, 
-which means we can only accept contributions under the 
-terms of <a href="http://oracle.com/technetwork/goto/oca">OCA</a>.
+## Licensing and Governance
 
-### More Info
+SAAJ RI is licensed under a dual license - CDDL 1.1 and GPL 2.0 with Class-path Exception. That means you can choose which one of the two suits your needs better and use it under those terms.
 
-Follow <a href="http://twitter.com/gfmetro">@gfmetro</a> (TBD) on Twitter to get SAAJ and wider Metro (WSIT, JAX-WS, JAXB, ...) related updates. See the Metro 
-website at http://metro.java.net to access Metro documentation and release information. 
+We use [GlassFish Governance Policy](https://javaee.github.io/metro-saaj/CONTRIBUTING), which means we can only accept contributions under the 
+terms of [OCA](http://oracle.com/technetwork/goto/oca).
 
-If you run into any issues 
-or have questions, ask at our user forum: <a href="mailto:users@metro.java.net">users@metro.java.net</a>, or file an issue at one of the issue trackers
-* http://java.net/jira/browse/SAAJ
-* http://java.net/jira/browse/JAX_WS
-* http://java.net/jira/browse/WSIT
+## Links
+
+- [METRO project](https://javaee.github.io/metro)
+- [SAAJ API on GitHub](https://github.com/javaee/javax.xml.soap)
+- [JSR-67 page on JCP.org](https://jcp.org/en/jsr/detail?id=67)
