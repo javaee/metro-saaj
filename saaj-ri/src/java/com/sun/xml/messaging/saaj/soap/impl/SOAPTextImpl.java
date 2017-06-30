@@ -57,15 +57,12 @@ public class SOAPTextImpl extends TextImpl<Text> implements Text {
 
     @Override
     protected Text createN(SOAPDocumentImpl ownerDoc, String text) {
-        Text t = ownerDoc.getDomDocument().createTextNode(text);
-//        ownerDoc.register(this);
-        return t;
+        return ownerDoc.getDomDocument().createTextNode(text);
     }
 
     @Override
     protected Text createN(SOAPDocumentImpl ownerDoc, CharacterData data) {
-        Text t = (Text) data;
-        return t;
+        return (Text) data;
     }
 
     @Override

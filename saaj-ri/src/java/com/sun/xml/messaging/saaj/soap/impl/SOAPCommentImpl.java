@@ -60,15 +60,12 @@ public class SOAPCommentImpl extends TextImpl<Comment> implements Comment {
 
     @Override
     protected Comment createN(SOAPDocumentImpl ownerDoc, String text) {
-        Comment c = ownerDoc.getDomDocument().createComment(text);
-//        ownerDoc.register(this);
-        return c;
+        return ownerDoc.getDomDocument().createComment(text);
     }
 
     @Override
     protected Comment createN(SOAPDocumentImpl ownerDoc, CharacterData data) {
-        Comment c = (Comment) data;
-        return c;
+        return (Comment) data;
     }
 
     @Override

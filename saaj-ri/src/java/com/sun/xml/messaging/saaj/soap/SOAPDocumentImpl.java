@@ -235,8 +235,8 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
         if (importedNode instanceof javax.xml.soap.Node) {
             Node newSoapNode = createSoapNode(importedNode.getClass(), newNode);
             newNode.setUserData(SAAJ_NODE, newSoapNode, null);
-            if (deep && importedNode.hasChildNodes()) {
-                NodeList childNodes = importedNode.getChildNodes();
+            if (deep && newSoapNode.hasChildNodes()) {
+                NodeList childNodes = newSoapNode.getChildNodes();
                 for (int i = 0; i < childNodes.getLength(); i++) {
                     registerChildNodes(childNodes.item(i), deep);
                 }
