@@ -427,7 +427,11 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
 
     @Override
     public NamedNodeMap getAttributes() {
-        return new NamedNodeMapImpl(document.getAttributes(), this);
+        NamedNodeMap attributes = document.getAttributes();
+        if (attributes == null) {
+            return null;
+        }
+        return new NamedNodeMapImpl(attributes, this);
     }
 
     @Override
@@ -639,6 +643,8 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
             return ((SOAPCommentImpl)node).getDomElement();
         } else if (node instanceof CDATAImpl) {
             return ((CDATAImpl) node).getDomElement();
+        } else if (node instanceof SOAPDocumentFragment) {
+            return ((SOAPDocumentFragment)node).getDomNode();
         }
         return node;
     }
@@ -651,6 +657,8 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
             return new SOAPCommentImpl(this, (Comment) node);
         } else if (CDATAImpl.class.isAssignableFrom(nodeType)) {
             return new CDATAImpl(this, (CDATASection) node);
+        } else if (SOAPDocumentFragment.class.isAssignableFrom(nodeType)) {
+            return new SOAPDocumentFragment(this, (DocumentFragment) node);
         }
         try {
             Constructor<Node> constructor = nodeType.getConstructor(SOAPDocumentImpl.class, Element.class);

@@ -633,7 +633,7 @@ public abstract class SOAPPartImpl extends SOAPPart implements SOAPDocument {
     
     @Override
     public Document getOwnerDocument() {
-        return document.getDomDocument().getOwnerDocument();
+        return document;
     }
     
     @Override

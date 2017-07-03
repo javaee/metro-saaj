@@ -186,7 +186,7 @@ public abstract class TextImpl<T extends CharacterData> implements Text, Charact
 
     @Override
     public Document getOwnerDocument() {
-        return domNode.getOwnerDocument();
+        return soapDocument;
     }
 
     @Override
