@@ -248,8 +248,12 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
         return findIfPresent(newNode);
     }
 
-    //If the parentNode is not registered to domToSoap, create soap wapper for parentNode and register it to domToSoap
-    //If deep = true, also register all children of parentNode to domToSoap map.
+    /**
+     * If the parentNode is not registered to domToSoap, create soap wapper for parentNode and register it to domToSoap
+     * If deep = true, also register all children transitively of parentNode to domToSoap map.
+     * @param parentNode node to wrap
+     * @param deep wrap child nodes transitively
+     */
     public void registerChildNodes(Node parentNode, boolean deep) {
         if (parentNode.getUserData(SAAJ_NODE) == null) {
             if (parentNode instanceof Element) {
@@ -266,6 +270,8 @@ public class SOAPDocumentImpl implements SOAPDocument, javax.xml.soap.Node, Docu
                         new SOAPTextImpl(this, (CharacterData) parentNode);
                         break;
                 }
+            } else if (parentNode instanceof DocumentFragment) {
+                new SOAPDocumentFragment(this, (DocumentFragment) parentNode);
             }
         }
         if (deep) {
