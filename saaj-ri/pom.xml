@@ -50,7 +50,7 @@
     </parent>
     <groupId>com.sun.xml.messaging.saaj</groupId>
     <artifactId>saaj-impl</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1-SNAPSHOT</version>
     <description>
         Open source Reference Implementation of JSR-67: SOAP with Attachments API for Java (SAAJ MR: 1.4)
     </description>
@@ -58,7 +58,7 @@
         <connection>scm:git:git@github.com:javaee/metro-saaj.git</connection>
         <developerConnection>scm:git:git@github.com:javaee/metro-saaj.git</developerConnection>
         <url>https://github.com/javaee/metro-saaj</url>
-        <tag>1.4.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <build>
         <sourceDirectory>src/java</sourceDirectory>
