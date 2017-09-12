@@ -6,9 +6,15 @@ description: [SOAP with Attachments]
 # sidebar links url
 links:
   source: https://github.com/javaee/metro-saaj
-  download: http://maven.java.net/content/repositories/releases/com/sun/xml/messaging/saaj/saaj-impl/
+  download: https://maven.java.net/content/repositories/releases/com/sun/xml/messaging/saaj/saaj-impl/1.4.0/saaj-impl-1.4.0.jar
   mailinglist: https://javaee.groups.io/g/metro
-  javadocs: https://javadoc.io/doc/com.sun.xml.messaging.saaj/saaj-impl/1.4.0-b03
+  javadocs: https://javadoc.io/doc/com.sun.xml.messaging.saaj/saaj-impl/1.4.0
+  tutorial: http://docs.oracle.com/javaee/5/tutorial/doc/bnbhf.html
+  rifeatures: https://community.oracle.com/blogs/kumarjayanti/2009/12/09/summary-proprietary-features-saaj-ri-134
+  security: docs/saaj-security
+  specification: https://www.jcp.org/en/jsr/detail?id=67
+  saajapi: https://github.com/javaee/javax.xml.soap
+  metro: https://javaee.github.io/metro
   #userguide: doc/user-guide/index.html 
   #faq:
   #mailinglist:
