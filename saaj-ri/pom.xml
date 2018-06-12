@@ -79,6 +79,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.7.0</version>
+                    <configuration>
+                        <release>7</release>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
@@ -128,16 +131,27 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>prepare-endorsed</id>
-                        <phase>validate</phase>
+                        <id>copy-upgrade-module-path</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <skip>${maven.endorsed.skip}</skip>
-                            <outputDirectory>${endorsed.dir}</outputDirectory>
+                            <outputDirectory>${upgrade.mods}</outputDirectory>
                             <silent>false</silent>
                             <includeArtifactIds>javax.xml.soap-api</includeArtifactIds>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-module-path</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${mods}</outputDirectory>
+                            <silent>false</silent>
+                            <includeArtifactIds>stax-ex,mimepull</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -145,9 +159,35 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <release>9</release>
+                            <compilerArgs>
+                                <arg>--upgrade-module-path</arg>
+                                <arg>${upgrade.mods}</arg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!--Replaces all files with 7, with exception to module-info -->
+                        <id>base-compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <release>7</release>
+                            <compilerArgs>
+                                <arg>-Djava.endorsed.dirs=${upgrade.mods}</arg>
+                            </compilerArgs>
+                            <excludes>
+                                <exclude>module-info.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
                     <compilerArgs>
                         <compilerArg>-Xlint:all</compilerArg>
                     </compilerArgs>
@@ -217,77 +257,29 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <additionalJOptions>
+                        <additionalJOption>--upgrade-module-path</additionalJOption>
+                        <additionalJOption>${upgrade.mods}</additionalJOption>
+                        <additionalJOption>--module-path</additionalJOption>
+                        <additionalJOption>${mods}</additionalJOption>
+                    </additionalJOptions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>${proxyOpts} --add-modules java.xml.soap --upgrade-module-path ${upgrade.mods}</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
-        <profile>
-            <id>endorsed-dirs</id>
-            <activation>
-                <jdk>[1.6,9)</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <compilerArgs>
-                                <compilerArg>-Djava.endorsed.dirs=${endorsed.dir}</compilerArg>
-                            </compilerArgs>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <argLine>${proxyOpts} -Djava.endorsed.dirs="${endorsed.dir}"</argLine>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <additionalJOption>-J-Djava.endorsed.dirs=${endorsed.dir}</additionalJOption>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>jdk9-setup</id>
-            <activation>
-                <jdk>9</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <release>7</release>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <argLine>${proxyOpts} --add-modules java.xml.soap --upgrade-module-path ${endorsed.dir}</argLine>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <additionalJOptions>
-                                <additionalJOption>--add-modules</additionalJOption>
-                                <additionalJOption>java.xml.soap,java.xml.bind</additionalJOption>
-                                <additionalJOption>--upgrade-module-path</additionalJOption>
-                                <additionalJOption>${endorsed.dir}</additionalJOption>
-                            </additionalJOptions>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>jvnet-release</id>
             <build>
@@ -464,6 +456,19 @@
       </license>
     </licenses>
 
+    <repositories>
+        <repository>
+            <id>promoted.java.net</id>
+            <url>https://maven.java.net/content/repositories/promoted/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>jvnet-nexus-staging</id>
+            <url>https://maven.java.net/content/repositories/staging/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -522,7 +527,8 @@
     <properties>
         <findbugs.exclude>${project.basedir}/exclude.xml</findbugs.exclude>
         <findbugs.threshold>Low</findbugs.threshold>
-        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        <upgrade.mods>${project.build.directory}/upgrade-mods</upgrade.mods>
+        <mods>${project.build.directory}/mods</mods>
         <proxyOpts />
     </properties>
 
