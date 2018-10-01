@@ -1,3 +1,5 @@
+⚠️ This project is now part of the EE4J initiative. This repository has been archived as all activities are now happening in the [corresponding Eclipse repository](https://github.com/eclipse-ee4j/metro-saaj).
+
 ### Licensing and Governance
 
 SAAJ is licensed under a dual license - CDDL 1.1 and GPL 2.0 with Class-path Exception. 
