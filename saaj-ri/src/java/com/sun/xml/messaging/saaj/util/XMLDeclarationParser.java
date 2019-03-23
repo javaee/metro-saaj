@@ -59,10 +59,12 @@ public class XMLDeclarationParser {
     private String xmlDecl = null;
     static String gt16 = null;
     static String utf16Decl = null;
+    static int maxDeclPrefixLength;
     static {
          try {
              gt16 = new String(">".getBytes("utf-16"));
              utf16Decl = new String("<?xml".getBytes("utf-16"));
+             maxDeclPrefixLength = utf16Decl.length();
          } catch (Exception e) {}
     }
 
@@ -91,10 +93,30 @@ public class XMLDeclarationParser {
      {
         int c = 0;
         int index = 0;
+        boolean utf16 = false;
+        boolean utf8 = false;
+        int xmlIndex = -1;
         StringBuilder xmlDeclStr = new StringBuilder();
         while ((c = m_pushbackReader.read()) != -1) {
             xmlDeclStr.append((char)c);
             index++;
+            if (index == maxDeclPrefixLength) {
+               xmlIndex = xmlDeclStr.indexOf(utf16Decl);
+               if (xmlIndex > -1) {
+                   utf16 = true;
+               } else {
+                   xmlIndex = xmlDeclStr.indexOf("<?xml");
+                   if (xmlIndex > -1) {
+                       utf8 = true;
+                   }
+               }
+               // no XML decl
+               if (!utf16 && !utf8) {
+                   int len = index;
+                   m_pushbackReader.unread(xmlDeclStr.toString().toCharArray(), 0, len);
+                   return;
+               }
+           }
             if (c == '>') {
                 break;
             }
@@ -102,24 +124,16 @@ public class XMLDeclarationParser {
         int len = index;
 
         String decl = xmlDeclStr.toString();
-        boolean utf16 = false;
-        boolean utf8 = false;
-
-        int xmlIndex = decl.indexOf(utf16Decl);
-        if (xmlIndex > -1) {
-            utf16 = true;
-        } else {
-            xmlIndex = decl.indexOf("<?xml");
-            if (xmlIndex > -1) {
+        if (len < maxDeclPrefixLength) {
+            xmlIndex = xmlDeclStr.indexOf("<?xml");
+            if (xmlIndex == -1) {
+                m_pushbackReader.unread(decl.toCharArray(), 0, len);
+                return;
+            } else {
                 utf8 = true;
             }
         }
 
-        // no XML decl
-        if (!utf16 && !utf8) {
-            m_pushbackReader.unread(decl.toCharArray(), 0, len);
-            return;
-        }
         m_hasHeader = true;
         
         if (utf16) {
